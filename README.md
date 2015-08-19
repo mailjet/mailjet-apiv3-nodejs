@@ -75,3 +75,4 @@ sendMessage.request({
  - Implement a couple more examples
  - Add tests relative to the action chaining
  - Implement a small external project featuring the Wrapper
+
