@@ -36,7 +36,7 @@ contact.id(3).request(function (error, response, body) {
 });
 
 // you can add an action to it
-contact.id(3).action('managemanycontacts').id(3)
+contact.id(3).action('managemanycontacts')
 	.request(function (error, response, body) {
 		console.log (error || body);
 	});
