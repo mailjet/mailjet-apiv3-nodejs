@@ -1,0 +1,35 @@
+{
+  "name": "node-mailjet",
+  "version": "3.0.0",
+  "description": "Mailjet node wrapper",
+  "main": "mailjet-client.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "request": "^2.60.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuillaumeBadi/node-mailjet.git"
+  },
+  "keywords": [
+    "mailjet",
+    "email",
+    "campaign",
+    "node",
+    "marketting"
+  ],
+  "author": "Guillaume Badi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GuillaumeBadi/node-mailjet/issues"
+  },
+  "homepage": "https://github.com/GuillaumeBadi/node-mailjet#readme"
+}
