@@ -68,6 +68,18 @@ sendMessage.request({
 	console.log (e);
 });
 
+postContact.action('managemanycontacts').request({
+	ContactLists: [
+		{ListID: 1, action: 'addnoforce'}
+	],
+	Contacts: [
+		{Email: 'mr@test.com', Name: 'Hello World'},
+		{Email: 'mr@test2.com', Name: 'Hello World2'},
+	]
+}, function (err, response, body) {
+	console.log (err || body);
+});
+
 ```
 
 ## TODO 

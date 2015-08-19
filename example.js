@@ -11,7 +11,7 @@ var getContact2 = Mailjet.get('contact/2');
 var myProfile = Mailjet.get('myprofile');
 var sendMessage = Mailjet.post('send');
 var sender = Mailjet.post('sender');
-
+/*
 sender.request({Email: 'gbadi@student.42.fr'})
 	.on('sucess', function (response, body) {
 		console.log (body);
@@ -45,3 +45,16 @@ getContact.id(3).request()
 			console.log (Mailjet.formatJSON(body));
 		});
 
+	*/
+
+postContact.action('managemanycontacts').request({
+	ContactLists: [
+		{ListID: 1, action: 'addnoforce'}
+	],
+	Contacts: [
+		{Email: 'mr@test.com', Name: 'Hello World'},
+		{Email: 'mr@test2.com', Name: 'Hello World2'},
+	]
+}, function (err, response, body) {
+	console.log (err || body);
+});
