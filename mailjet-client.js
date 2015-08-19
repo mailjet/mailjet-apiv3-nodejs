@@ -179,10 +179,10 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 			TODO:
 			- Find out why this condition works
 		 */
-		if (hasAnArray(data))
+		// if (hasAnArray(data))
 			options.body = data;
-		else
-			options.formData = data;
+		// else
+			// options.formData = data;
 	}
 
 	/*
