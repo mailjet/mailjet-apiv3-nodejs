@@ -231,7 +231,7 @@ function MailjetRessource (method, func, context) {
 	 */
 	this.result = function (params, callback) {
 		params = params || {};
-		if (typeof params === 'function' && arguments.length === 1) {
+		if (typeof params === 'function') {
 			callback = params;
 			params = {};
 		}
@@ -274,7 +274,7 @@ MailjetRessource.prototype.id = function(value) {
  *
  */
 MailjetRessource.prototype.action = function(name) {
-	if (this.lastAdded === ACTION || this.lastAdded == FUNCTION)
+	if (this.lastAdded === ACTION)
 		console.warn('[WARNING] your request may fail due to invalid action chaining');
 	this.func = _path.join(this.func, name);
 	this.lastAdded = ACTION;
