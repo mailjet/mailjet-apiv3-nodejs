@@ -57,7 +57,7 @@ replace `zshrc` with `bash_profile` if you are simply using bash
 ``` javascript
 
 var apiKey = process.env.MAILJET_API_KEY,
-	apiSecret = process.env.API_SECRET;
+	apiSecret = process.env.MAILJET_API_SECRET;
 
 ```
 
