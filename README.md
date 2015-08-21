@@ -8,10 +8,10 @@
 
 # Mailjet NodeJs Wrapper
 
-Say Welcome to the new [Mailjet][mailjet] official NodeJS API wrapper !
+Say Welcome to the new [Mailjet][mailjet] official NodeJS API wrapper!
 
-[Mailjet][mailjet] is an Email Service Provider (ESP) !
-Go visit the website and get confortable !
+[Mailjet][mailjet] is an Email Service Provider (ESP)!
+Go visit the website and get confortable!
 
 For more details, see the full [API Documentation][doc]
 
@@ -165,9 +165,9 @@ sendEmail
 
 ## Contribute
 
-Mailjet loves developpers. You can be part of this project !
+Mailjet loves developpers. You can be part of this project!
 
-This wrapper is a great introduction to the open source world, check out the code !
+This wrapper is a great introduction to the open source world, check out the code!
 
 Feel free to ask anything, and contribute:
 
