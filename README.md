@@ -105,7 +105,7 @@ user.request()
 
 sender.request({ Email: 'mr@mailjet.com' })
 	.on('success', handleData)
-	.on('error', handlaError);
+	.on('error', handleError);
 
 ```
 
@@ -134,8 +134,8 @@ getContacts.id(2).request(handleSingleContact);
 var postContact = Mailjet.post('contact');
 
 postContact.action('managemanycontacts').request({
-	ContactLists: MyContactLists,
-    Contacts: MyContacts,
+	ContactLists: MyContactListsArrqy,
+    Contacts: MyContactsArrqy,
 }, handlePostResponse);
 
 ```
@@ -157,7 +157,7 @@ var emailData = {
 sendEmail
 	.request(emailData)
     .on('success', handlePostResponse)
-    .on('error', hendleError);
+    .on('error', hqndleError);
 
 ```
 
