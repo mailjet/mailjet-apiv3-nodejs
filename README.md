@@ -46,9 +46,9 @@ var Mailjet = require('mailjet').connect('api key', 'api secret');
 
 #### Save your `API_KEY` and `API_SECRET`:
 
-`echo 'export MAILJET_API_KEY=MY_API_KEY' >> ~/.zshrc`
+`echo 'export MJ_APIKEY_PUBLIC=MY_API_KEY' >> ~/.zshrc`
 
-`echo 'export MAILJET_API_SECRET=MY_API_SECRET' >> ~/.zshrc`
+`echo 'export MJ_APIKEY_PRIVATE=MY_API_SECRET' >> ~/.zshrc`
 
 `source ~/.zshrc`
 
@@ -58,8 +58,8 @@ replace `zshrc` with `bash_profile` if you are simply using bash
 
 ``` javascript
 
-var apiKey = process.env.MAILJET_API_KEY,
-	apiSecret = process.env.MAILJET_API_SECRET;
+var apiKey = process.env.MJ_APIKEY_PUBLIC,
+	apiSecret = process.env.MJ_APIKEY_PRIVATE;
 
 ```
 
