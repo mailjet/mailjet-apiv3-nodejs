@@ -176,3 +176,7 @@ Feel free to ask anything, and contribute:
 - Implement your feature or bug fix.
 - Add documentation to it.
 - Commit, push, open a pull request and voila.
+
+TODO:
+
+- Add compatibility with `duplicatefrom` filter
