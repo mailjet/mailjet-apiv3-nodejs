@@ -122,10 +122,10 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
  * path.
  *
  * Returns a formatted url from a http method and 
- * a parameters object litteral
+ * a parameters object literal
  *
  * @method {String} GET/POST/...
- * @params {Object Litteral} {name: value}
+ * @params {Object literal} {name: value}
  *
  */
 MailjetClient.prototype.path = function(method, params) {
@@ -142,7 +142,7 @@ MailjetClient.prototype.path = function(method, params) {
  *
  * @method {String} http method (GET/POST...)
  * @url {String} url path to be used for the request
- * @data {Object litteral} additional data espacially for POST/PUT operations
+ * @data {Object literal} additional data espacially for POST/PUT operations
  * @callback -optional {Function} called on response from the server, or on error
  *
  * @return a promise triggering 'success' on response
@@ -208,15 +208,15 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 
 /*
  *
- * MailjetRessource constructor
+ * MailjetResource constructor
  *
  * This class creates a function that can be build through method chaining
  *
  * @method {String} http method
- * @func {String} ressource/path to be sent
+ * @func {String} resource/path to be sent
  * @context {MailjetClient[instance]} parent client
  */
-function MailjetRessource (method, func, context) {
+function MailjetResource (method, func, context) {
 	this.base = func;
 	this.func = func;
 	this.lastAdded = FUNCTION;
@@ -249,10 +249,10 @@ function MailjetRessource (method, func, context) {
  * Add an ID and prevent invalid id chaining
  * 
  * @value {String/Number} append an id to the path
- * @return the MailjetRessource instance to allow method chaining
+ * @return the MailjetResource instance to allow method chaining
  *
  */
-MailjetRessource.prototype.id = function(value) {
+MailjetResource.prototype.id = function(value) {
 	if (isNaN(parseInt(value)))
 		throw new Error('Invalid ID value');
 	if (this.lastAdded === ID)
@@ -270,10 +270,10 @@ MailjetRessource.prototype.id = function(value) {
  * Add an Action and prevent invalid action chaining
  * 
  * @value {String} append an action to the path
- * @return the MailjetRessource instance to allow method chaining
+ * @return the MailjetResource instance to allow method chaining
  *
  */
-MailjetRessource.prototype.action = function(name) {
+MailjetResource.prototype.action = function(name) {
 	if (this.lastAdded === ACTION)
 		console.warn('[WARNING] your request may fail due to invalid action chaining');
 	this.func = _path.join(this.func, name);
@@ -285,13 +285,13 @@ MailjetRessource.prototype.action = function(name) {
  *
  * request.
  *
- * @parmas {Object Litteral} method parameters
+ * @parmas {Object literal} method parameters
  * @callback (optional) {Function} triggered when done
  * 
  * @return {String} the server response
  */
 
-MailjetRessource.prototype.request = function(params, callback) {
+MailjetResource.prototype.request = function(params, callback) {
 	return this.result(params, callback);
 };
 
@@ -303,7 +303,7 @@ MailjetRessource.prototype.request = function(params, callback) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.post = function(func) {
-	return new MailjetRessource('post', func, this);
+	return new MailjetResource('post', func, this);
 };
 
 
@@ -315,7 +315,18 @@ MailjetClient.prototype.post = function(func) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.get = function(func) {
-	return new MailjetRessource('get', func, this);
+	return new MailjetResource('get', func, this);
+};
+
+/*
+ * delete.
+ *
+ * @func {String} required Mailjet API function to be used (can contain a whole action path)
+ *
+ * @returns a function that make an httpRequest for each call
+ */
+MailjetClient.prototype.delete = function(func) {
+	return new MailjetResource('delete', func, this);
 };
 
 /*
@@ -326,7 +337,7 @@ MailjetClient.prototype.get = function(func) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.put = function(func) {
-	return new MailjetRessource('put', func, this);
+	return new MailjetResource('put', func, this);
 };
 
 /*
