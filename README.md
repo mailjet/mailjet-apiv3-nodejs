@@ -10,7 +10,7 @@
 
 Say Welcome to the new [Mailjet][mailjet] official NodeJS API wrapper !
 
-[Mailjet][mailjet] is an all-in-one email delivery engine !
+[Mailjet][mailjet] is an Email Service Provider (ESP) !
 Go visit the website and get confortable !
 
 For more details, see the full [API Documentation][doc]
@@ -44,11 +44,13 @@ var Mailjet = require('mailjet').connect('api key', 'api secret');
 ### Get cosy with Mailjet
 
 
-#### save your `API_KEY` and `API_SECRET`:
+#### Save your `API_KEY` and `API_SECRET`:
 
 `echo 'export MAILJET_API_KEY=MY_API_KEY' >> ~/.zshrc`
 
 `echo 'export MAILJET_API_SECRET=MY_API_SECRET' >> ~/.zshrc`
+
+`source ~/.zshrc`
 
 replace `zshrc` with `bash_profile` if you are simply using bash
 
@@ -173,4 +175,4 @@ Feel free to ask anything, and contribute:
 - Create a new branch.
 - Implement your feature or bug fix.
 - Add documentation to it.
-- Commit, push and voila.
+- Commit, push, open a pull request and voila.
