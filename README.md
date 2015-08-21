@@ -1,90 +1,176 @@
 
+[mailjet]: http://www.mailjet.com
+[api_credential]: https://app.mailjet.com/account/api_keys
+[eventemitter]: https://nodejs.org/api/events.html
+[doc]: http://dev.mailjet.com/
 
 ![alt text](http://cdn.appstorm.net/web.appstorm.net/files/2012/02/mailjet_logo_200x200.png "Mailjet")
 
 # Mailjet NodeJs Wrapper
-for more information about Mailjet, visit http://www.mailjet.com/
 
-This is the NodeJs wrapper form Mailjet, it's MIT licenced.
+Say Welcome to the new [Mailjet][mailjet] official NodeJS API wrapper !
 
-## Getting Started !
+[Mailjet][mailjet] is an all-in-one email delivery engine !
+Go visit the website and get confortable !
+
+For more details, see the full [API Documentation][doc]
+
+## Getting started
+
+first, create a project folder
+
+`mkdir mailjet-project && cd $_`
+
+### Installation
+
+
+if you want to get a global installation, you can add `-g`
+
+`npm install mailjet`
+
+
+
+### Show me the code
+
+To authenticate, go get your API key, and API secret [here][api_credential],
+open your favorite text editor and import the mailjet module
 
 ``` javascript
 
-// test.js
-// to run this example add your API key and Secret to your env
-// and run 'node test.js'
+var Mailjet = require('mailjet').connect('api key', 'api secret');
 
-var env = process.env
-	, Mailjet = require ('./mailjet-client')
-		.connect(env.MAILJET_API_KEY, env.MAILJET_API_SECRET);
+```
 
-// you can store ressources
-var contact = Mailjet.get('contact');
-var sender = Mailjet.post('sender');
+### Get cosy with Mailjet
+
+
+#### save your `API_KEY` and `API_SECRET`:
+
+`echo 'export MAILJET_API_KEY=MY_API_KEY' >> ~/.zshrc`
+
+`echo 'export MAILJET_API_SECRET=MY_API_SECRET' >> ~/.zshrc`
+
+replace `zshrc` with `bash_profile` if you are simply using bash
+
+#### And use it in your projects
+
+``` javascript
+
+var apiKey = process.env.MAILJET_API_KEY,
+	apiSecret = process.env.API_SECRET;
+
+```
+
+### Store a Mailjet resource
+
+``` javascript
+
+// GET resource
 var user = Mailjet.get('user');
-var sendMessage = Mailjet.post('send');
 
-// and call them easily
-contact.request({Limit: 2}, function (error, response, body) {
-	console.log (error || body)
-});
+// POST resource
+var sender = Mailjet.post('sender');
 
-// you can specify an id
-contact.id(3).request(function (error, response, body) {
-	console.log (error || body);
-});
+```
 
-// you can add an action to it
-contact.id(3)
-	.request(function (error, response, body) {
-		console.log (error || body);
-	});
+### Request your resource with a callback function
 
-// if you don't like callbacks
-contact.id(2).request()
-	.on('success', function (response, body) {
+``` javascript
+
+user.request(function (error, response, body) {
+	if (error)
+		console.log ('Oops, something went wrong ' + response.statusCode);
+	else
 		console.log (body);
-	})
-	.on('error', function (error, response) {
-		console.log ("you shiouldn't get here anyway");
-	});
-
-user.request().on('success', function (response, body) {
-	console.log (response.statusCode);
-});
-
-// Send an Email
-sendMessage.request({
-	'FromEmail': 'stan@smith.com',
-	'FromName': 'Stan Smith',
-	'Subject': 'Test nodejs mailjet wrapper',
-	'Text-part': 'Hello NodeJs!',
-	'Recipients': [{'Email': 'roger@smith.com'}],
-}).on('success', function (response, body) {
-	console.log (body);
-})
-.on('error', function (e) {
-	console.log (e);
-});
-
-postContact.action('managemanycontacts').request({
-	ContactLists: [
-		{ListID: 1, action: 'addnoforce'}
-	],
-	Contacts: [
-		{Email: 'mr@test.com', Name: 'Hello World'},
-		{Email: 'mr@test2.com', Name: 'Hello World2'},
-	]
-}, function (err, response, body) {
-	console.log (err || body);
 });
 
 ```
 
-## TODO 
- - Add the documentation in test.js
- - Implement a couple more examples
- - Add tests relative to the action chaining
- - Implement a small external project featuring the Wrapper
+### Make the same request with a Promise
 
+the request method actually returns a [EventEmitter][eventemitter] triggering `success` and `error`
+
+``` javascript
+
+user.request()
+	.on('error', function (error, response) {})
+	.on('success', function (response, body) {});
+
+```
+
+### Pass data to your requests
+
+
+``` javascript
+
+sender.request({ Email: 'mr@mailjet.com' })
+	.on('success', handleData)
+	.on('error', handlaError);
+
+```
+
+### Pass parameters as well as a callback
+
+``` javascript
+
+var getContacts = Mailjet.get('contact');
+
+getContacts.request({Limit: 3}, handleContacts);
+
+```
+
+### Request a resource with an ID
+
+``` javascript
+
+getContacts.id(2).request(handleSingleContact);
+
+````
+
+### Request a ressource with an Action
+
+``` javascript
+
+var postContact = Mailjet.post('contact');
+
+postContact.action('managemanycontacts').request({
+	ContactLists: MyContactLists,
+    Contacts: MyContacts,
+}, handlePostResponse);
+
+```
+
+### Send an Email
+
+``` javascript
+
+var sendEmail = Mailjet.post('send');
+
+var emailData = {
+    'FromEmail': 'my@email.com',
+    'FromName': 'My Name',
+    'Subject': 'Test with the NodeJS Mailjet wrapper',
+    'Text-part': 'Hello NodeJs !',
+    'Recipients': [{'Email': 'roger@smith.com'}],
+}
+
+sendEmail
+	.request(emailData)
+    .on('success', handlePostResponse)
+    .on('error', hendleError);
+
+```
+
+## Contribute
+
+Mailjet loves developpers. You can be part of this project !
+
+This wrapper is a great introduction to the open source world, check out the code !
+
+Feel free to ask anything, and contribute:
+
+- Fork the project.
+- Create a new branch.
+- Implement your feature or bug fix.
+- Add documentation to it.
+- Commit, push and voila.
