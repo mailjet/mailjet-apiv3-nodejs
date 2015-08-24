@@ -26,7 +26,7 @@ first, create a project folder
 
 if you want to get a global installation, you can add `-g`
 
-`npm install mailjet`
+`npm install node-mailjet`
 
 
 
