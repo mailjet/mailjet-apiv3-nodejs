@@ -1,0 +1,62 @@
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	box-sizing: border-box;
+}
+
+#logo {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
+
+input:focus , #editor:focus {
+ 	outline: none; 
+	border: 1px solid #2c97de;
+}
+
+#subject input {
+	color: #2c97de;
+}
+
+#container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#wrapper {
+	width: 960px;
+	height: 500px;
+}
+
+.field {
+	width: 100%;
+}
+
+#send-button button {
+	float: right;
+	padding: 10px 50px;
+	outline: none;
+	border: 1px solid silver;
+	background-color: #fff;
+	margin-top: 10px;
+}
+
+.field input {
+	width: 100%;
+	padding: 20px;
+	margin-bottom: 5px;
+}
+
+#editor {
+	border: 1px solid silver;
+	font-family: Helvetica;
+	width: 100%;
+	height: 500px;
+	outline: none;
+	padding: 20px;
+}
