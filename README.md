@@ -163,6 +163,33 @@ sendEmail
 
 ```
 
+### Send two Emails
+
+``` javascript
+
+var emailData = {
+    'FromEmail': 'gbadi@student.42.fr',
+    'FromName': 'Guillaume badi',
+    'Subject': 'Coucou Mailjet2',
+    'Text-part': 'Hello World2',
+    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+}
+
+var emailData2 = emailData;
+emailData2['Text-part'] = 'This is another Email';
+
+sendEmail
+	.request(emailData)
+    .on('success', handleData)
+    .on('error', handleError);
+
+sendEmail
+	.request(emailData2)
+    .on('success', handleData)
+    .on('error', handleError);
+
+```
+
 ## Contribute
 
 Mailjet loves developpers. You can be part of this project!
