@@ -37,7 +37,7 @@ open your favorite text editor and import the mailjet module
 
 ``` javascript
 
-var Mailjet = require('mailjet').connect('api key', 'api secret');
+var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
