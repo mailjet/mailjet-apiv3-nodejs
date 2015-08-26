@@ -192,7 +192,7 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	 * on the promise object
 	 */
 	request[method](options, function (err, response, body) {
-		if (err || (response.statusCode !== 200 && response.statusCode !== 201)) {
+		if (err || (response.statusCode > 210)) {
 			if (callback) {
 				callback(err || body, response);
 			}
