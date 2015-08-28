@@ -1,18 +1,18 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2015 Mailjet
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@ const ACTION = 2;
 
 /*
  * Imports.
- * 
+ *
  * qs is used to format the url from the provided parameters and method
  * _path will join a path according to the OS specifications
  * https will be used to make a secure http request to the API
@@ -83,28 +83,6 @@ MailjetClient.prototype.readFile = function(file, callback) {
 	return promise;
 };
 
-/**
- *
- * errorHandler
- * 
- * if fn is mentionned, Set the default error Handler to fn.
- * otherwise return it
- *
- * @fn (optional) {Function} a function that takes a error and a response
- * 
- * @returns either the MailjetClient instance if fn is passed to allow chianing]
- *			or returns the _errorHandler function
- *
- */
-MailjetClient.prototype.errorHandler = function(fn) {
-	if (fn) {
-		this._errorHandler = fn;
-		return this;
-	} else {
-		return this._errorHandler;
-	}
-};
-
 /*
  * formatJSON.
  *
@@ -127,7 +105,7 @@ MailjetClient.prototype.formatJSON = function(json) {
  */
 MailjetClient.connect = function (k, s) {
 	return new MailjetClient().connect(k, s);
-}	
+}
 
 /*
  * connect.
@@ -147,7 +125,7 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
 /*
  * path.
  *
- * Returns a formatted url from a http method and 
+ * Returns a formatted url from a http method and
  * a parameters object literal
  *
  * @method {String} GET/POST/...
@@ -186,8 +164,8 @@ function hasAnArray(object) {
 
 MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	var promise = new EventEmitter().on('error', function () {});
-	
-	if (url.match(/REST\/send/i))
+
+	if (url.match(/REST\/send$/i))
 		url = url.replace(/REST\/send/gi, 'send');
 	else if (url.match(/REST\/contactslist\/[0-9]+\/CSVData/gi))
 		url = url.replace(/REST/gi, 'DATA').replace(/CSVData/gi, 'CSVData/text:plain');
@@ -272,7 +250,7 @@ function MailjetResource (method, func, context) {
  * id.
  *
  * Add an ID and prevent invalid id chaining
- * 
+ *
  * @value {String/Number} append an id to the path
  * @return the MailjetResource instance to allow method chaining
  *
@@ -293,7 +271,7 @@ MailjetResource.prototype.id = function(value) {
  * action.
  *
  * Add an Action and prevent invalid action chaining
- * 
+ *
  * @value {String} append an action to the path
  * @return the MailjetResource instance to allow method chaining
  *
@@ -312,7 +290,7 @@ MailjetResource.prototype.action = function(name) {
  *
  * @parmas {Object literal} method parameters
  * @callback (optional) {Function} triggered when done
- * 
+ *
  * @return {String} the server response
  */
 
