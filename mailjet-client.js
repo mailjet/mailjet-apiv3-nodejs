@@ -23,11 +23,10 @@
  *
  */
 
+const DEBUG_MODE = true;
 const FUNCTION = 0;
 const ID = 1;
 const ACTION = 2;
-
-const SEND_RESSOURCE = 'send';
 
 /*
  * Imports.
@@ -35,12 +34,15 @@ const SEND_RESSOURCE = 'send';
  * qs is used to format the url from the provided parameters and method
  * _path will join a path according to the OS specifications
  * https will be used to make a secure http request to the API
+ * fs will simply be used to read files
  */
 
 var qs = require ('querystring')
 	, request = require ('request')
 	, EventEmitter = require ('events').EventEmitter
+	, fs = require ('fs')
 	, _path = require ('path');
+
 
 /*
  * MailjetClient constructor.
@@ -55,6 +57,30 @@ function MailjetClient (api_key, api_secret) {
 	this.config = require ('./config');
 	if (api_key && api_secret)
 		this.connect(api_key, api_secret);
+};
+
+/**
+ *
+ * readFile.
+ *
+ * @file {String} csv file to be uploaded to the Mailjet server
+ * @callback {Function} called when the file content is available, after meking the warnings.
+ */
+
+MailjetClient.prototype.readFile = function(file, callback) {
+	var promise = new EventEmitter().on('error', function () {});
+	if (file.indexOf('.csv') === -1)
+		console.warn('[WARNING] The file you are trying to upload does not appear to be a csv file.');
+	fs.readFile(file, function (err, data) {
+		if (err) {
+			if (callback) callback(err);
+			else promise.emit('error', err);
+		} else {
+			if (callback) callback(null, data);
+			else promise.emit('success', data);
+		}
+	});
+	return promise;
 };
 
 /**
@@ -129,7 +155,8 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
  *
  */
 MailjetClient.prototype.path = function(method, params) {
-	var base = this.config.version + (method === SEND_RESSOURCE ? '' : 'REST');
+	// var base = this.config.version + (method === SEND_RESSOURCE ? '' : 'REST');
+	base = this.config.version + 'REST';
 	if (Object.keys(params).length === 0)
 		return base + '/' + method;
 
@@ -164,25 +191,34 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	 * If this line gets erased, we cannot overwrite the error event...
 	 */
 	var promise = new EventEmitter().on('error', function () {});
+	
+	/*
+	url = url
+			.replace(/REST\/send/gi, 'send')
+			.replace(/REST\/import/gi, 'DATA/contactslist')
+			.replace(/csvdata/gi, 'CSVData/text:plain');
+	*/
+	if (url.match(/REST\/send/i))
+		url = url.replace(/REST\/send/gi, 'send');
+	else if (url.match(/REST\/contactslist\/[0-9]+\/CSVData/gi))
+		url = url.replace(/REST/gi, 'DATA').replace(/CSVData/gi, 'CSVData/text:plain');
+	else if (url.match(/REST\/batchjob\/[0-9]+\/csvError/gi))
+		url = url.replace(/REST/gi, 'DATA').replace(/csverror/gi, 'CSVError/text:csv');
+
+	if (DEBUG_MODE)
+		console.log ('Finale url: ' +  url);
 
 	/**
 	 * json: true converts the output from string to JSON
 	 */
 	var options = {
-		json: true,
+		json: url.indexOf('text:plain') === -1,
 		url: url,
 		auth: {user: this.apiKey, pass: this.apiSecret}
 	}
 
 	if ((method === 'post' || method === 'put') && Object.keys(data).length !== 0) {
-		/**
-			TODO:
-			- Find out why this condition works
-		 */
-		// if (hasAnArray(data))
-			options.body = data;
-		// else
-			// options.formData = data;
+		options.body = data;
 	}
 
 	/*
