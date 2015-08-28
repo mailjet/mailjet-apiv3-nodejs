@@ -155,7 +155,6 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
  *
  */
 MailjetClient.prototype.path = function(method, params) {
-	// var base = this.config.version + (method === SEND_RESSOURCE ? '' : 'REST');
 	base = this.config.version + 'REST';
 	if (Object.keys(params).length === 0)
 		return base + '/' + method;
@@ -186,18 +185,8 @@ function hasAnArray(object) {
 }
 
 MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
-	/*
-	 * TODO: document this line
-	 * If this line gets erased, we cannot overwrite the error event...
-	 */
 	var promise = new EventEmitter().on('error', function () {});
 	
-	/*
-	url = url
-			.replace(/REST\/send/gi, 'send')
-			.replace(/REST\/import/gi, 'DATA/contactslist')
-			.replace(/csvdata/gi, 'CSVData/text:plain');
-	*/
 	if (url.match(/REST\/send/i))
 		url = url.replace(/REST\/send/gi, 'send');
 	else if (url.match(/REST\/contactslist\/[0-9]+\/CSVData/gi))
