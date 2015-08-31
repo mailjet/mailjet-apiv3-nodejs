@@ -28,6 +28,8 @@ const FUNCTION = 0;
 const ID = 1;
 const ACTION = 2;
 
+const STRICT = false;
+
 /*
  * Imports.
  *
@@ -55,6 +57,8 @@ var qs = require ('querystring')
  */
 function MailjetClient (api_key, api_secret) {
 	this.config = require ('./config');
+	// To be updated according to the npm repo version
+	this.version = 1.0.3;
 	if (api_key && api_secret)
 		this.connect(api_key, api_secret);
 };
@@ -65,6 +69,9 @@ function MailjetClient (api_key, api_secret) {
  *
  * @file {String} csv file to be uploaded to the Mailjet server
  * @callback {Function} called when the file content is available, after meking the warnings.
+ *
+ * TODO:
+ * 	- implement native Promise for later release
  */
 
 MailjetClient.prototype.readFile = function(file, callback) {
@@ -81,6 +88,16 @@ MailjetClient.prototype.readFile = function(file, callback) {
 		}
 	});
 	return promise;
+};
+
+
+MailjetClient.prototype.typeJson = function (body) {
+	var keys = Object.keys(body);
+	for (var i in keys) {
+		var key = keys[i];
+		body[key] = parseInt(body[key]) || body[key];
+	}
+	return body;
 };
 
 /*
@@ -173,7 +190,7 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 		url = url.replace(/REST/gi, 'DATA').replace(/csverror/gi, 'CSVError/text:csv');
 
 	if (DEBUG_MODE)
-		console.log ('Finale url: ' +  url);
+		console.log ('Final url: ' +  url);
 
 	/**
 	 * json: true converts the output from string to JSON
@@ -181,11 +198,12 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	var options = {
 		json: url.indexOf('text:plain') === -1,
 		url: url,
+		useragent: 'mailjet-api-v3-nodejs/' + this.version,
 		auth: {user: this.apiKey, pass: this.apiSecret}
 	}
 
 	if ((method === 'post' || method === 'put') && Object.keys(data).length !== 0) {
-		options.body = data;
+		options.body = STRICT ? this.typeJson(data) : data;
 	}
 
 	/*
