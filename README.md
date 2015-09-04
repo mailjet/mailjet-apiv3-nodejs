@@ -156,7 +156,7 @@ var emailData = {
 sendEmail
 	.request(emailData)
     .on('success', handlePostResponse)
-    .on('error', hqndleError);
+    .on('error', handleError);
 
 ```
 
