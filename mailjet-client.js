@@ -58,7 +58,7 @@ var qs = require ('querystring')
 function MailjetClient (api_key, api_secret) {
 	this.config = require ('./config');
 	// To be updated according to the npm repo version
-	this.version = 1.0.3;
+	this.version = "1.0.3";
 	if (api_key && api_secret)
 		this.connect(api_key, api_secret);
 };
