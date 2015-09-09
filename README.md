@@ -133,8 +133,8 @@ getContacts.id(2).request(handleSingleContact);
 var postContact = Mailjet.post('contact');
 
 postContact.action('managemanycontacts').request({
-	ContactLists: MyContactListsArrqy,
-    Contacts: MyContactsArrqy,
+	ContactLists: MyContactListsArray,
+    Contacts: MyContactsArray,
 }, handlePostResponse);
 
 ```
@@ -151,6 +151,11 @@ var emailData = {
     'Subject': 'Test with the NodeJS Mailjet wrapper',
     'Text-part': 'Hello NodeJs !',
     'Recipients': [{'Email': 'roger@smith.com'}],
+	'Attachments': [{
+		"Content-Type": "text-plain",
+		"Filename": "test.txt",
+		"Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
+	}],
 }
 
 sendEmail
