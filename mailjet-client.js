@@ -23,8 +23,8 @@
  *
  */
 
-const DEBUG_MODE = true;
-const FUNCTION = 0;
+const DEBUG_MODE = false;
+const RESOURCE = 0;
 const ID = 1;
 const ACTION = 2;
 
@@ -63,34 +63,6 @@ function MailjetClient (api_key, api_secret) {
 		this.connect(api_key, api_secret);
 };
 
-/**
- *
- * readFile.
- *
- * @file {String} csv file to be uploaded to the Mailjet server
- * @callback {Function} called when the file content is available, after meking the warnings.
- *
- * TODO:
- * 	- implement native Promise for later release
- */
-
-MailjetClient.prototype.readFile = function(file, callback) {
-	var promise = new EventEmitter().on('error', function () {});
-	if (file.indexOf('.csv') === -1)
-		console.warn('[WARNING] The file you are trying to upload does not appear to be a csv file.');
-	fs.readFile(file, function (err, data) {
-		if (err) {
-			if (callback) callback(err);
-			else promise.emit('error', err);
-		} else {
-			if (callback) callback(null, data);
-			else promise.emit('success', data);
-		}
-	});
-	return promise;
-};
-
-
 MailjetClient.prototype.typeJson = function (body) {
 	var keys = Object.keys(body);
 	for (var i in keys) {
@@ -98,17 +70,6 @@ MailjetClient.prototype.typeJson = function (body) {
 		body[key] = parseInt(body[key]) || body[key];
 	}
 	return body;
-};
-
-/*
- * formatJSON.
- *
- * @json {String} response body
- * @return a formatted JSON string with newlines and indentation
- */
-
-MailjetClient.prototype.formatJSON = function(json) {
-	return JSON.stringify(json, null, 4);
 };
 
 /*
@@ -145,17 +106,23 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
  * Returns a formatted url from a http method and
  * a parameters object literal
  *
- * @method {String} GET/POST/...
+ * @resource {String}
+ * @sub {String} REST/''/DATA
  * @params {Object literal} {name: value}
  *
  */
-MailjetClient.prototype.path = function(method, params) {
-	base = this.config.version + 'REST';
+MailjetClient.prototype.path = function(resource, sub, params) {
+	if (DEBUG_MODE) {
+		console.log("resource =", resource);
+		console.log("subPath =", sub);
+		console.log("filters =", params);
+	}
+	base = _path.join(this.config.version, sub);
 	if (Object.keys(params).length === 0)
-		return base + '/' + method;
+		return base + '/' + resource;
 
 	var q = qs.stringify(params);
-	return base + '/' + method + '/?' + q;
+	return base + '/' + resource + '/?' + q;
 };
 
 /*
@@ -170,15 +137,6 @@ MailjetClient.prototype.path = function(method, params) {
  * 		and error on error
  */
 
-function hasAnArray(object) {
-	var keys = Object.keys(object);
-	for (var i in keys) {
-		var key = keys[i];
-		if (object[key] instanceof Array) return true
-	}
-	return false;
-}
-
 MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	var promise = new EventEmitter().on('error', function () {});
 
@@ -189,14 +147,17 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	else if (url.match(/REST\/batchjob\/[0-9]+\/csvError/gi))
 		url = url.replace(/REST/gi, 'DATA').replace(/csverror/gi, 'CSVError/text:csv');
 
-	if (DEBUG_MODE)
+	if (DEBUG_MODE) {
 		console.log ('Final url: ' +  url);
+		process.exit(0);
+	}
 
 	/**
 	 * json: true converts the output from string to JSON
 	 */
 	var options = {
 		json: url.indexOf('text:plain') === -1,
+		// url: "http://requestb.in/173r1r01",
 		url: url,
 		useragent: 'mailjet-api-v3-nodejs/' + this.version,
 		auth: {user: this.apiKey, pass: this.apiSecret}
@@ -239,9 +200,20 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
  */
 function MailjetResource (method, func, context) {
 	this.base = func;
-	this.func = func;
-	this.lastAdded = FUNCTION;
+	this.callUrl = func;
+
+	this.resource = func.toLowerCase();
+
+	this.lastAdded = RESOURCE;
 	var self = context;
+
+	/*
+	It can be REST or nothing if we only know the resource
+	*/
+	this.subPath = (function () {
+		if (func.toLowerCase() !== 'send') return 'REST';
+		return '';
+	})();
 
 	/**
 	 *
@@ -256,9 +228,22 @@ function MailjetResource (method, func, context) {
 			callback = params;
 			params = {};
 		}
-		var path = self.path(this.func, method === 'get' ? params : {});
-		this.func = this.base;
-		self.lastAdded = FUNCTION;
+
+		/*
+		We build the querystring depending on the parameters. if the user explicitly mentionned
+		a filters property, we pass it to the url
+		*/
+		var path = self.path(this.callUrl, this.subPath, (function () {
+			if (params['filters']) {
+				var ret = params['filters'];
+				delete params['filters'];
+				return ret;
+			} else if (method === 'get') return params;
+			else return {};
+		})());
+
+		this.callUrl = this.base;
+		self.lastAdded = RESOURCE;
 		return self.httpRequest(method, 'https://' + _path.join(self.config.url, path), params, callback);
 	}
 }
@@ -274,12 +259,10 @@ function MailjetResource (method, func, context) {
  *
  */
 MailjetResource.prototype.id = function(value) {
-	if (isNaN(parseInt(value)))
-		throw new Error('Invalid ID value');
-	if (this.lastAdded === ID)
+	if (this.lastAdded === ID && DEBUG_MODE)
 		console.warn('[WARNING] your request may fail due to invalid id chaining');
 
-	this.func = _path.join(this.func, value.toString());
+	this.callUrl = _path.join(this.callUrl, value.toString());
 	this.lastAdded = ID;
 	return this;
 };
@@ -295,10 +278,20 @@ MailjetResource.prototype.id = function(value) {
  *
  */
 MailjetResource.prototype.action = function(name) {
-	if (this.lastAdded === ACTION)
+	if (this.lastAdded === ACTION && DEBUG_MODE)
 		console.warn('[WARNING] your request may fail due to invalid action chaining');
-	this.func = _path.join(this.func, name);
+
+	this.callUrl = _path.join(this.callUrl, name);
+	this.action = name.toLowerCase();
+
 	this.lastAdded = ACTION;
+
+	this.subPath = (function () {
+		if (this.resource === 'contactslist' && this.action === 'csvdata' ||
+				this.resource === 'batchjob' && this.action === 'csverror')
+			return 'DATA';
+		else return this.subPath;
+	})();
 	return this;
 };
 

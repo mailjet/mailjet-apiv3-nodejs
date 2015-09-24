@@ -191,6 +191,37 @@ sendEmail
     .on('error', handleError);
 
 ```
+## Have Fun !
+``` javascript
+var mailjet = require ('./mailjet-client')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
+function handleError (err) {
+  throw new Error(err.ErrorMessage);
+}
+
+function newContact (email) {
+  mailjet.post('contact')
+      .request({Email: email})
+      .on('error', handleError);
+}
+
+function testEmail (text) {
+  email = {};
+  email['FromName'] = 'Your Name';
+  email['FromEmail'] = 'Your Sender Adress';
+  email['Subject'] = 'Test Email';
+  email['Recipients'] = [{Email: 'Your email'}];
+  email['Text-Part'] = text;
+
+  mailjet.post('send')
+    .request(email)
+    .on('error', handleError);
+}
+
+testEmail('Hello World!');
+```
+
 
 ## Contribute
 
@@ -208,4 +239,4 @@ Feel free to ask anything, and contribute:
 
 TODO:
 
-- Add compatibility with `duplicatefrom` filter
+- Extend Error class to create Api errors
