@@ -117,7 +117,7 @@ MailjetClient.prototype.path = function(resource, sub, params) {
 		console.log("subPath =", sub);
 		console.log("filters =", params);
 	}
-	base = _path.join(this.config.version, sub);
+	var base = _path.join(this.config.version, sub);
 	if (Object.keys(params).length === 0)
 		return base + '/' + resource;
 
@@ -162,7 +162,6 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 		useragent: 'mailjet-api-v3-nodejs/' + this.version,
 		auth: {user: this.apiKey, pass: this.apiSecret}
 	}
-
 	if ((method === 'post' || method === 'put') && Object.keys(data).length !== 0) {
 		options.body = STRICT ? this.typeJson(data) : data;
 	}
