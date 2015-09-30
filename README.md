@@ -2,7 +2,7 @@
 [mailjet]: http://www.mailjet.com
 [api_credential]: https://app.mailjet.com/account/api_keys
 [eventemitter]: https://nodejs.org/api/events.html
-[doc]: http://dev.preprod.mailjet.com/guides/?javascript#
+[doc]: http://dev.mailjet.com/guides/?javascript#
 
 ![alt text](http://cdn.appstorm.net/web.appstorm.net/files/2012/02/mailjet_logo_200x200.png "Mailjet")
 
