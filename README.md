@@ -223,6 +223,12 @@ testEmail('Hello World!');
 ```
 
 
+## Run Test
+
+``` bash
+npm test
+```
+
 ## Contribute
 
 Mailjet loves developers. You can be part of this project!
