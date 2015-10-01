@@ -55,8 +55,9 @@ var qs = require ('querystring')
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret) {
+function MailjetClient (api_key, api_secret, testMode) {
 	this.config = require ('./config');
+	this.testMode = testMode || false;
 	// To be updated according to the npm repo version
 	this.version = "1.0.3";
 	if (api_key && api_secret)
@@ -140,32 +141,27 @@ MailjetClient.prototype.path = function(resource, sub, params) {
 MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	var promise = new EventEmitter().on('error', function () {});
 
-	if (url.match(/REST\/send$/i))
-		url = url.replace(/REST\/send/gi, 'send');
-	else if (url.match(/REST\/contactslist\/[0-9]+\/CSVData/gi))
-		url = url.replace(/REST/gi, 'DATA').replace(/CSVData/gi, 'CSVData/text:plain');
-	else if (url.match(/REST\/batchjob\/[0-9]+\/csvError/gi))
-		url = url.replace(/REST/gi, 'DATA').replace(/csverror/gi, 'CSVError/text:csv');
-
-	if (DEBUG_MODE) {
-		console.log ('Final url: ' +  url);
-		process.exit(0);
-	}
-
 	/**
 	 * json: true converts the output from string to JSON
 	 */
 	var options = {
 		json: url.indexOf('text:plain') === -1,
-		// url: "http://requestb.in/173r1r01",
 		url: url,
 		useragent: 'mailjet-api-v3-nodejs/' + this.version,
 		auth: {user: this.apiKey, pass: this.apiSecret}
 	}
-	if ((method === 'post' || method === 'put') && Object.keys(data).length !== 0) {
+	if ((method === 'post' || method === 'put')) {
 		options.body = STRICT ? this.typeJson(data) : data;
 	}
 
+	if (DEBUG_MODE) {
+		console.log ('Final url: ' +  url);
+		console.log ('body: ' +  body);
+	}
+
+	if (this.testMode) {
+		return [options.url, options.body || {}];
+	}
 	/*
 	 * request[method] returns either request.post, request.get etc
 	 *
@@ -221,6 +217,7 @@ function MailjetResource (method, func, context) {
 	 * @params (optional) {Object Littteral} parameters to be sent to the server
 	 * @callback (optional) {Function} called on response or error
 	 */
+	var that = this;
 	this.result = function (params, callback) {
 		params = params || {};
 		if (typeof params === 'function') {
@@ -232,7 +229,7 @@ function MailjetResource (method, func, context) {
 		We build the querystring depending on the parameters. if the user explicitly mentionned
 		a filters property, we pass it to the url
 		*/
-		var path = self.path(this.callUrl, this.subPath, (function () {
+		var path = self.path(that.callUrl, that.subPath, (function () {
 			if (params['filters']) {
 				var ret = params['filters'];
 				delete params['filters'];
@@ -241,7 +238,7 @@ function MailjetResource (method, func, context) {
 			else return {};
 		})());
 
-		this.callUrl = this.base;
+		that.callUrl = that.base;
 		self.lastAdded = RESOURCE;
 		return self.httpRequest(method, 'https://' + _path.join(self.config.url, path), params, callback);
 	}
@@ -285,13 +282,14 @@ MailjetResource.prototype.action = function(name) {
 
 	this.lastAdded = ACTION;
 
+	var self = this;
 	this.subPath = (function () {
-		if (this.resource === 'contactslist' && this.action === 'csvdata' ||
-				this.resource === 'batchjob' && this.action === 'csverror')
+		if (self.resource === 'contactslist' && self.action === 'csvdata' ||
+				self.resource === 'batchjob' && self.action === 'csverror')
 			return 'DATA';
-		else return this.subPath;
+		else return self.subPath;
 	})();
-	return this;
+	return self;
 };
 
 /**
