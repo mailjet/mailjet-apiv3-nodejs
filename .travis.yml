@@ -7,3 +7,5 @@ node_js:
  - "0.10"
  - "iojs"
 	
+script:
+ - npm test
