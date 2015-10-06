@@ -14,7 +14,7 @@ Please welcome the new [Mailjet][mailjet] official NodeJS API wrapper!
 
 [Mailjet][mailjet] is an Email Service Provider (ESP). Visit the website and get comfortable!
 
-For more details, see the full [API Documentation][doc]
+You can find a lot of code samples in the [API Documentation][doc]
 
 ## Getting started
 
