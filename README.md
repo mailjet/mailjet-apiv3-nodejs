@@ -3,6 +3,7 @@
 [api_credential]: https://app.mailjet.com/account/api_keys
 [eventemitter]: https://nodejs.org/api/events.html
 [doc]: http://dev.mailjet.com/guides/?javascript#
+[api_doc_repo]: https://github.com/mailjet/api-documentation
 
 ![alt text](http://cdn.appstorm.net/web.appstorm.net/files/2012/02/mailjet_logo_200x200.png "Mailjet")
 
@@ -14,7 +15,10 @@ Please welcome the new [Mailjet][mailjet] official NodeJS API wrapper!
 
 [Mailjet][mailjet] is an Email Service Provider (ESP). Visit the website and get comfortable!
 
-You can find a lot of code samples in the [API Documentation][doc]
+Every code examples can be find on the [Mailjet Documentation][doc]
+
+(Please refer to the [Mailjet Documentation Repository][api_doc_repo] to contribute to the documentation examples)
+
 
 ## Getting started
 
