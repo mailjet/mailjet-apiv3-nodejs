@@ -285,6 +285,11 @@ MailjetResource.prototype.action = function(name) {
 
 	this.lastAdded = ACTION;
 
+  if (action.toLowerCase() == 'csvdata')
+    action = 'csvdata/text:plain';
+  else if (action.toLowerCase() == 'csverror')
+    action = 'csverror/text:csv';
+
 	var self = this;
 	this.subPath = (function () {
 		if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
