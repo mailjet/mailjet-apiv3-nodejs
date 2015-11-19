@@ -285,10 +285,10 @@ MailjetResource.prototype.action = function(name) {
 
 	this.lastAdded = ACTION;
 
-  if (action.toLowerCase() == 'csvdata')
-    action = 'csvdata/text:plain';
-  else if (action.toLowerCase() == 'csverror')
-    action = 'csverror/text:csv';
+  if (this.action.toLowerCase() == 'csvdata')
+    this.action = 'csvdata/text:plain';
+  else if (this.action.toLowerCase() == 'csverror')
+    this.action = 'csverror/text:csv';
 
 	var self = this;
 	this.subPath = (function () {
