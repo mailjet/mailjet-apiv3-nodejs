@@ -23,7 +23,7 @@
  *
  */
 
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 const RESOURCE = 0;
 const ID = 1;
 const ACTION = 2;
