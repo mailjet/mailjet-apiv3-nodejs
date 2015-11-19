@@ -23,7 +23,7 @@
  *
  */
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 const RESOURCE = 0;
 const ID = 1;
 const ACTION = 2;
@@ -154,9 +154,12 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 		options.body = STRICT ? this.typeJson(data) : data;
 	}
 
+  options['Content-Type'] = url.toLowerCase().indexOf('text:plain') > -1 ?
+    'text/plain' : 'application/json';
+
 	if (DEBUG_MODE) {
 		console.log ('Final url: ' +  url);
-		console.log ('body: ' +  body);
+		console.log ('body: ' +  options.body);
 	}
 
 	if (this.testMode) {
@@ -284,8 +287,8 @@ MailjetResource.prototype.action = function(name) {
 
 	var self = this;
 	this.subPath = (function () {
-		if (self.resource === 'contactslist' && self.action === 'csvdata' ||
-				self.resource === 'batchjob' && self.action === 'csverror')
+		if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
+				self.resource === 'batchjob' && self.action === 'csverror/text:csv')
 			return 'DATA';
 		else return self.subPath;
 	})();
