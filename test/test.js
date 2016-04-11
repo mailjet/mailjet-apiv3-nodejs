@@ -32,9 +32,9 @@ describe ('Basic Usage', function () {
 			var connectionType2 = new Mailjet().connect(API_KEY, API_SECRET);
 			var connectionType3 = Mailjet.connect(API_KEY, API_SECRET);
 
-			expect(connectionType1.apiKey + connectionType1.apiSecret).to.equal(API_KEY + API_SECRET);
-			expect(connectionType2.apiKey + connectionType2.apiSecret).to.equal(API_KEY + API_SECRET);
-			expect(connectionType3.apiKey + connectionType3.apiSecret).to.equal(API_KEY + API_SECRET);
+			expect('' + connectionType1.apiKey + connectionType1.apiSecret).to.equal('' + API_KEY + API_SECRET);
+			expect('' + connectionType2.apiKey + connectionType2.apiSecret).to.equal('' + API_KEY + API_SECRET);
+			expect('' + connectionType3.apiKey + connectionType3.apiSecret).to.equal('' + API_KEY + API_SECRET);
 		});
 	})
 
