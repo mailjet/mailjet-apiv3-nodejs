@@ -39,10 +39,10 @@ const STRICT = false
  * fs will simply be used to read files
  */
 
-var qs = require('querystring')
-var request = require('request')
-var EventEmitter = require('events').EventEmitter
-var _path = require('path')
+const qs = require('querystring')
+const request = require('request')
+const Promise = require('bluebird')
+const _path = require('path')
 
 /*
  * MailjetClient constructor.
@@ -139,8 +139,6 @@ MailjetClient.prototype.path = function (resource, sub, params) {
  */
 
 MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
-  var promise = new EventEmitter().on('error', function () {})
-
   /**
    * json: true converts the output from string to JSON
    */
@@ -170,29 +168,34 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
   if (method === 'delete') {
     method = 'del'
   }
-  /*
-   * request[method] returns either request.post, request.get etc
-   *
-   * If a callback is provided, it triggers it, else it trigger an event
-   * on the promise object
-   */
-  request[method](options, function (err, response, body) {
-    if (err || (response.statusCode > 210)) {
-      if (callback) {
-        callback(err || body, response)
-      } else {
-        promise.emit('error', err || body, response)
-      }
-    } else {
-      if (callback) {
-        callback(null, response, body)
-      } else {
-        promise.emit('success', response, body)
-      }
-    }
-  })
 
-  return promise
+  return new Promise((resolve, reject) => {
+    /*
+     * request[method] returns either request.post, request.get etc
+     *
+     * If a callback is provided, it triggers it, else it trigger an event
+     * on the promise object
+     */
+    request[method](options, function (err, response, body) {
+      if (err || (response.statusCode > 210)) {
+        if (typeof callback === 'function') {
+          callback(err || body, response)
+        }
+        reject({
+          error: err || body,
+          response: response
+        })
+      } else {
+        if (typeof callback === 'function') {
+          callback(null, response, body)
+        }
+        resolve({
+          response: response,
+          body: body
+        })
+      }
+    })
+  })
 }
 
 /*

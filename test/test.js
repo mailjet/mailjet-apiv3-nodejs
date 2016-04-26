@@ -16,7 +16,10 @@ var Mailjet = require('../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
-var EventEmitter = require('events').EventEmitter
+var Promise = require('bluebird')
+if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
+  throw new Error(`Mailjet API_KEY and API_SECRET are required, respectively "${API_KEY}" and "${API_SECRET}" given`)
+}
 
 describe('Basic Usage', function () {
   var client = Mailjet.connect(API_KEY, API_SECRET)
@@ -39,40 +42,39 @@ describe('Basic Usage', function () {
 
       it('calls the contact ressource instance whith no parameters', function (done) {
         contact.request()
-          .on('success', function (response, body) {
-            body.should.be.a('object')
-            expect(response.statusCode).to.equal(200)
+          .then(function (result) {
+            result.body.should.be.a('object')
+            expect(result.response.statusCode).to.equal(200)
             done()
           })
-          .on('error', function (e) {
+          .catch(function (reason) {
             // We want it to raise an error if it gets here
-            expect(e).to.equal(undefined)
+            expect(reason).to.equal(undefined)
             done()
           })
       })
 
       it('calls the contact ressource instance whith parameters', function (done) {
-        var ee = contact.request({Name: 'Guillaume Badi'})
-          .on('success', function (response, body) {
-            body.should.be.a('object')
-            expect(response.statusCode).to.be.within(200, 201)
+        var promise = contact.request({Name: 'Guillaume Badi'})
+          .then(function (result) {
+            result.body.should.be.a('object')
+            expect(result.response.statusCode).to.be.within(200, 201)
             done()
           })
-          .on('error', function (e) {
+          .catch(function (reason) {
             // We want it to raise an error if it gets here
-            expect(e).to.equal(undefined)
+            expect(reason).to.equal(undefined)
             done()
           })
-        expect(EventEmitter.prototype.isPrototypeOf(ee)).to.equal(true)
+        expect(Promise.prototype.isPrototypeOf(promise)).to.equal(true)
       })
 
       it('calls the contact ressource instance with empty parameters', function (done) {
-        contact.request({})
-          .on('success', function (response, body) {
-            body.should.be.a('object')
-            expect(response.statusCode).to.be.within(200, 201)
-            done()
-          })
+        contact.request({}).then(function (result) {
+          result.body.should.be.a('object')
+          expect(result.response.statusCode).to.be.within(200, 201)
+          done()
+        })
       })
     })
 
@@ -80,40 +82,37 @@ describe('Basic Usage', function () {
       var sender = client.post('sender')
 
       it('calls the sender ressource instance whith no parameters', function (done) {
-        sender.request()
-          .on('error', function (e, response) {
-            response.statusCode.should.equal(400)
-            done()
-          })
+        sender.request().catch(function (reason) {
+          reason.response.statusCode.should.equal(400)
+          done()
+        })
       })
 
       it('calls the sender ressource instance whith invalid parameters', function (done) {
-        sender.request({Name: 'Guillaume Badi'})
-          .on('error', function (e, response) {
-            expect(response.statusCode).to.equal(400)
-            done()
-          })
+        sender.request({Name: 'Guillaume Badi'}).catch(function (reason) {
+          expect(reason.response.statusCode).to.equal(400)
+          done()
+        })
       })
 
       it('calls the sender ressource instance whith valid parameters', function (done) {
         sender.request({email: 'gbadi@mailjet.com'})
-          .on('success', function (response, body) {
-            expect(response.statusCode).to.equal(201)
+          .then(function (result) {
+            expect(result.response.statusCode).to.equal(201)
             done()
           })
-          .on('error', function (e, response) {
+          .catch(function (reason) {
             // if it fails because the sender already exist. should be 400
-            expect(response.statusCode).to.equal(400)
+            expect(reason.response.statusCode).to.equal(400)
             done()
           })
       })
 
       it('calls the sender resource with empty parameters', function (done) {
-        sender.request({})
-          .on('error', function (e, response) {
-            expect(response.statusCode).to.equal(400)
-            done()
-          })
+        sender.request({}).catch(function (reason) {
+          expect(reason.response.statusCode).to.equal(400)
+          done()
+        })
       })
     })
   })
