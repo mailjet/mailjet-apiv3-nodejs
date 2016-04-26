@@ -23,12 +23,12 @@
  *
  */
 
-const DEBUG_MODE = false;
-const RESOURCE = 0;
-const ID = 1;
-const ACTION = 2;
+const DEBUG_MODE = false
+const RESOURCE = 0
+const ID = 1
+const ACTION = 2
 
-const STRICT = false;
+const STRICT = false
 
 /*
  * Imports.
@@ -39,12 +39,10 @@ const STRICT = false;
  * fs will simply be used to read files
  */
 
-var qs = require ('querystring')
-	, request = require ('request')
-	, EventEmitter = require ('events').EventEmitter
-	, fs = require ('fs')
-	, _path = require ('path');
-
+const qs = require('querystring')
+const request = require('request')
+const Promise = require('bluebird')
+const _path = require('path')
 
 /*
  * MailjetClient constructor.
@@ -56,22 +54,23 @@ var qs = require ('querystring')
  * https://www.mailjet.com/
  */
 function MailjetClient (api_key, api_secret, testMode) {
-	this.config = require ('./config');
-	this.testMode = testMode || false;
-	// To be updated according to the npm repo version
-	this.version = "1.0.3";
-	if (api_key && api_secret)
-		this.connect(api_key, api_secret);
-};
+  this.config = require('./config')
+  this.testMode = testMode || false
+  // To be updated according to the npm repo version
+  this.version = '1.0.3'
+  if (api_key && api_secret) {
+    this.connect(api_key, api_secret)
+  }
+}
 
 MailjetClient.prototype.typeJson = function (body) {
-	var keys = Object.keys(body);
-	for (var i in keys) {
-		var key = keys[i];
-		body[key] = parseInt(body[key]) || body[key];
-	}
-	return body;
-};
+  var keys = Object.keys(body)
+  for (var i in keys) {
+    var key = keys[i]
+    body[key] = parseInt(body[key]) || body[key]
+  }
+  return body
+}
 
 /*
  * [Static] connect.
@@ -83,7 +82,7 @@ MailjetClient.prototype.typeJson = function (body) {
  *
  */
 MailjetClient.connect = function (k, s) {
-	return new MailjetClient().connect(k, s);
+  return new MailjetClient().connect(k, s)
 }
 
 /*
@@ -95,11 +94,11 @@ MailjetClient.connect = function (k, s) {
  * @api_secret {String}
  *
  */
-MailjetClient.prototype.connect = function(apiKey, apiSecret) {
-	this.apiKey = apiKey;
-	this.apiSecret = apiSecret;
-	return this;
-};
+MailjetClient.prototype.connect = function (apiKey, apiSecret) {
+  this.apiKey = apiKey
+  this.apiSecret = apiSecret
+  return this
+}
 
 /*
  * path.
@@ -112,19 +111,20 @@ MailjetClient.prototype.connect = function(apiKey, apiSecret) {
  * @params {Object literal} {name: value}
  *
  */
-MailjetClient.prototype.path = function(resource, sub, params) {
-	if (DEBUG_MODE) {
-		console.log("resource =", resource);
-		console.log("subPath =", sub);
-		console.log("filters =", params);
-	}
-	var base = _path.join(this.config.version, sub);
-	if (Object.keys(params).length === 0)
-		return base + '/' + resource;
+MailjetClient.prototype.path = function (resource, sub, params) {
+  if (DEBUG_MODE) {
+    console.log('resource =', resource)
+    console.log('subPath =', sub)
+    console.log('filters =', params)
+  }
+  var base = _path.join(this.config.version, sub)
+  if (Object.keys(params).length === 0) {
+    return base + '/' + resource
+  }
 
-	var q = qs.stringify(params);
-	return base + '/' + resource + '/?' + q;
-};
+  var q = qs.stringify(params)
+  return base + '/' + resource + '/?' + q
+}
 
 /*
  * httpRequest.
@@ -138,57 +138,65 @@ MailjetClient.prototype.path = function(resource, sub, params) {
  * 		and error on error
  */
 
-MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
-	var promise = new EventEmitter().on('error', function () {});
+MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
+  /**
+   * json: true converts the output from string to JSON
+   */
+  var options = {
+    json: url.indexOf('text:plain') === -1,
+    url: url,
+    useragent: 'mailjet-api-v3-nodejs/' + this.version,
+    auth: {user: this.apiKey, pass: this.apiSecret}
+  }
+  if (method === 'post' || method === 'put') {
+    options.body = STRICT ? this.typeJson(data) : data
+  }
 
-	/**
-	 * json: true converts the output from string to JSON
-	 */
-	var options = {
-		json: url.indexOf('text:plain') === -1,
-		url: url,
-		useragent: 'mailjet-api-v3-nodejs/' + this.version,
-		auth: {user: this.apiKey, pass: this.apiSecret}
-	}
-	if ((method === 'post' || method === 'put')) {
-		options.body = STRICT ? this.typeJson(data) : data;
-	}
+  options['Content-Type'] = (url.toLowerCase().indexOf('text:plain') > -1)
+    ? 'text/plain'
+    : 'application/json'
 
-  options['Content-Type'] = url.toLowerCase().indexOf('text:plain') > -1 ?
-    'text/plain' : 'application/json';
+  if (DEBUG_MODE) {
+    console.log('Final url: ' + url)
+    console.log('body: ' + options.body)
+  }
 
-	if (DEBUG_MODE) {
-		console.log ('Final url: ' +  url);
-		console.log ('body: ' +  options.body);
-	}
+  if (this.testMode) {
+    return [options.url, options.body || {}]
+  }
 
-	if (this.testMode) {
-		return [options.url, options.body || {}];
-	}
-	
-	if(method === 'delete'){
-		method = 'del';
-	}
-	/*
-	 * request[method] returns either request.post, request.get etc
-	 *
-	 * If a callback is provided, it triggers it, else it trigger an event
-	 * on the promise object
-	 */
-	request[method](options, function (err, response, body) {
-		if (err || (response.statusCode > 210)) {
-			if (callback) {
-				callback(err || body, response);
-			}
-			else promise.emit('error', err || body, response);
-		} else {
-			if (callback) callback(null, response, body);
-			else promise.emit('success', response, body);
-		}
-	});
+  if (method === 'delete') {
+    method = 'del'
+  }
 
-	return promise;
-};
+  return new Promise((resolve, reject) => {
+    /*
+     * request[method] returns either request.post, request.get etc
+     *
+     * If a callback is provided, it triggers it, else it trigger an event
+     * on the promise object
+     */
+    request[method](options, function (err, response, body) {
+      if (err || (response.statusCode > 210)) {
+        if (typeof callback === 'function') {
+          callback(err || body, response)
+        }
+        reject({
+          error: err || body,
+          response: response
+        })
+      } else {
+        if (typeof callback === 'function') {
+          callback(null, response, body)
+        }
+        resolve({
+          response: response,
+          body: body
+        })
+      }
+    })
+  })
+}
 
 /*
  *
@@ -201,54 +209,59 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
  * @context {MailjetClient[instance]} parent client
  */
 function MailjetResource (method, func, context) {
-	this.base = func;
-	this.callUrl = func;
+  this.base = func
+  this.callUrl = func
 
-	this.resource = func.toLowerCase();
+  this.resource = func.toLowerCase()
 
-	this.lastAdded = RESOURCE;
-	var self = context;
+  this.lastAdded = RESOURCE
+  var self = context
 
-	/*
-	It can be REST or nothing if we only know the resource
-	*/
-	this.subPath = (function () {
-		if (func.toLowerCase() !== 'send') return 'REST';
-		return '';
-	})();
+  /*
+  It can be REST or nothing if we only know the resource
+  */
+  this.subPath = (function () {
+    if (func.toLowerCase() !== 'send') {
+      return 'REST'
+    }
+    return ''
+  })()
 
-	/**
-	 *
-	 * result.
-	 *
-	 * @params (optional) {Object Littteral} parameters to be sent to the server
-	 * @callback (optional) {Function} called on response or error
-	 */
-	var that = this;
-	this.result = function (params, callback) {
-		params = params || {};
-		if (typeof params === 'function') {
-			callback = params;
-			params = {};
-		}
+  /**
+   *
+   * result.
+   *
+   * @params (optional) {Object Littteral} parameters to be sent to the server
+   * @callback (optional) {Function} called on response or error
+   */
+  var that = this
+  this.result = function (params, callback) {
+    params = params || {}
+    if (typeof params === 'function') {
+      callback = params
+      params = {}
+    }
 
-		/*
-		We build the querystring depending on the parameters. if the user explicitly mentionned
-		a filters property, we pass it to the url
-		*/
-		var path = self.path(that.callUrl, that.subPath, (function () {
-			if (params['filters']) {
-				var ret = params['filters'];
-				delete params['filters'];
-				return ret;
-			} else if (method === 'get') return params;
-			else return {};
-		})());
+    /*
+    We build the querystring depending on the parameters. if the user explicitly mentionned
+    a filters property, we pass it to the url
+    */
+    var path = self.path(that.callUrl, that.subPath, (function () {
+      if (params['filters']) {
+        var ret = params['filters']
+        delete params['filters']
+        return ret
+      } else if (method === 'get') {
+        return params
+      } else {
+        return {}
+      }
+    })())
 
-		that.callUrl = that.base;
-		self.lastAdded = RESOURCE;
-		return self.httpRequest(method, 'https://' + _path.join(self.config.url, path), params, callback);
-	}
+    that.callUrl = that.base
+    self.lastAdded = RESOURCE
+    return self.httpRequest(method, 'https://' + _path.join(self.config.url, path), params, callback)
+  }
 }
 
 /**
@@ -261,14 +274,15 @@ function MailjetResource (method, func, context) {
  * @return the MailjetResource instance to allow method chaining
  *
  */
-MailjetResource.prototype.id = function(value) {
-	if (this.lastAdded === ID && DEBUG_MODE)
-		console.warn('[WARNING] your request may fail due to invalid id chaining');
+MailjetResource.prototype.id = function (value) {
+  if (this.lastAdded === ID && DEBUG_MODE) {
+    console.warn('[WARNING] your request may fail due to invalid id chaining')
+  }
 
-	this.callUrl = _path.join(this.callUrl, value.toString());
-	this.lastAdded = ID;
-	return this;
-};
+  this.callUrl = _path.join(this.callUrl, value.toString())
+  this.lastAdded = ID
+  return this
+}
 
 /**
  *
@@ -280,29 +294,33 @@ MailjetResource.prototype.id = function(value) {
  * @return the MailjetResource instance to allow method chaining
  *
  */
-MailjetResource.prototype.action = function(name) {
-	if (this.lastAdded === ACTION && DEBUG_MODE)
-		console.warn('[WARNING] your request may fail due to invalid action chaining');
+MailjetResource.prototype.action = function (name) {
+  if (this.lastAdded === ACTION && DEBUG_MODE) {
+    console.warn('[WARNING] your request may fail due to invalid action chaining')
+  }
 
-	this.callUrl = _path.join(this.callUrl, name);
-	this.action = name.toLowerCase();
+  this.callUrl = _path.join(this.callUrl, name)
+  this.action = name.toLowerCase()
 
-	this.lastAdded = ACTION;
+  this.lastAdded = ACTION
 
-  if (this.action.toLowerCase() == 'csvdata')
-    this.action = 'csvdata/text:plain';
-  else if (this.action.toLowerCase() == 'csverror')
-    this.action = 'csverror/text:csv';
+  if (this.action.toLowerCase() === 'csvdata') {
+    this.action = 'csvdata/text:plain'
+  } else if (this.action.toLowerCase() === 'csverror') {
+    this.action = 'csverror/text:csv'
+  }
 
-	var self = this;
-	this.subPath = (function () {
-		if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
-				self.resource === 'batchjob' && self.action === 'csverror/text:csv')
-			return 'DATA';
-		else return self.subPath;
-	})();
-	return self;
-};
+  var self = this
+  this.subPath = (function () {
+    if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
+      self.resource === 'batchjob' && self.action === 'csverror/text:csv') {
+      return 'DATA'
+    } else {
+      return self.subPath
+    }
+  })()
+  return self
+}
 
 /**
  *
@@ -314,9 +332,9 @@ MailjetResource.prototype.action = function(name) {
  * @return {String} the server response
  */
 
-MailjetResource.prototype.request = function(params, callback) {
-	return this.result(params, callback);
-};
+MailjetResource.prototype.request = function (params, callback) {
+  return this.result(params, callback)
+}
 
 /*
  * post.
@@ -325,10 +343,9 @@ MailjetResource.prototype.request = function(params, callback) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.post = function(func) {
-	return new MailjetResource('post', func, this);
-};
-
+MailjetClient.prototype.post = function (func) {
+  return new MailjetResource('post', func, this)
+}
 
 /*
  * get.
@@ -337,9 +354,9 @@ MailjetClient.prototype.post = function(func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.get = function(func) {
-	return new MailjetResource('get', func, this);
-};
+MailjetClient.prototype.get = function (func) {
+  return new MailjetResource('get', func, this)
+}
 
 /*
  * delete.
@@ -348,9 +365,9 @@ MailjetClient.prototype.get = function(func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.delete = function(func) {
-	return new MailjetResource('delete', func, this);
-};
+MailjetClient.prototype.delete = function (func) {
+  return new MailjetResource('delete', func, this)
+}
 
 /*
  * put.
@@ -359,17 +376,17 @@ MailjetClient.prototype.delete = function(func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.put = function(func) {
-	return new MailjetResource('put', func, this);
-};
+MailjetClient.prototype.put = function (func) {
+  return new MailjetResource('put', func, this)
+}
 
 /*
  * Exports the Mailjet client.
  *
  * you can require it like so:
- * var mj = require ('./mailjet-client');
+ * var mj = require ('./mailjet-client')
  *
  * or for the bleeding edge developpers out there:
- * import mj from './mailjet-client';
+ * import mj from './mailjet-client'
  */
-module.exports = MailjetClient;
+module.exports = MailjetClient

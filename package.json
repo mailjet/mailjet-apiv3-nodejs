@@ -1,15 +1,17 @@
 {
   "name": "node-mailjet",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Mailjet NodeJS API client",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
+    "bluebird": "^3.3.5",
+    "chai": "^3.2.0",
     "qs": "^4.0.0",
     "request": "^2.61.0",
-    "chai": "^3.2.0"
+    "standard": "^6.0.8"
   },
   "devDependencies": {
     "mocha": "^2.4.5"
@@ -28,6 +30,11 @@
     "mailjet"
   ],
   "author": "Guillaume Badi <gbadi@mailjet.com> (https://github.com/GuillaumeBadi)",
+  "contributors": [
+    "Arnaud Breton <iam@arnaud.ninja> (https://github.com/arnaudbreton)",
+    "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
+    "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mailjet/mailjet-apiv3-nodejs/issues"

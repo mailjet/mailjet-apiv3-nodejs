@@ -94,13 +94,17 @@ user.request(function (error, response, body) {
 
 ### Make the same request with a Promise
 
-the request method actually returns a [EventEmitter][eventemitter] triggering `success` and `error`
-
 ``` javascript
 
 user.request()
-	.on('error', function (error, response) {})
-	.on('success', function (response, body) {});
+	.then(function (result) {
+    // do something with the result
+    // result structure is {response: {...}, body: {...}}
+  })
+  .catch(function (reason) {
+    // handle the rejection reason
+    // reason structure is {error: {...}, response: {...}}
+  })
 
 ```
 
@@ -109,8 +113,8 @@ user.request()
 ``` javascript
 
 sender.request({ Email: 'mr@mailjet.com' })
-	.on('success', handleData)
-	.on('error', handleError);
+	.then(handleData)
+	.catch(handleError);
 
 ```
 
@@ -166,8 +170,8 @@ var emailData = {
 
 sendEmail
 	.request(emailData)
-    .on('success', handlePostResponse)
-    .on('error', handleError);
+    .then(handlePostResponse)
+    .catch(handleError);
 
 ```
 
@@ -188,13 +192,13 @@ emailData2['Text-part'] = 'This is another Email';
 
 sendEmail
 	.request(emailData)
-    .on('success', handleData)
-    .on('error', handleError);
+    .then(handleData)
+    .catch(handleError);
 
 sendEmail
 	.request(emailData2)
-    .on('success', handleData)
-    .on('error', handleError);
+    .then(handleData)
+    .catch(handleError);
 
 ```
 ## Have Fun !
@@ -209,7 +213,7 @@ function handleError (err) {
 function newContact (email) {
   mailjet.post('contact')
       .request({Email: email})
-      .on('error', handleError);
+      .catch(handleError);
 }
 
 function testEmail (text) {
@@ -222,7 +226,7 @@ function testEmail (text) {
 
   mailjet.post('send')
     .request(email)
-    .on('error', handleError);
+    .catch(handleError);
 }
 
 testEmail('Hello World!');
