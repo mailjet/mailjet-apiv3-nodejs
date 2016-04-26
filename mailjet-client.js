@@ -165,7 +165,7 @@ MailjetClient.prototype.httpRequest = function(method, url, data, callback) {
 	if (this.testMode) {
 		return [options.url, options.body || {}];
 	}
-	
+
 	if(method === 'delete'){
 		method = 'del';
 	}
