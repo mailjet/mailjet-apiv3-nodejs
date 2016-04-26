@@ -7,9 +7,10 @@
     "test": "test"
   },
   "dependencies": {
+    "chai": "^3.2.0",
     "qs": "^4.0.0",
     "request": "^2.61.0",
-    "chai": "^3.2.0"
+    "standard": "^6.0.8"
   },
   "devDependencies": {
     "mocha": "^2.4.5"
