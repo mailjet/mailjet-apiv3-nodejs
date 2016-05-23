@@ -14,7 +14,8 @@
     "standard": "^6.0.8"
   },
   "devDependencies": {
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "to-iso-string": "0.0.2"
   },
   "scripts": {
     "test": "mocha"

@@ -83,14 +83,14 @@ describe('Basic Usage', function () {
 
       it('calls the sender ressource instance whith no parameters', function (done) {
         sender.request().catch(function (reason) {
-          reason.response.statusCode.should.equal(400)
+          reason.statusCode.should.equal(400)
           done()
         })
       })
 
       it('calls the sender ressource instance whith invalid parameters', function (done) {
         sender.request({Name: 'Guillaume Badi'}).catch(function (reason) {
-          expect(reason.response.statusCode).to.equal(400)
+          expect(reason.statusCode).to.equal(400)
           done()
         })
       })
@@ -103,14 +103,14 @@ describe('Basic Usage', function () {
           })
           .catch(function (reason) {
             // if it fails because the sender already exist. should be 400
-            expect(reason.response.statusCode).to.equal(400)
+            expect(reason.statusCode).to.equal(400)
             done()
           })
       })
 
       it('calls the sender resource with empty parameters', function (done) {
         sender.request({}).catch(function (reason) {
-          expect(reason.response.statusCode).to.equal(400)
+          expect(reason.statusCode).to.equal(400)
           done()
         })
       })

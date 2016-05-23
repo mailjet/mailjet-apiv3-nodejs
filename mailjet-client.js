@@ -181,7 +181,9 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
         if (typeof callback === 'function') {
           callback(err || new Error(body), response)
         }
-        reject(err || new Error(body))
+        const error = new Error(body)
+        error.statusCode = response.statusCode
+        reject(error)
       } else {
         if (typeof callback === 'function') {
           callback(null, response, body)
