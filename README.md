@@ -103,7 +103,7 @@ user.request()
   })
   .catch(function (reason) {
     // handle the rejection reason
-    // reason structure is {error: {...}, response: {...}}
+    console.log(reason.statusCode)
   })
 
 ```
@@ -132,7 +132,7 @@ getContacts.request({Limit: 3}, handleContacts);
 
 ``` javascript
 
-getContacts.id(2).request(handleSingleContact);
+getContacts.id(2).request(handleSingleContact)
 
 ````
 
@@ -145,7 +145,7 @@ var postContact = Mailjet.post('contact');
 postContact.action('managemanycontacts').request({
 	ContactLists: MyContactListsArray,
     Contacts: MyContactsArray,
-}, handlePostResponse);
+}, handlePostResponse)
 
 ```
 
