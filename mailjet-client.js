@@ -40,9 +40,10 @@ const STRICT = false
  */
 
 const qs = require('querystring')
-const request = require('request')
+const request = require('superagent')
 const Promise = require('bluebird')
 const _path = require('path')
+const JSONb = require('json-bigint')({ storeAsString: true })
 
 /*
  * MailjetClient constructor.
@@ -139,61 +140,53 @@ MailjetClient.prototype.path = function (resource, sub, params) {
  */
 
 MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
-  /**
-   * json: true converts the output from string to JSON
-   */
-  var options = {
-    json: url.indexOf('text:plain') === -1,
-    url: url,
-    useragent: 'mailjet-api-v3-nodejs/' + this.version,
-    auth: {user: this.apiKey, pass: this.apiSecret}
-  }
-  if (method === 'post' || method === 'put') {
-    options.body = STRICT ? this.typeJson(data) : data
-  }
 
-  options['Content-Type'] = (url.toLowerCase().indexOf('text:plain') > -1)
-    ? 'text/plain'
-    : 'application/json'
+  let req = request[method](url)
+    .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
+
+    .set('Content-type', url.indexOf('text:plain') > -1
+                         ? 'text/plain'
+                         : 'application/json')
+
+    .auth(this.apiKey, this.apiSecret)
+
+  const payload = method === 'post' || method === 'put' ? data : {}
 
   if (DEBUG_MODE) {
     console.log('Final url: ' + url)
-    console.log('body: ' + options.body)
+    console.log('body: ' + payload)
   }
 
   if (this.testMode) {
-    return [options.url, options.body || {}]
+    return [url, payload]
   }
 
-  if (method === 'delete') {
-    method = 'del'
-  }
+  if (method === 'delete') { method = 'del' }
+  if (method === 'post' || method === 'put') { req = req.send(data) }
 
   return new Promise((resolve, reject) => {
-    /*
-     * request[method] returns either request.post, request.get etc
-     *
-     * If a callback is provided, it triggers it, else it trigger an event
-     * on the promise object
-     */
-    request[method](options, function (err, response, body) {
-      if (err || (response.statusCode > 210)) {
+
+    const ret = (err, result) => typeof callback === 'function'
+      ? callback(err, result)
+      : err
+      ? reject(err)
+      : resolve(result)
+
+    req.end((err, result) => {
+      const body = JSONb.parse(result.text)
+
+      if (result && result.status && result.status > 210) {
         const error = new Error('Unsuccesfull')
-        error.ErrorMessage = body.ErrorMessage
-        error.statusCode = response.statusCode
-        if (typeof callback === 'function') {
-          callback(err || error, response)
-        }
-        reject(err || error)
-      } else {
-        if (typeof callback === 'function') {
-          callback(null, response, body)
-        }
-        resolve({
-          response: response,
-          body: body
-        })
+        error.ErrorMessage = body.ErrorMessage || result.statusMessage
+        error.statusCode = result.status
+        error.response = result
+        return ret(error)
       }
+
+      return ret(null, {
+        response: result,
+        body
+      })
     })
   })
 }
