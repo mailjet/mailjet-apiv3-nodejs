@@ -141,10 +141,10 @@ MailjetClient.prototype.path = function (resource, sub, params) {
 
 MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
 
-  let req = request[method](url)
-    .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
+  var req = request[method](url)
+      .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
 
-    .set('Content-type', url.indexOf('text:plain') > -1
+      .set('Content-type', url.indexOf('text:plain') > -1
                          ? 'text/plain'
                          : 'application/json')
 
