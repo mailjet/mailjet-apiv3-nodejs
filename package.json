@@ -1,6 +1,6 @@
 {
   "name": "node-mailjet",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Mailjet NodeJS API client",
   "main": "index.js",
   "directories": {
@@ -9,6 +9,7 @@
   "dependencies": {
     "bluebird": "^3.3.5",
     "chai": "^3.2.0",
+    "json-bigint": "^0.2.0",
     "qs": "^4.0.0",
     "request": "^2.61.0",
     "standard": "^6.0.8",
