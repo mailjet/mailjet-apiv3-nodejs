@@ -44,6 +44,7 @@ const request = require('superagent')
 const Promise = require('bluebird')
 const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
+const version = require('./package.json').version
 
 /*
  * MailjetClient constructor.
@@ -58,7 +59,7 @@ function MailjetClient (api_key, api_secret, testMode) {
   this.config = require('./config')
   this.testMode = testMode || false
   // To be updated according to the npm repo version
-  this.version = '1.0.3'
+  this.version = version
   if (api_key && api_secret) {
     this.connect(api_key, api_secret)
   }
