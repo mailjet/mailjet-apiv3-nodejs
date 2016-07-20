@@ -174,7 +174,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
       : resolve(result)
 
     req.end((err, result) => {
-      let body
+      var body
 
       try {
         body = JSONb.parse(result.text)
