@@ -183,7 +183,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
       }
 
       if (result && result.status && result.status > 210) {
-        const error = new Error('Unsuccesfull')
+        const error = new Error('Unsuccessful')
         error.ErrorMessage = body.ErrorMessage || (result.res.statusMessage)
         error.statusCode = result.status
         error.response = result
