@@ -174,11 +174,17 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
       : resolve(result)
 
     req.end((err, result) => {
-      const body = JSONb.parse(result.text)
+      let body
+
+      try {
+        body = JSONb.parse(result.text)
+      } catch (e) {
+        body = {}
+      }
 
       if (result && result.status && result.status > 210) {
         const error = new Error('Unsuccesfull')
-        error.ErrorMessage = body.ErrorMessage || result.statusMessage
+        error.ErrorMessage = body.ErrorMessage || (result.res.statusMessage)
         error.statusCode = result.status
         error.response = result
         return ret(error)
