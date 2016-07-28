@@ -165,15 +165,17 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
   if (method === 'delete') { method = 'del' }
   if (method === 'post' || method === 'put') { req = req.send(data) }
 
-  return new Promise((resolve, reject) => {
+  return new Promise(function (resolve, reject) {
 
-    const ret = (err, result) => typeof callback === 'function'
-      ? callback(err, result)
-      : err
-      ? reject(err)
-      : resolve(result)
+    const ret = function (err, result) {
+      return typeof callback === 'function'
+        ? callback(err, result)
+        : err
+        ? reject(err)
+        : resolve(result)
+    }
 
-    req.end((err, result) => {
+    req.end(function (err, result) {
       var body
 
       try {
@@ -192,7 +194,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
 
       return ret(null, {
         response: result,
-        body
+        body: body
       })
     })
   })

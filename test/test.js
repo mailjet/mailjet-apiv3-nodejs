@@ -18,7 +18,7 @@ var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
 var Promise = require('bluebird')
 if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
-  throw new Error(`Mailjet API_KEY and API_SECRET are required, respectively "${API_KEY}" and "${API_SECRET}" given`)
+  throw new Error('Mailjet API_KEY and API_SECRET are required, respectively ' + API_KEY + ' and ' + API_SECRET + ' given ')
 }
 
 describe('Basic Usage', function () {
