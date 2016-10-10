@@ -130,7 +130,7 @@ describe('Advanced API Calls', function () {
     }
   }
 
-  var client2 = new Mailjet(API_KEY, API_SECRET, true)
+  var client2 = new Mailjet(API_KEY, API_SECRET, null, true)
 
   const EXAMPLES_SET = [
     new Example(client2.get('contact')),

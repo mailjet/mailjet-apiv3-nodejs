@@ -45,6 +45,17 @@ var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
+### Using an HTTP proxy
+
+If you need to send the email requests via a proxy, you can pass a third argument
+with the full proxy URL to `connect`, for instance:
+
+``` javascript
+var Mailjet = require('node-mailjet').connect('api key', 'api secret', process.env.https_proxy);
+```
+
+The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
+
 ### Get cosy with Mailjet
 
 

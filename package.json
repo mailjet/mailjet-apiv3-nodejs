@@ -10,7 +10,8 @@
     "bluebird": "^3.3.5",
     "json-bigint": "^0.2.0",
     "qs": "^4.0.0",
-    "superagent": "^2.0.0"
+    "superagent": "^2.0.0",
+    "superagent-proxy": "^1.0.1"
   },
   "devDependencies": {
     "mocha": "^2.4.5",

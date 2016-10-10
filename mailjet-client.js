@@ -46,22 +46,26 @@ const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
 const version = require('./package.json').version
 
+/* Extend superagent request with proxy method */
+require('superagent-proxy')(request);
+
 /*
  * MailjetClient constructor.
  *
  * @qpi_key (optional) {String} mailjet account api key
  * @api_secret (optional) {String} mailjet account api secret
+ * @proxy_url (optional) {String} proxy URL for HTTPS requests
  *
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, testMode) {
+function MailjetClient (api_key, api_secret, proxy_url, testMode) {
   this.config = require('./config')
   this.testMode = testMode || false
   // To be updated according to the npm repo version
   this.version = version
   if (api_key && api_secret) {
-    this.connect(api_key, api_secret)
+    this.connect(api_key, api_secret, proxy_url)
   }
 }
 
@@ -81,10 +85,11 @@ MailjetClient.prototype.typeJson = function (body) {
  *
  * @k {String} mailjet qpi key
  * @s {String} mailjet api secret
+ * @p {String} optional proxy URL
  *
  */
-MailjetClient.connect = function (k, s) {
-  return new MailjetClient().connect(k, s)
+MailjetClient.connect = function (k, s, p) {
+  return new MailjetClient().connect(k, s, p)
 }
 
 /*
@@ -92,13 +97,15 @@ MailjetClient.connect = function (k, s) {
  *
  * create a auth property from the api key and secret
  *
- * @api_key {String}
- * @api_secret {String}
+ * @apiKey {String}
+ * @apiSecret {String}
+ * @proxyUrl {String}
  *
  */
-MailjetClient.prototype.connect = function (apiKey, apiSecret) {
+MailjetClient.prototype.connect = function (apiKey, apiSecret, proxyUrl) {
   this.apiKey = apiKey
   this.apiSecret = apiSecret
+  this.proxyUrl = proxyUrl
   return this
 }
 
@@ -150,6 +157,10 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
                          : 'application/json')
 
     .auth(this.apiKey, this.apiSecret)
+
+  if (this.proxyUrl) {
+    req = req.proxy(this.proxyUrl)
+  }
 
   const payload = method === 'post' || method === 'put' ? data : {}
 
