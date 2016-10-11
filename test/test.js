@@ -47,7 +47,7 @@ describe('Basic Usage', function () {
       connections.forEach(function (connection) {
         expect(connection).to.have.property('apiKey', API_KEY)
         expect(connection).to.have.property('apiSecret', API_SECRET)
-        expect(connection).to.have.property('proxyUrl', proxyUrl)
+        expect(connection.options).to.have.property('proxyUrl', proxyUrl)
       })
     })
   })

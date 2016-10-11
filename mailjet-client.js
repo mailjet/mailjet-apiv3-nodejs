@@ -103,10 +103,9 @@ MailjetClient.connect = function (k, s, o) {
  *
  */
 MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
-  var options = options || {}
   this.apiKey = apiKey
   this.apiSecret = apiSecret
-  this.proxyUrl = options.proxyUrl
+  this.options = options || {}
   return this
 }
 
@@ -159,8 +158,8 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
 
     .auth(this.apiKey, this.apiSecret)
 
-  if (this.proxyUrl) {
-    req = req.proxy(this.proxyUrl)
+  if (this.options.proxyUrl) {
+    req = req.proxy(this.options.proxyUrl)
   }
 
   const payload = method === 'post' || method === 'put' ? data : {}
