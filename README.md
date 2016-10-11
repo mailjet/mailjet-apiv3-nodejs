@@ -45,13 +45,16 @@ var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
-### Using an HTTP proxy
+Additional connection options may be passed as the third argument. These values are supported:
 
-If you need to send the email requests via a proxy, you can pass a third argument
-with the full proxy URL to `connect`, for instance:
+- `proxyUrl`: HTTP proxy URL to send the email requests through
+
+Example:
 
 ``` javascript
-var Mailjet = require('node-mailjet').connect('api key', 'api secret', process.env.https_proxy);
+var Mailjet = require('node-mailjet').connect('api key', 'api secret', {
+  proxyUrl: process.env.https_proxy
+});
 ```
 
 The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).

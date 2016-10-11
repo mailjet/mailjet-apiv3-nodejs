@@ -34,6 +34,22 @@ describe('Basic Usage', function () {
       expect('' + connectionType2.apiKey + connectionType2.apiSecret).to.equal('' + API_KEY + API_SECRET)
       expect('' + connectionType3.apiKey + connectionType3.apiSecret).to.equal('' + API_KEY + API_SECRET)
     })
+
+    it('creates an instance of the client with options', function () {
+      var proxyUrl = 'http://localhost:3128'
+      var expectedMembers = { apiKey: API_KEY, apiSecret: API_SECRET, proxyUrl: proxyUrl }
+
+      var connectionType1 = new Mailjet(API_KEY, API_SECRET, { proxyUrl: proxyUrl })
+      var connectionType2 = new Mailjet().connect(API_KEY, API_SECRET, { proxyUrl: proxyUrl })
+      var connectionType3 = Mailjet.connect(API_KEY, API_SECRET, { proxyUrl: proxyUrl })
+
+      var connections = [connectionType1, connectionType2, connectionType3]
+      connections.forEach(function (connection) {
+        expect(connection).to.have.property('apiKey', API_KEY)
+        expect(connection).to.have.property('apiSecret', API_SECRET)
+        expect(connection).to.have.property('proxyUrl', proxyUrl)
+      })
+    })
   })
 
   describe('method request', function () {

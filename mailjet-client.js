@@ -54,18 +54,18 @@ require('superagent-proxy')(request);
  *
  * @qpi_key (optional) {String} mailjet account api key
  * @api_secret (optional) {String} mailjet account api secret
- * @proxy_url (optional) {String} proxy URL for HTTPS requests
+ * @options (optional) {Object} additional connection options
  *
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, proxy_url, testMode) {
+function MailjetClient (api_key, api_secret, options, testMode) {
   this.config = require('./config')
   this.testMode = testMode || false
   // To be updated according to the npm repo version
   this.version = version
   if (api_key && api_secret) {
-    this.connect(api_key, api_secret, proxy_url)
+    this.connect(api_key, api_secret, options)
   }
 }
 
@@ -85,11 +85,11 @@ MailjetClient.prototype.typeJson = function (body) {
  *
  * @k {String} mailjet qpi key
  * @s {String} mailjet api secret
- * @p {String} optional proxy URL
+ * @o {String} optional connection options
  *
  */
-MailjetClient.connect = function (k, s, p) {
-  return new MailjetClient().connect(k, s, p)
+MailjetClient.connect = function (k, s, o) {
+  return new MailjetClient().connect(k, s, o)
 }
 
 /*
@@ -99,13 +99,14 @@ MailjetClient.connect = function (k, s, p) {
  *
  * @apiKey {String}
  * @apiSecret {String}
- * @proxyUrl {String}
+ * @options {Object}
  *
  */
-MailjetClient.prototype.connect = function (apiKey, apiSecret, proxyUrl) {
+MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
+  var options = options || {}
   this.apiKey = apiKey
   this.apiSecret = apiSecret
-  this.proxyUrl = proxyUrl
+  this.proxyUrl = options.proxyUrl
   return this
 }
 
