@@ -14,8 +14,9 @@
     "superagent-proxy": "^1.0.1"
   },
   "devDependencies": {
-    "mocha": "^2.4.5",
     "chai": "^3.2.0",
+    "mocha": "^2.4.5",
+    "nock": "^8.1.0",
     "to-iso-string": "0.0.2"
   },
   "scripts": {

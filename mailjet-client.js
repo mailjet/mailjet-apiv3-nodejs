@@ -161,6 +161,9 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
   if (this.options.proxyUrl) {
     req = req.proxy(this.options.proxyUrl)
   }
+  if (this.options.timeout) {
+    req = req.timeout(this.options.timeout)
+  }
 
   const payload = method === 'post' || method === 'put' ? data : {}
 
@@ -195,11 +198,11 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
         body = {}
       }
 
-      if (result && result.status && result.status > 210) {
+      if (err) {
         const error = new Error('Unsuccessful')
-        error.ErrorMessage = body.ErrorMessage || (result.res.statusMessage)
-        error.statusCode = result.status
-        error.response = result
+        error.ErrorMessage = body.ErrorMessage || err.message
+        error.statusCode = err.status || null
+        error.response = result || null
         return ret(error)
       }
 
