@@ -185,10 +185,15 @@ var emailData = {
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'Hello World2',
     'Recipients': [{'Email': 'gbadi@mailjet.com'}],
-}
+};
 
-var emailData2 = emailData;
-emailData2['Text-part'] = 'This is another Email';
+var emailData2 = {
+    'FromEmail': 'gbadi@student.42.fr',
+    'FromName': 'Guillaume badi',
+    'Subject': 'Coucou Mailjet2',
+    'Text-part': 'This is another Email',
+    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+};
 
 sendEmail
 	.request(emailData)
