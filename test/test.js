@@ -17,6 +17,8 @@ var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
 var Promise = require('bluebird')
+var nock = require('nock')
+
 if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
   throw new Error('Mailjet API_KEY and API_SECRET are required, respectively ' + API_KEY + ' and ' + API_SECRET + ' given ')
 }
@@ -33,6 +35,25 @@ describe('Basic Usage', function () {
       expect('' + connectionType1.apiKey + connectionType1.apiSecret).to.equal('' + API_KEY + API_SECRET)
       expect('' + connectionType2.apiKey + connectionType2.apiSecret).to.equal('' + API_KEY + API_SECRET)
       expect('' + connectionType3.apiKey + connectionType3.apiSecret).to.equal('' + API_KEY + API_SECRET)
+    })
+
+    it('creates an instance of the client with options', function () {
+      var options = {
+        proxyUrl: 'http://localhost:3128',
+        timeout: 10000
+      }
+
+      var connectionType1 = new Mailjet(API_KEY, API_SECRET, options)
+      var connectionType2 = new Mailjet().connect(API_KEY, API_SECRET, options)
+      var connectionType3 = Mailjet.connect(API_KEY, API_SECRET, options)
+
+      var connections = [connectionType1, connectionType2, connectionType3]
+      connections.forEach(function (connection) {
+        expect(connection).to.have.property('apiKey', API_KEY)
+        expect(connection).to.have.property('apiSecret', API_SECRET)
+        expect(connection.options).to.have.property('proxyUrl', options.proxyUrl)
+        expect(connection.options).to.have.property('timeout', 10000)
+      })
     })
   })
 
@@ -130,7 +151,7 @@ describe('Advanced API Calls', function () {
     }
   }
 
-  var client2 = new Mailjet(API_KEY, API_SECRET, true)
+  var client2 = new Mailjet(API_KEY, API_SECRET, null, true)
 
   const EXAMPLES_SET = [
     new Example(client2.get('contact')),
@@ -175,6 +196,39 @@ describe('Advanced API Calls', function () {
   EXPECTED_SET.forEach(function (test, index) {
     it('should output: ' + test, function () {
       EXAMPLES_SET[index].call().should.equal(test)
+    })
+  })
+})
+
+/* This fixture needs to run last so that it doesn't interfere with the other tests */
+describe('Mocked API calls', function () {
+  /* Set a very short timeout */
+  var client = Mailjet.connect(API_KEY, API_SECRET, { timeout: 10 })
+
+  describe('method request', function () {
+    describe('get', function () {
+      var contact = client.get('contact')
+
+      it('calls the contact resource instance and the request times out', function (done) {
+        /* Simulate a delayed response */
+        nock('https://api.mailjet.com')
+          .get('/v3/REST/contact')
+          .delayConnection(1000)
+          .reply(200, {})
+
+        contact.request({})
+          .then(function (result) {
+            // We want it to raise an error if it gets here
+            expect(result).to.equal(undefined)
+            done()
+          })
+          .catch(function (reason) {
+            expect(reason.ErrorMessage).to.equal('timeout of 10ms exceeded')
+            expect(reason.statusCode).to.equal(null)
+            expect(reason.response).to.equal(null)
+            done()
+          })
+      })
     })
   })
 })

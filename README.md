@@ -45,6 +45,22 @@ var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
+Additional connection options may be passed as the third argument. These values are supported:
+
+- `proxyUrl`: HTTP proxy URL to send the email requests through
+- `timeout`: API request timeout in milliseconds
+
+Example:
+
+``` javascript
+var Mailjet = require('node-mailjet').connect('api key', 'api secret', {
+  proxyUrl: process.env.https_proxy,
+  timeout: 60000 // 1 minute
+});
+```
+
+The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
+
 ### Get cosy with Mailjet
 
 

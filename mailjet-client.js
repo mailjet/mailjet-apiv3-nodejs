@@ -46,22 +46,26 @@ const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
 const version = require('./package.json').version
 
+/* Extend superagent request with proxy method */
+require('superagent-proxy')(request);
+
 /*
  * MailjetClient constructor.
  *
  * @qpi_key (optional) {String} mailjet account api key
  * @api_secret (optional) {String} mailjet account api secret
+ * @options (optional) {Object} additional connection options
  *
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, testMode) {
+function MailjetClient (api_key, api_secret, options, testMode) {
   this.config = require('./config')
   this.testMode = testMode || false
   // To be updated according to the npm repo version
   this.version = version
   if (api_key && api_secret) {
-    this.connect(api_key, api_secret)
+    this.connect(api_key, api_secret, options)
   }
 }
 
@@ -81,10 +85,11 @@ MailjetClient.prototype.typeJson = function (body) {
  *
  * @k {String} mailjet qpi key
  * @s {String} mailjet api secret
+ * @o {String} optional connection options
  *
  */
-MailjetClient.connect = function (k, s) {
-  return new MailjetClient().connect(k, s)
+MailjetClient.connect = function (k, s, o) {
+  return new MailjetClient().connect(k, s, o)
 }
 
 /*
@@ -92,13 +97,15 @@ MailjetClient.connect = function (k, s) {
  *
  * create a auth property from the api key and secret
  *
- * @api_key {String}
- * @api_secret {String}
+ * @apiKey {String}
+ * @apiSecret {String}
+ * @options {Object}
  *
  */
-MailjetClient.prototype.connect = function (apiKey, apiSecret) {
+MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
   this.apiKey = apiKey
   this.apiSecret = apiSecret
+  this.options = options || {}
   return this
 }
 
@@ -151,6 +158,13 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
 
     .auth(this.apiKey, this.apiSecret)
 
+  if (this.options.proxyUrl) {
+    req = req.proxy(this.options.proxyUrl)
+  }
+  if (this.options.timeout) {
+    req = req.timeout(this.options.timeout)
+  }
+
   const payload = method === 'post' || method === 'put' ? data : {}
 
   if (DEBUG_MODE) {
@@ -184,11 +198,11 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
         body = {}
       }
 
-      if (result && result.status && result.status > 210) {
+      if (err) {
         const error = new Error('Unsuccessful')
-        error.ErrorMessage = body.ErrorMessage || (result.res.statusMessage)
-        error.statusCode = result.status
-        error.response = result
+        error.ErrorMessage = body.ErrorMessage || err.message
+        error.statusCode = err.status || null
+        error.response = result || null
         return ret(error)
       }
 
