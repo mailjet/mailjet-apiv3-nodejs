@@ -101,9 +101,14 @@ describe('Basic Usage', function () {
 
     describe('post', function () {
       var sender = client.post('sender')
+      var deletedErrorMessage = 'There is an already existing deleted sender with the same email. ' +
+        'You can use "validate" action in order to activate it.'
+      var inactiveErrorMessage = 'There is an already existing inactive sender with the same email. ' +
+        'You can use "validate" action in order to activate it.'
 
       it('calls the sender ressource instance whith no parameters', function (done) {
         sender.request().catch(function (reason) {
+          //reason.ErrorMessage.should.equal(deletedErrorMessage)
           reason.statusCode.should.equal(400)
           done()
         })
@@ -111,6 +116,7 @@ describe('Basic Usage', function () {
 
       it('calls the sender ressource instance whith invalid parameters', function (done) {
         sender.request({Name: 'Guillaume Badi'}).catch(function (reason) {
+          //expect(reason.ErrorMessage).to.equal(deletedErrorMessage)
           expect(reason.statusCode).to.equal(400)
           done()
         })
@@ -124,6 +130,7 @@ describe('Basic Usage', function () {
           })
           .catch(function (reason) {
             // if it fails because the sender already exist. should be 400
+            // expect(reason.ErrorMessage).to.equal(inactiveErrorMessage)
             expect(reason.statusCode).to.equal(400)
             done()
           })
@@ -131,6 +138,7 @@ describe('Basic Usage', function () {
 
       it('calls the sender resource with empty parameters', function (done) {
         sender.request({}).catch(function (reason) {
+          // expect(reason.ErrorMessage).to.equal(deletedErrorMessage)
           expect(reason.statusCode).to.equal(400)
           done()
         })
