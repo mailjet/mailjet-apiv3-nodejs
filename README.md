@@ -9,6 +9,7 @@
 
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
+![Current Version](https://img.shields.io/badge/version-3.1.0-green.svg)
 # Mailjet NodeJs Wrapper
 
 Please welcome the new [Mailjet][mailjet] official NodeJS API wrapper!
@@ -79,7 +80,7 @@ replace `zshrc` with `bash_profile` if you are simply using bash
 ``` javascript
 
 var apiKey = process.env.MJ_APIKEY_PUBLIC,
-	apiSecret = process.env.MJ_APIKEY_PRIVATE;
+  apiSecret = process.env.MJ_APIKEY_PRIVATE;
 
 ```
 
@@ -100,10 +101,10 @@ var sender = Mailjet.post('sender');
 ``` javascript
 
 user.request(function (error, response, body) {
-	if (error)
-		console.log ('Oops, something went wrong ' + response.statusCode);
-	else
-		console.log (body);
+  if (error)
+    console.log ('Oops, something went wrong ' + response.statusCode);
+  else
+    console.log (body);
 });
 
 ```
@@ -113,7 +114,7 @@ user.request(function (error, response, body) {
 ``` javascript
 
 user.request()
-	.then(function (result) {
+  .then(function (result) {
     // do something with the result
     // result structure is {response: {...}, body: {...}}
   })
@@ -129,8 +130,8 @@ user.request()
 ``` javascript
 
 sender.request({ Email: 'mr@mailjet.com' })
-	.then(handleData)
-	.catch(handleError);
+  .then(handleData)
+  .catch(handleError);
 
 ```
 
@@ -159,7 +160,7 @@ getContacts.id(2).request(handleSingleContact)
 var postContact = Mailjet.post('contact');
 
 postContact.action('managemanycontacts').request({
-	ContactLists: MyContactListsArray,
+  ContactLists: MyContactListsArray,
     Contacts: MyContactsArray,
 }, handlePostResponse)
 
@@ -177,15 +178,15 @@ var emailData = {
     'Subject': 'Test with the NodeJS Mailjet wrapper',
     'Text-part': 'Hello NodeJs !',
     'Recipients': [{'Email': 'roger@smith.com'}],
-	'Attachments': [{
-		"Content-Type": "text-plain",
-		"Filename": "test.txt",
-		"Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
-	}],
+  'Attachments': [{
+    "Content-Type": "text-plain",
+    "Filename": "test.txt",
+    "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
+  }],
 }
 
 sendEmail
-	.request(emailData)
+  .request(emailData)
     .then(handlePostResponse)
     .catch(handleError);
 
@@ -207,12 +208,12 @@ var emailData2 = emailData;
 emailData2['Text-part'] = 'This is another Email';
 
 sendEmail
-	.request(emailData)
+  .request(emailData)
     .then(handleData)
     .catch(handleError);
 
 sendEmail
-	.request(emailData2)
+  .request(emailData2)
     .then(handleData)
     .catch(handleError);
 
