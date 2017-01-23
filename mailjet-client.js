@@ -23,7 +23,7 @@
  *
  */
 
-const DEBUG_MODE = false
+const DEBUG_MODE = true
 const RESOURCE = 0
 const ID = 1
 const ACTION = 2
@@ -44,7 +44,7 @@ const request = require('superagent')
 const Promise = require('bluebird')
 const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
-const version = require('./package.json').version
+const version = "3.0.6"
 
 /* Extend superagent request with proxy method */
 require('superagent-proxy')(request);
@@ -60,7 +60,7 @@ require('superagent-proxy')(request);
  * https://www.mailjet.com/
  */
 function MailjetClient (api_key, api_secret, options, testMode) {
-  this.config = require('./config')
+  this.config = this.setConfig(options);
   this.testMode = testMode || false
   // To be updated according to the npm repo version
   this.version = version
@@ -106,8 +106,23 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
   this.apiKey = apiKey
   this.apiSecret = apiSecret
   this.options = options || {}
+  if (options) {
+    this.config = this.setConfig(options);
+  }
   return this
 }
+
+MailjetClient.prototype.setConfig = function (options) {
+  config = require('./config')
+  if (typeof options === 'object') {
+    if ('url' in options) config['url'] = options['url']
+    if ('version' in options) config['version'] = options['version']
+    if ('secured' in options && options['secured'] === "http") config['secured'] = "http"
+    if ('call' in options && options['call'] === false) config['call'] = false
+  }
+  
+  return config
+};
 
 /*
  * path.
@@ -120,19 +135,24 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
  * @params {Object literal} {name: value}
  *
  */
-MailjetClient.prototype.path = function (resource, sub, params) {
+MailjetClient.prototype.path = function (resource, sub, params, opts) {
   if (DEBUG_MODE) {
     console.log('resource =', resource)
     console.log('subPath =', sub)
     console.log('filters =', params)
   }
-  var base = _path.join(this.config.version, sub)
+  
+  is_object = typeof opts === 'object' ? true : false
+  url = (is_object && 'url' in opts ? opts['url'] : this.config.url)
+  api_version = (is_object && 'version' in opts ? opts['version'] : this.config.version)
+  
+  var base = _path.join(api_version, sub)
   if (Object.keys(params).length === 0) {
-    return base + '/' + resource
+    return _path.join(url, base + '/' + resource)
   }
 
   var q = qs.stringify(params).replace(/%2B/g, '+')
-  return base + '/' + resource + '/?' + q
+  return _path.join(url, base + '/' + resource + '/?' + q)
 }
 
 /*
@@ -147,8 +167,7 @@ MailjetClient.prototype.path = function (resource, sub, params) {
  * 		and error on error
  */
 
-MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
-
+MailjetClient.prototype.httpRequest = function (method, url, data, callback, call){
   var req = request[method](url)
       .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
 
@@ -171,8 +190,8 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
     console.log('Final url: ' + url)
     console.log('body: ' + payload)
   }
-
-  if (this.testMode) {
+  
+  if (call === false || (this.testMode && typeof call !== "boolean")) {
     return [url, payload]
   }
 
@@ -224,9 +243,10 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback) {
  * @func {String} resource/path to be sent
  * @context {MailjetClient[instance]} parent client
  */
-function MailjetResource (method, func, context) {
+function MailjetResource (method, func, opts = {}, context) {
   this.base = func
   this.callUrl = func
+  this.opts = opts
 
   this.resource = func.toLowerCase()
 
@@ -272,11 +292,14 @@ function MailjetResource (method, func, context) {
       } else {
         return {}
       }
-    })())
+    })(), that.opts)
+    
+    secured = ('secured' in that.opts && that.opts['secured'] === "http" ? "http" : self.config.secured)
+    call = ('call' in that.opts && that.opts['call'] === false ? false : self.config.call)
 
     that.callUrl = that.base
     self.lastAdded = RESOURCE
-    return self.httpRequest(method, 'https://' + _path.join(self.config.url, path), params, callback)
+    return self.httpRequest(method, secured + '://' + path, params, callback, call)
   }
 }
 
@@ -359,8 +382,8 @@ MailjetResource.prototype.request = function (params, callback) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.post = function (func) {
-  return new MailjetResource('post', func, this)
+MailjetClient.prototype.post = function (func, opts) {
+  return new MailjetResource('post', func, opts, this)
 }
 
 /*
@@ -370,8 +393,8 @@ MailjetClient.prototype.post = function (func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.get = function (func) {
-  return new MailjetResource('get', func, this)
+MailjetClient.prototype.get = function (func, opts) {
+  return new MailjetResource('get', func, opts, this)
 }
 
 /*
@@ -381,8 +404,8 @@ MailjetClient.prototype.get = function (func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.delete = function (func) {
-  return new MailjetResource('delete', func, this)
+MailjetClient.prototype.delete = function (func, opts) {
+  return new MailjetResource('delete', func, opts, this)
 }
 
 /*
@@ -392,8 +415,8 @@ MailjetClient.prototype.delete = function (func) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.put = function (func) {
-  return new MailjetResource('put', func, this)
+MailjetClient.prototype.put = function (func, opts) {
+  return new MailjetResource('put', func, opts, this)
 }
 
 /*
