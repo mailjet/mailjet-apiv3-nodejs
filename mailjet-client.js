@@ -23,7 +23,7 @@
  *
  */
 
-const DEBUG_MODE = true
+const DEBUG_MODE = false
 const RESOURCE = 0
 const ID = 1
 const ACTION = 2
@@ -44,7 +44,7 @@ const request = require('superagent')
 const Promise = require('bluebird')
 const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
-const version = "3.0.6"
+const version = require('./package.json').version
 
 /* Extend superagent request with proxy method */
 require('superagent-proxy')(request);
@@ -112,9 +112,9 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
   return this
 }
 
-MailjetClient.prototype.setConfig = function (options) {
+MailjetClient.prototype.setConfig = function (options = {}) {
   config = require('./config')
-  if (typeof options === 'object') {
+  if (typeof options === 'object' && options != null && options.length != 0) {
     if ('url' in options) config['url'] = options['url']
     if ('version' in options) config['version'] = options['version']
     if ('secured' in options && options['secured'] === "http") config['secured'] = "http"
@@ -190,10 +190,13 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, cal
     console.log('Final url: ' + url)
     console.log('body: ' + payload)
   }
+  console.log(typeof call)
   
-  if (call === false || (this.testMode && typeof call !== "boolean")) {
+  if (call === false || this.testMode) {
     return [url, payload]
   }
+  
+  console.log("failed !!")
 
   if (method === 'delete') { method = 'del' }
   if (method === 'post' || method === 'put') { req = req.send(data) }
