@@ -241,7 +241,7 @@ function newContact (email) {
 function testEmail (text) {
   email = {};
   email['FromName'] = 'Your Name';
-  email['FromEmail'] = 'Your Sender Adress';
+  email['FromEmail'] = 'Your Sender Address';
   email['Subject'] = 'Test Email';
   email['Recipients'] = [{Email: 'Your email'}];
   email['Text-Part'] = text;
@@ -259,6 +259,37 @@ testEmail('Hello World!');
 
 ``` bash
 npm test
+```
+
+## Use the version 3.1 of the send api
+
+``` javascript
+
+// The third argument (the object) is not mandatory, as each of its 4 keys.
+const mailjet = require ('apiv3')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
+        'url': 'api.mailjet.com', // default is the API url
+        'version': 'v3', // default is '/v3'
+        'secured': "https", // default is 'https'
+        'call': true // used for tests. default is true
+      })
+
+// the second argument (the object) is not mandatory, as each of its 4 keys
+const request = mailjet
+    .post("send", {
+      'url': 'api.mailjet.com', 'version': 'v3.1', 'secured': 'https', 'call': false
+    })
+    .request({
+        "Messages": [{
+            "From":{"Email":"pilote@mailjet.com", "Name": "mailjet pilot"},
+            "Subject":"Test from NodeJS wrapper",
+            "TextPart":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+            "HTMLPart":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            "To":[{"Email":"passenger@mailjet.com"}]
+        }]
+    })
+
+
 ```
 
 ## Contribute

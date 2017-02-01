@@ -112,7 +112,7 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
   return this
 }
 
-MailjetClient.prototype.setConfig = function (options = {}) {
+MailjetClient.prototype.setConfig = function (options) {
   config = require('./config')
   if (typeof options === 'object' && options != null && options.length != 0) {
     if ('url' in options) config['url'] = options['url']
@@ -190,14 +190,11 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, cal
     console.log('Final url: ' + url)
     console.log('body: ' + payload)
   }
-  console.log(typeof call)
   
   if (call === false || this.testMode) {
     return [url, payload]
   }
   
-  console.log("failed !!")
-
   if (method === 'delete') { method = 'del' }
   if (method === 'post' || method === 'put') { req = req.send(data) }
 
