@@ -261,7 +261,7 @@ testEmail('Hello World!');
 npm test
 ```
 
-## Use the version 3.1 of the send api
+## Use the version 3.1 of the send API
 
 ``` javascript
 
@@ -270,14 +270,14 @@ const mailjet = require ('apiv3')
     .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
         'url': 'api.mailjet.com', // default is the API url
         'version': 'v3', // default is '/v3'
-        'secured': "https", // default is 'https'
-        'call': true // used for tests. default is true
+        'secured': true, // default is a boolean true
+        'perform_api_call': true // used for tests. default is true
       })
 
 // the second argument (the object) is not mandatory, as each of its 4 keys
 const request = mailjet
     .post("send", {
-      'url': 'api.mailjet.com', 'version': 'v3.1', 'secured': 'https', 'call': false
+      'url': 'api.mailjet.com', 'version': 'v3.1', 'secured': 'https', 'perform_api_call': false
     })
     .request({
         "Messages": [{

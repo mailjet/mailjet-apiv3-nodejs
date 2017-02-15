@@ -117,8 +117,8 @@ MailjetClient.prototype.setConfig = function (options) {
   if (typeof options === 'object' && options != null && options.length != 0) {
     if ('url' in options) config['url'] = options['url']
     if ('version' in options) config['version'] = options['version']
-    if ('secured' in options && options['secured'] === "http") config['secured'] = "http"
-    if ('call' in options && options['call'] === false) config['call'] = false
+    if ('secured' in options && options['secured'] === false) config['secured'] = false
+    if ('perform_api_call' in options && options['perform_api_call'] === false) config['perform_api_call'] = false
   }
   
   return config
@@ -167,7 +167,7 @@ MailjetClient.prototype.path = function (resource, sub, params, opts) {
  * 		and error on error
  */
 
-MailjetClient.prototype.httpRequest = function (method, url, data, callback, call){
+MailjetClient.prototype.httpRequest = function (method, url, data, callback, perform_api_call){
   var req = request[method](url)
       .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
 
@@ -191,7 +191,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, cal
     console.log('body: ' + payload)
   }
   
-  if (call === false || this.testMode) {
+  if (perform_api_call === false || this.testMode) {
     return [url, payload]
   }
   
@@ -243,10 +243,10 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, cal
  * @func {String} resource/path to be sent
  * @context {MailjetClient[instance]} parent client
  */
-function MailjetResource (method, func, opts = {}, context) {
+function MailjetResource (method, func, options = {}, context) {
   this.base = func
   this.callUrl = func
-  this.opts = opts
+  this.opts = options
 
   this.resource = func.toLowerCase()
 
@@ -294,12 +294,12 @@ function MailjetResource (method, func, opts = {}, context) {
       }
     })(), that.opts)
     
-    secured = ('secured' in that.opts && that.opts['secured'] === "http" ? "http" : self.config.secured)
-    call = ('call' in that.opts && that.opts['call'] === false ? false : self.config.call)
+    secured = ('secured' in that.opts && that.opts['secured'] === true ? "https" : "http")
+    perform_api_call = ('perform_api_call' in that.opts && that.opts['perform_api_call'] === false ? false : self.config.perform_api_call)
 
     that.callUrl = that.base
     self.lastAdded = RESOURCE
-    return self.httpRequest(method, secured + '://' + path, params, callback, call)
+    return self.httpRequest(method, secured + '://' + path, params, callback, perform_api_call)
   }
 }
 
@@ -382,8 +382,8 @@ MailjetResource.prototype.request = function (params, callback) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.post = function (func, opts) {
-  return new MailjetResource('post', func, opts, this)
+MailjetClient.prototype.post = function (func, options) {
+  return new MailjetResource('post', func, options, this)
 }
 
 /*
@@ -393,8 +393,8 @@ MailjetClient.prototype.post = function (func, opts) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.get = function (func, opts) {
-  return new MailjetResource('get', func, opts, this)
+MailjetClient.prototype.get = function (func, options) {
+  return new MailjetResource('get', func, options, this)
 }
 
 /*
@@ -404,8 +404,8 @@ MailjetClient.prototype.get = function (func, opts) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.delete = function (func, opts) {
-  return new MailjetResource('delete', func, opts, this)
+MailjetClient.prototype.delete = function (func, options) {
+  return new MailjetResource('delete', func, options, this)
 }
 
 /*
@@ -415,8 +415,8 @@ MailjetClient.prototype.delete = function (func, opts) {
  *
  * @returns a function that make an httpRequest for each call
  */
-MailjetClient.prototype.put = function (func, opts) {
-  return new MailjetResource('put', func, opts, this)
+MailjetClient.prototype.put = function (func, options) {
+  return new MailjetResource('put', func, options, this)
 }
 
 /*

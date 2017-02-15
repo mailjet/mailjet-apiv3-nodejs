@@ -2,6 +2,6 @@
   "url": "api.mailjet.com",
   "version": "/v3/",
   "output": "json",
-  "call": true,
-  "secured": "https"
+  "perform_api_call": true,
+  "secured": true
 }
