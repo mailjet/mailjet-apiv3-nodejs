@@ -167,7 +167,7 @@ MailjetClient.prototype.path = function (resource, sub, params, opts) {
  * 		and error on error
  */
 
-MailjetClient.prototype.httpRequest = function (method, url, data, callback, perform_api_call){
+MailjetClient.prototype.httpRequest = function (method, url, data, callback, perform_api_call){  
   var req = request[method](url)
       .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
 
@@ -294,12 +294,21 @@ function MailjetResource (method, func, options = {}, context) {
       }
     })(), that.opts)
     
-    secured = ('secured' in that.opts && that.opts['secured'] === true ? "https" : "http")
-    perform_api_call = ('perform_api_call' in that.opts && that.opts['perform_api_call'] === false ? false : self.config.perform_api_call)
+    if (that.opts && that.opts.hasOwnProperty("secured")) {
+      secured = that.opts['secured'];
+    } else {
+      secured = self.config.secured;
+    }
+    
+    if (that.opts && that.opts.hasOwnProperty("perfom_api_call")) {
+      perform_api_call = that.opts['perform_api_call'];
+    } else {
+      perform_api_call = self.config.perform_api_call;
+    }
 
     that.callUrl = that.base
     self.lastAdded = RESOURCE
-    return self.httpRequest(method, secured + '://' + path, params, callback, perform_api_call)
+    return self.httpRequest(method, (secured ? 'https' : 'http') + '://' + path, params, callback, perform_api_call)
   }
 }
 
