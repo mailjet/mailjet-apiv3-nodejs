@@ -243,7 +243,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
  * @func {String} resource/path to be sent
  * @context {MailjetClient[instance]} parent client
  */
-function MailjetResource (method, func, options = {}, context) {
+function MailjetResource (method, func, options, context) {
   this.base = func
   this.callUrl = func
   this.opts = options
