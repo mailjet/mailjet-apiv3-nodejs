@@ -23,7 +23,7 @@
  *
  */
 
-const DEBUG_MODE = false
+const DEBUG_MODE = true
 const RESOURCE = 0
 const ID = 1
 const ACTION = 2
@@ -59,9 +59,9 @@ require('superagent-proxy')(request);
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, options, testMode) {
+function MailjetClient (api_key, api_secret, options, perform_api_call) {
   this.config = this.setConfig(options);
-  this.testMode = testMode || false
+  this.perform_api_call = perform_api_call || false
   // To be updated according to the npm repo version
   this.version = version
   if (api_key && api_secret) {
@@ -115,10 +115,12 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
 MailjetClient.prototype.setConfig = function (options) {
   config = require('./config')
   if (typeof options === 'object' && options != null && options.length != 0) {
-    if ('url' in options) config['url'] = options['url']
-    if ('version' in options) config['version'] = options['version']
-    if ('secured' in options && options['secured'] === false) config['secured'] = false
-    if ('perform_api_call' in options && options['perform_api_call'] === false) config['perform_api_call'] = false
+    if (options.url) config.url = options.url
+    if (options.version) config.version = options.version
+    if (options.secured) config.secured = options.secured
+    if (options.perform_api_call) config.perform_api_call = options.perform_api_call
+  } else if (options != undefined) {
+    throw "warning, your options variable is not a valid object."
   }
   
   return config
@@ -135,16 +137,15 @@ MailjetClient.prototype.setConfig = function (options) {
  * @params {Object literal} {name: value}
  *
  */
-MailjetClient.prototype.path = function (resource, sub, params, opts) {
+MailjetClient.prototype.path = function (resource, sub, params, options) {
   if (DEBUG_MODE) {
     console.log('resource =', resource)
     console.log('subPath =', sub)
     console.log('filters =', params)
   }
   
-  is_object = typeof opts === 'object' ? true : false
-  url = (is_object && 'url' in opts ? opts['url'] : this.config.url)
-  api_version = (is_object && 'version' in opts ? opts['version'] : this.config.version)
+  url = (options && 'url' in options ? options.url : this.config.url)
+  api_version = (options && 'version' in options ? options.version : this.config.version)
   
   var base = _path.join(api_version, sub)
   if (Object.keys(params).length === 0) {
@@ -191,7 +192,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
     console.log('body: ' + payload)
   }
   
-  if (perform_api_call === false || this.testMode) {
+  if (perform_api_call === false || this.perform_api_call) {
     return [url, payload]
   }
   
@@ -246,7 +247,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
 function MailjetResource (method, func, options, context) {
   this.base = func
   this.callUrl = func
-  this.opts = options
+  this.options = options
 
   this.resource = func.toLowerCase()
 
@@ -283,25 +284,25 @@ function MailjetResource (method, func, options, context) {
     a filters property, we pass it to the url
     */
     var path = self.path(that.callUrl, that.subPath, (function () {
-      if (params['filters']) {
-        var ret = params['filters']
-        delete params['filters']
+      if (params.filters) {
+        var ret = params.filters
+        delete params.filters
         return ret
       } else if (method === 'get') {
         return params
       } else {
         return {}
       }
-    })(), that.opts)
-    
-    if (that.opts && that.opts.hasOwnProperty("secured")) {
-      secured = that.opts['secured'];
+    })(), that.options)
+        
+    if (that.options && 'secured' in that.options) {
+      secured = that.options.secured;
     } else {
       secured = self.config.secured;
     }
     
-    if (that.opts && that.opts.hasOwnProperty("perfom_api_call")) {
-      perform_api_call = that.opts['perform_api_call'];
+    if (that.options && 'perform_api_call' in that.options) {
+      perform_api_call = that.options.perform_api_call;
     } else {
       perform_api_call = self.config.perform_api_call;
     }
