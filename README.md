@@ -198,7 +198,7 @@ sendEmail
 
 var emailData = {
     'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Guillaume badi',
+    'FromName': 'Pilot',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'Hello World2',
     'Recipients': [{'Email': 'passenger@mailjet.com'}],
@@ -206,7 +206,7 @@ var emailData = {
 
 var emailData2 = {
     'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Guillaume badi',
+    'FromName': 'Pilot',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'This is another Email',
     'Recipients': [{'Email': 'passenger@mailjet.com'}],
