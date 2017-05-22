@@ -197,19 +197,19 @@ sendEmail
 ``` javascript
 
 var emailData = {
-    'FromEmail': 'gbadi@student.42.fr',
+    'FromEmail': 'pilot@mailjet.com',
     'FromName': 'Guillaume badi',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'Hello World2',
-    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+    'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
 
 var emailData2 = {
-    'FromEmail': 'gbadi@student.42.fr',
+    'FromEmail': 'pilot@mailjet.com',
     'FromName': 'Guillaume badi',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'This is another Email',
-    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+    'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
 
 sendEmail
@@ -261,7 +261,18 @@ testEmail('Hello World!');
 npm test
 ```
 
-## Use the version 3.1 of the send API
+## New !! Version 3.1.0 of the Nodejs wrapper !
+
+This version modifies the way to construct the Client or the calls. We add the possibility to add an array with parameters on both Client creation and API call (please, note that each of these parameters are preset and are not mandatory in the creation or the call) :
+
+Properties of the $settings (Client constructor) and $options (API call function)
+
+url (Default: api.mailjet.com) : domain name of the API
+version (Default: v3) : API version (only working for Mailjet API V3 +)
+perform_api_call (Default: true) : turns on(true) / off the call to the API
+secured (Default: true) : turns on(true) / off the use of 'https'
+
+
 
 ``` javascript
 
@@ -277,18 +288,14 @@ const mailjet = require ('apiv3')
 // the second argument (the object) is not mandatory, as each of its 4 keys
 const request = mailjet
     .post("send", {
-      'url': 'api.mailjet.com', 'version': 'v3.1', 'secured': 'https', 'perform_api_call': false
+      'url': 'api.mailjet.com', 'version': 'v3', 'secured': 'https', 'perform_api_call': false
     })
     .request({
-        "Messages": [{
-            "From":{"Email":"pilote@mailjet.com", "Name": "mailjet pilot"},
-            "Subject":"Test from NodeJS wrapper",
-            "TextPart":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-            "HTMLPart":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
-            "To":[{"Email":"passenger@mailjet.com"}]
-        }]
-    })
-
+	'FromEmail': 'pilot@mailjet.com',
+	'FromName': 'Pilot',
+	'Subject': 'Coucou Mailjet2',
+	'Text-part': 'Hello World2',
+	'Recipients': [{'Email': 'passenger@mailjet.com'}]})
 
 ```
 
