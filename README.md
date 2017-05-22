@@ -197,19 +197,19 @@ sendEmail
 ``` javascript
 
 var emailData = {
-    'FromEmail': 'gbadi@student.42.fr',
-    'FromName': 'Guillaume badi',
+    'FromEmail': 'pilot@mailjet.com',
+    'FromName': 'Pilot',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'Hello World2',
-    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+    'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
 
 var emailData2 = {
-    'FromEmail': 'gbadi@student.42.fr',
-    'FromName': 'Guillaume badi',
+    'FromEmail': 'pilot@mailjet.com',
+    'FromName': 'Pilot',
     'Subject': 'Coucou Mailjet2',
     'Text-part': 'This is another Email',
-    'Recipients': [{'Email': 'gbadi@mailjet.com'}],
+    'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
 
 sendEmail
@@ -241,7 +241,7 @@ function newContact (email) {
 function testEmail (text) {
   email = {};
   email['FromName'] = 'Your Name';
-  email['FromEmail'] = 'Your Sender Adress';
+  email['FromEmail'] = 'Your Sender Address';
   email['Subject'] = 'Test Email';
   email['Recipients'] = [{Email: 'Your email'}];
   email['Text-Part'] = text;
@@ -259,6 +259,44 @@ testEmail('Hello World!');
 
 ``` bash
 npm test
+```
+
+## New !! Version 3.1.0 of the Nodejs wrapper !
+
+This version modifies the way to construct the Client or the calls. We add the possibility to add an array with parameters on both Client creation and API call (please, note that each of these parameters are preset and are not mandatory in the creation or the call) :
+
+Properties of the $settings (Client constructor) and $options (API call function)
+
+url (Default: api.mailjet.com) : domain name of the API
+version (Default: v3) : API version (only working for Mailjet API V3 +)
+perform_api_call (Default: true) : turns on(true) / off the call to the API
+secured (Default: true) : turns on(true) / off the use of 'https'
+
+
+
+``` javascript
+
+// The third argument (the object) is not mandatory, as each of its 4 keys.
+const mailjet = require ('apiv3')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
+        'url': 'api.mailjet.com', // default is the API url
+        'version': 'v3', // default is '/v3'
+        'secured': true, // default is a boolean true
+        'perform_api_call': true // used for tests. default is true
+      })
+
+// the second argument (the object) is not mandatory, as each of its 4 keys
+const request = mailjet
+    .post("send", {
+      'url': 'api.mailjet.com', 'version': 'v3', 'secured': 'https', 'perform_api_call': false
+    })
+    .request({
+	'FromEmail': 'pilot@mailjet.com',
+	'FromName': 'Pilot',
+	'Subject': 'Coucou Mailjet2',
+	'Text-part': 'Hello World2',
+	'Recipients': [{'Email': 'passenger@mailjet.com'}]})
+
 ```
 
 ## Contribute
