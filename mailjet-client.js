@@ -61,7 +61,7 @@ require('superagent-proxy')(request);
  */
 function MailjetClient (api_key, api_secret, options, perform_api_call) {
   this.config = this.setConfig(options);
-  this.perform_api_call = perform_api_call || false
+  this.perform_api_call = perform_api_call || true
   // To be updated according to the npm repo version
   this.version = version
   if (api_key && api_secret) {
@@ -192,8 +192,8 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
     console.log('body: ' + payload)
   }
   
-  if (perform_api_call === false || this.perform_api_call) {
-    return [url, payload]
+  if (perform_api_call === false || this.perform_api_call === false) {
+    return Promise.resolve({body: {}})
   }
   
   if (method === 'delete') { method = 'del' }
