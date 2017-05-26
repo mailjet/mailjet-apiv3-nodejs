@@ -1,3 +1,4 @@
+/* global describe, it */
 const FILE = 'FILE'
 const EMAIL = 'test@mailjet.com'
 const EMAIL2 = 'test2@mailjet.com'
@@ -101,8 +102,10 @@ describe('Basic Usage', function () {
 
     describe('post', function () {
       var sender = client.post('sender')
+      // eslint-disable-next-line no-unused-vars
       var deletedErrorMessage = 'There is an already existing deleted sender with the same email. ' +
         'You can use "validate" action in order to activate it.'
+      // eslint-disable-next-line no-unused-vars
       var inactiveErrorMessage = 'There is an already existing inactive sender with the same email. ' +
         'You can use "validate" action in order to activate it.'
 
