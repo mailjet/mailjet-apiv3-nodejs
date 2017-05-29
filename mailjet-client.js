@@ -293,13 +293,13 @@ function MailjetResource (method, func, options, context) {
       }
     })(), that.options)
     
-    let secured = null
+    var secured = null
     if (that.options && 'secured' in that.options) {
       secured = that.options.secured
     } else {
       secured = self.config.secured
     }
-    let perform_api_call = null
+    var perform_api_call = null
     if (that.options && 'perform_api_call' in that.options) {
       perform_api_call = that.options.perform_api_call
     } else {
