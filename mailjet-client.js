@@ -28,8 +28,6 @@ const RESOURCE = 0
 const ID = 1
 const ACTION = 2
 
-const STRICT = false
-
 /*
  * Imports.
  *
@@ -47,7 +45,7 @@ const JSONb = require('json-bigint')({ storeAsString: true })
 const version = require('./package.json').version
 
 /* Extend superagent request with proxy method */
-require('superagent-proxy')(request);
+require('superagent-proxy')(request)
 
 /*
  * MailjetClient constructor.
@@ -60,7 +58,7 @@ require('superagent-proxy')(request);
  * https://www.mailjet.com/
  */
 function MailjetClient (api_key, api_secret, options, perform_api_call) {
-  this.config = this.setConfig(options);
+  this.config = this.setConfig(options)
   this.perform_api_call = perform_api_call || false
   // To be updated according to the npm repo version
   this.version = version
@@ -107,24 +105,24 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
   this.apiSecret = apiSecret
   this.options = options || {}
   if (options) {
-    this.config = this.setConfig(options);
+    this.config = this.setConfig(options)
   }
   return this
 }
 
 MailjetClient.prototype.setConfig = function (options) {
-  config = require('./config')
+  const config = require('./config')
   if (typeof options === 'object' && options != null && options.length != 0) {
     if (options.url) config.url = options.url
     if (options.version) config.version = options.version
     if (options.secured) config.secured = options.secured
     if (options.perform_api_call) config.perform_api_call = options.perform_api_call
-  } else if (options != undefined) {
-    throw "warning, your options variable is not a valid object."
+  } else if (options != null) {
+    throw new Error('warning, your options variable is not a valid object.')
   }
   
   return config
-};
+}
 
 /*
  * path.
@@ -144,8 +142,8 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
     console.log('filters =', params)
   }
   
-  url = (options && 'url' in options ? options.url : this.config.url)
-  api_version = (options && 'version' in options ? options.version : this.config.version)
+  const url = (options && 'url' in options ? options.url : this.config.url)
+  const api_version = (options && 'version' in options ? options.version : this.config.version)
   
   var base = _path.join(api_version, sub)
   if (Object.keys(params).length === 0) {
@@ -222,7 +220,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
         const error = new Error('Unsuccessful')
         error.ErrorMessage = body.ErrorMessage || err.message
         error.statusCode = err.status || null
-        error.response = result || null
+        error.response = result || null
         return ret(error)
       }
 
@@ -294,17 +292,18 @@ function MailjetResource (method, func, options, context) {
         return {}
       }
     })(), that.options)
-        
-    if (that.options && 'secured' in that.options) {
-      secured = that.options.secured;
-    } else {
-      secured = self.config.secured;
-    }
     
-    if (that.options && 'perform_api_call' in that.options) {
-      perform_api_call = that.options.perform_api_call;
+    var secured = null
+    if (that.options && 'secured' in that.options) {
+      secured = that.options.secured
     } else {
-      perform_api_call = self.config.perform_api_call;
+      secured = self.config.secured
+    }
+    var perform_api_call = null
+    if (that.options && 'perform_api_call' in that.options) {
+      perform_api_call = that.options.perform_api_call
+    } else {
+      perform_api_call = self.config.perform_api_call
     }
 
     that.callUrl = that.base
