@@ -1,6 +1,6 @@
 {
   "name": "node-mailjet",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Mailjet NodeJS API client",
   "main": "index.js",
   "directories": {
@@ -35,7 +35,7 @@
   ],
   "author": "Guillaume Badi <gbadi@mailjet.com> (https://github.com/GuillaumeBadi)",
   "contributors": [
-    "Arnaud Breton <iam@arnaud.ninja> (https://github.com/arnaudbreton)",
+    "Arnaud Breton <arnaud@mailjet.com> (https://github.com/arnaudbreton)",
     "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
     "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
   ],
