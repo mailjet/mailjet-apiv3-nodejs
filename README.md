@@ -9,7 +9,7 @@
 
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-3.1.0-green.svg)
+![Current Version](https://img.shields.io/badge/version-3.1.1-green.svg)
 
 # Mailjet NodeJs Wrapper
 
@@ -34,8 +34,6 @@ if you want to get a global installation, you can add `-g`
 
 `npm install node-mailjet`
 
-
-
 ### Show me the code
 
 To authenticate, go get your API key, and API secret [here][api_credential],
@@ -47,24 +45,44 @@ var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
-Additional connection options may be passed as the third argument. These values are supported:
+Additional connection options may be passed as the third argument. The supported values are:
 
-- `proxyUrl`: HTTP proxy URL to send the email requests through
+- `proxyUrl`: HTTP proxy URL to send the API requests through
 - `timeout`: API request timeout in milliseconds
-
-Example:
+- `url` (default: `api.mailjet.com`): Base Mailjet API URL
+- `version` (default: v3): API version to use in the URL
+- `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
 
 ``` javascript
-var Mailjet = require('node-mailjet').connect('api key', 'api secret', {
-  proxyUrl: process.env.https_proxy,
-  timeout: 60000 // 1 minute
-});
+
+// The third argument (the object) is not mandatory. Each configuration key is also optional
+const mailjet = require ('apiv3')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
+        url: 'api.mailjet.com', // default is the API url
+        version: 'v3.1', // default is '/v3'
+        perform_api_call: true // used for tests. default is true
+      })
+```
+On top of that, you can also pass those options locally to a request:
+
+```javascript
+// the second argument (the object) is not mandatory. Each configuration key is also optional
+const request = mailjet
+    .post("send", {
+      url: 'api.mailjet.com', version: 'v3', perform_api_call: false
+    })
+    .request({
+    	FromEmail: 'pilot@mailjet.com',
+    	FromName: 'Mailjet Pilot',
+    	Subject: 'Hello world Mailjet!',
+    	'Text-part': 'Hello World',
+    	Recipients: [{'Email': 'passenger@mailjet.com'}]
+  })
 ```
 
 The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
 
 ### Get cosy with Mailjet
-
 
 #### Save your `API_KEY` and `API_SECRET`:
 
@@ -179,11 +197,11 @@ var emailData = {
     'Subject': 'Test with the NodeJS Mailjet wrapper',
     'Text-part': 'Hello NodeJs !',
     'Recipients': [{'Email': 'roger@smith.com'}],
-  'Attachments': [{
-    "Content-Type": "text-plain",
-    "Filename": "test.txt",
-    "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
-  }],
+    'Attachments': [{
+      "Content-Type": "text-plain",
+      "Filename": "test.txt",
+      "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
+    }]
 }
 
 sendEmail
@@ -199,16 +217,16 @@ sendEmail
 
 var emailData = {
     'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Pilot',
-    'Subject': 'Coucou Mailjet2',
-    'Text-part': 'Hello World2',
+    'FromName': 'Mailjet Pilot',
+    'Subject': 'Hello world Mailjet!',
+    'Text-part': 'Hello world!',
     'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
 
 var emailData2 = {
     'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Pilot',
-    'Subject': 'Coucou Mailjet2',
+    'FromName': 'Mailjet Pilot',
+    'Subject': 'Hello world Mailjet!',
     'Text-part': 'This is another Email',
     'Recipients': [{'Email': 'passenger@mailjet.com'}],
 };
@@ -241,10 +259,10 @@ function newContact (email) {
 
 function testEmail (text) {
   email = {};
-  email['FromName'] = 'Your Name';
-  email['FromEmail'] = 'Your Sender Address';
-  email['Subject'] = 'Test Email';
-  email['Recipients'] = [{Email: 'Your email'}];
+  email.FromName = 'Your Name';
+  email.FromEmail = 'Your Sender Address';
+  email.Subject = 'Test Email';
+  email.Recipients = [{Email: 'Your email'}];
   email['Text-Part'] = text;
 
   mailjet.post('send')
@@ -260,44 +278,6 @@ testEmail('Hello World!');
 
 ``` bash
 npm test
-```
-
-## New !! Version 3.1.0 of the Nodejs wrapper !
-
-This version modifies the way to construct the Client or the calls. We add the possibility to add an array with parameters on both Client creation and API call (please, note that each of these parameters are preset and are not mandatory in the creation or the call) :
-
-Properties of the $settings (Client constructor) and $options (API call function)
-
-url (Default: api.mailjet.com) : domain name of the API
-version (Default: v3) : API version (only working for Mailjet API V3 +)
-perform_api_call (Default: true) : turns on(true) / off the call to the API
-secured (Default: true) : turns on(true) / off the use of 'https'
-
-
-
-``` javascript
-
-// The third argument (the object) is not mandatory, as each of its 4 keys.
-const mailjet = require ('apiv3')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
-        'url': 'api.mailjet.com', // default is the API url
-        'version': 'v3', // default is '/v3'
-        'secured': true, // default is a boolean true
-        'perform_api_call': true // used for tests. default is true
-      })
-
-// the second argument (the object) is not mandatory, as each of its 4 keys
-const request = mailjet
-    .post("send", {
-      'url': 'api.mailjet.com', 'version': 'v3', 'secured': 'https', 'perform_api_call': false
-    })
-    .request({
-	'FromEmail': 'pilot@mailjet.com',
-	'FromName': 'Pilot',
-	'Subject': 'Coucou Mailjet2',
-	'Text-part': 'Hello World2',
-	'Recipients': [{'Email': 'passenger@mailjet.com'}]})
-
 ```
 
 ## Contribute
