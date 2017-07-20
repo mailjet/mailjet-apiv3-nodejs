@@ -234,7 +234,7 @@ describe('Mocked API calls', function () {
             done()
           })
           .catch(function (reason) {
-            expect(reason.ErrorMessage).to.equal('timeout of 10ms exceeded')
+            expect(reason.ErrorMessage).to.equal('Timeout of 10ms exceeded')
             expect(reason.statusCode).to.equal(null)
             expect(reason.response).to.equal(null)
             done()
