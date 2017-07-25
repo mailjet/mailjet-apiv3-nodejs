@@ -9,7 +9,7 @@
 
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-3.1.1-green.svg)
+![Current Version](https://img.shields.io/badge/version-3.2-green.svg)
 
 # Mailjet NodeJs Wrapper
 
@@ -279,6 +279,13 @@ testEmail('Hello World!');
 ``` bash
 npm test
 ```
+## Node.js compatibility
+Officially supported Node.js versions:
+ - ~~v0.12.0~~ (deprecated)
+ - v4.1
+ - v4.0
+ - v5.0.0
+ - v6.11.1
 
 ## Contribute
 
