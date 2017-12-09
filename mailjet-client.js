@@ -57,7 +57,10 @@ require('superagent-proxy')(request)
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, options, perform_api_call) {
+function MailjetClient (api_key, api_secret, options, perform_api_call, debug_mode) {
+  if (debug_mode) {
+    DEBUG_MODE = true
+  }
   this.config = this.setConfig(options)
   this.perform_api_call = perform_api_call || false
   // To be updated according to the npm repo version
