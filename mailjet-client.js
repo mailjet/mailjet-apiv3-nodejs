@@ -190,13 +190,6 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
     console.log('body: ' + payload)
   }
   
-  if (perform_api_call === false || this.perform_api_call) {
-    return [url, payload]
-  }
-  
-  if (method === 'delete') { method = 'del' }
-  if (method === 'post' || method === 'put') { req = req.send(data) }
-
   return new Promise(function (resolve, reject) {
 
     const ret = function (err, result) {
@@ -206,7 +199,13 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
         ? reject(err)
         : resolve(result)
     }
-
+    if (perform_api_call === false || this.perform_api_call) {
+      return ret(null, { response: { statusCode: 200 }, url, body: payload })
+    }
+  
+    if (method === 'delete') { method = 'del' }
+    if (method === 'post' || method === 'put') { req = req.send(data) }
+    
     req.end(function (err, result) {
       var body
 
