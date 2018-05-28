@@ -69,7 +69,7 @@ function MailjetClient (api_key, api_secret, options, perform_api_call) {
  */
 MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, perform_api_call) {
 
-  var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call)//(arguments.length === 1 || (arguments.length === 2 && typeof api_secret === 'object'))
+  var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call)
   var self = this
   // Check if api version requires toekn authentication
   // This is one of the approaches, maybe there is better 
