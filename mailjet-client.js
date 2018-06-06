@@ -81,7 +81,7 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
     tokenAuthentication(api_key, api_secret, options)
   } else {
     // params are in correct order
-    legacyAuthentication(api_key, api_secret, options, perform_api_call)
+    basicAuthentication(api_key, api_secret, options, perform_api_call)
   }
 
   /**
@@ -91,7 +91,7 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
    * @param (optional){Object} options additional connection options
    * @param (optional){boolean} perform_api_call 
    */
-  function legacyAuthentication(api_key, api_secret, options, perform_api_call) {
+  function basicAuthentication(api_key, api_secret, options, perform_api_call) {
     
     self.config = self.setConfig(options)
     self.perform_api_call = perform_api_call || false
@@ -179,10 +179,10 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
   if (isTokenRequired) {
     return tokenConnectStrategy(apiKey, apiSecret)
   } else {
-    return legacyConnectStrategy(apiKey, apiSecret, options)
+    return basicConnectStrategy(apiKey, apiSecret, options)
   }
 
-  function legacyConnectStrategy(apiKey, apiSecret, options) {
+  function basicConnectStrategy(apiKey, apiSecret, options) {
     setOptions(options)
     self.apiKey = apiKey
     self.apiSecret = apiSecret

@@ -1,8 +1,4 @@
 /* global describe, it */
-
-const FROM = 'MJPilot'
-const TO = '+33600000000'
-const TXT_MESSAGE = 'Have a nice SMS flight with Mailjet !'
 const API_TOKEN = process.env.MJ_API_TOKEN
 
 var Mailjet = require('../mailjet-client')
@@ -59,7 +55,7 @@ describe('Basic Usage', function() {
         var countRequest = smsGet.action('count')
 
         var promise = countRequest
-          .request({ FromTS: 1033552800, ToTS: 1033574400 })
+          .request({ FromTS: +new Date, ToTS: +new Date })
           .then(function(result) {
             expect(result.body).should.be.a('object')
             expect(result.body.count).to.equal(0)
@@ -74,7 +70,7 @@ describe('Basic Usage', function() {
 
       it('retirieve list of messages', function(done) {
         var promise = smsGet
-          .request({ FromTS: 1033552800, ToTS: 1033574400 })
+          .request({ FromTS: +new Date, ToTS: +new Date })
           .then(function(response) {
             expect(response.body).to.be.a('object')
             expect(response.body.Data.length).to.equal(0)
@@ -89,28 +85,6 @@ describe('Basic Usage', function() {
     })
 
     describe('post', function() {
-      it('send sms request', function(done) {
-        var promise = client
-          .post('sms-send')
-          .request({
-            Text: TXT_MESSAGE,
-            To: TO,
-            From: FROM
-          })
-          .then(function(response) {
-            expect(response.body).to.be.a('object')
-            done()
-          })
-          .catch(function(reason) {
-            expect(reason.statusCode).to.equal(400)
-            expect(reason.message).to.equal('Unsuccessful')
-            expect(reason.ErrorMessage).to.equal('Insufficient funds.')
-            done()
-          })
-
-        expect(Promise.prototype.isPrototypeOf(promise)).to.equal(true)
-      })
-
       it('export sms statisitcs action with timestamp bigger than one year', function(done) {
         var promise = client
           .post('sms')
