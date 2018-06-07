@@ -24,8 +24,12 @@ if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
   throw new Error('Mailjet API_KEY and API_SECRET are required, respectively ' + API_KEY + ' and ' + API_SECRET + ' given ')
 }
 
+var emailOptions = {
+  version: 'v3'
+}
+
 describe('Basic Usage', function () {
-  var client = Mailjet.connect(API_KEY, API_SECRET)
+  var client = Mailjet.connect(API_KEY, API_SECRET, emailOptions)
 
   describe('connection', function () {
     it('creates an instance of the client', function () {
@@ -157,7 +161,7 @@ describe('Advanced API Calls', function () {
     this.format = function (obj) { return JSON.stringify(obj).match(/\S+/g).join('') }
     this.call = function () {
       var res = this.fn.request(this.payload)
-      var ret = res[0] + ' ' + this.format(res[1])
+      var ret = res[0].replace(/\\/g, '/') + ' ' + this.format(res[1])
       return ret
     }
   }

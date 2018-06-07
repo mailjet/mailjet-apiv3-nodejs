@@ -1,6 +1,7 @@
 
 [mailjet]: http://www.mailjet.com
 [api_credential]: https://app.mailjet.com/account/api_keys
+[api_token]: https://app.mailjet.com/sms
 [eventemitter]: https://nodejs.org/api/events.html
 [doc]: http://dev.mailjet.com/guides/?javascript#
 [api_doc_repo]: https://github.com/mailjet/api-documentation
@@ -272,7 +273,81 @@ function testEmail (text) {
 
 testEmail('Hello World!');
 ```
+## SMS API
 
+##### `IMPORTANT`
+
+In mailjet-client v4 we have introduced new **_token_** authentication method for the sms api.
+You can generate token from [here][api_token]
+
+```javascript
+var Mailjet = require('node-mailjet').connect('api token');
+```
+Additional connection options may be passed as a **_second_** argument. The supported values are:
+
+- `proxyUrl`: HTTP proxy URL to send the API requests through
+- `timeout`: API request timeout in milliseconds
+- `url` (default: `api.mailjet.com`): Base Mailjet API URL
+- `version` (default: v3): API version to use in the URL
+- `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
+
+``` javascript
+
+// The second argument (the object) is not mandatory. Each configuration key is also optional
+const mailjet = require ('node-mailjet')
+    .connect(process.env.MJ_API_TOKEN, {
+        url: 'api.mailjet.com', // default is the API url
+        version: 'v4', // default is '/v3'
+        perform_api_call: true // used for tests. default is true
+      })
+```
+**_We kept all other functionality unchanged_**
+### Get cosy with Mailjet SMS
+
+#### Save your `API_TOKEN`:
+
+`echo 'export MJ_API_TOKEN=MY_API_TOKEN' >> ~/.zshrc`
+
+`source ~/.zshrc`
+
+replace `zshrc` with `bash_profile` if you are simply using bash
+
+#### And use it in your projects
+
+``` javascript
+
+var apiToken = process.env.MJ_API_TOKEN;
+
+```
+
+### Store SMS resource
+``` javascript
+
+// GET resource
+var sms = Mailjet.get('sms');
+
+// POST resource
+var sendSms = Mailjet.post('sms-send');
+
+```
+### Send SMS
+
+``` javascript
+
+var smsSend = Mailjet.post('sms-send');
+
+var smsData = {
+    'Text': 'Have a nice SMS flight with Mailjet !',
+    'To': '+33600000000',
+    'From': 'MJPilot'
+}
+
+smsSend
+  .request(smsData)
+    .then(handlePostResponse)
+    .catch(handleError);
+
+```
 
 ## Run Test
 
