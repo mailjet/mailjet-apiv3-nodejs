@@ -157,7 +157,7 @@ describe('Advanced API Calls', function () {
     this.format = function (obj) { return JSON.stringify(obj).match(/\S+/g).join('') }
     this.call = function () {
       var res = this.fn.request(this.payload)
-      var ret = res[0] + ' ' + this.format(res[1])
+      var ret = res[0].replace(/\\/g, '/') + ' ' + this.format(res[1])
       return ret
     }
   }
