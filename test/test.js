@@ -166,7 +166,7 @@ describe('Advanced API Calls', function () {
     }
   }
 
-  var client2 = new Mailjet(API_KEY, API_SECRET, null, true)
+  var client2 = new Mailjet(API_KEY, API_SECRET, emailOptions, true)
 
   const EXAMPLES_SET = [
     new Example(client2.get('contact')),
@@ -218,7 +218,7 @@ describe('Advanced API Calls', function () {
 /* This fixture needs to run last so that it doesn't interfere with the other tests */
 describe('Mocked API calls', function () {
   /* Set a very short timeout */
-  var client = Mailjet.connect(API_KEY, API_SECRET, { timeout: 10 })
+  var client = Mailjet.connect(API_KEY, API_SECRET, { timeout: 10, version: 'v3' })
 
   describe('method request', function () {
     describe('get', function () {
