@@ -58,7 +58,7 @@ require('superagent-proxy')(request)
  * https://www.mailjet.com/
  */
 function MailjetClient (api_key, api_secret, options, perform_api_call) {  
-  this.authStrategy(api_key, api_secret, options, perform_api_call)
+  return this.authStrategy(api_key, api_secret, options, perform_api_call)
 }
 
 /**
@@ -78,10 +78,10 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
     // api_key becomes api_token
     // api_secret becomes options
     // options becomes perform_api_call
-    tokenAuthentication(api_key, api_secret, options)
+    return tokenAuthentication(api_key, api_secret, options)
   } else {
     // params are in correct order
-    basicAuthentication(api_key, api_secret, options, perform_api_call)
+    return basicAuthentication(api_key, api_secret, options, perform_api_call)
   }
 
   /**
@@ -100,6 +100,8 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
     if (api_key && api_secret) {
       self.connect(api_key, api_secret, options)
     }
+
+    return self
   }
 
   /**
@@ -115,6 +117,8 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
     if (api_token) {
       self.connect(api_token, options)
     }
+
+    return self
   }
 }
 
@@ -342,7 +346,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
 function MailjetResource (method, func, options, context) {
   this.base = func
   this.callUrl = func
-  this.options = options
+  this.options = options || context.options
 
   this.resource = func.toLowerCase()
 
