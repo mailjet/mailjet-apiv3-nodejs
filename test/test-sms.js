@@ -102,7 +102,7 @@ describe('Basic Usage', function() {
             expect(reason.ErrorMessage).to.equal(
               'FromTS must not be older than one year.'
             )
-            expect(reason.message).to.equal('Unsuccessful')
+            expect(reason.message).to.include('Unsuccessful')
             done()
           })
         expect(Promise.prototype.isPrototypeOf(promise)).to.equal(true)
