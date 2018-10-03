@@ -318,10 +318,12 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
       }
 
       if (err) {
-        const error = new Error('Unsuccessful')
+        const error = new Error()
         error.ErrorMessage = body.ErrorMessage || err.message
+        error.ErrorIdentifier = body.ErrorIdentifier
         error.statusCode = err.status || null
         error.response = result || null
+        error.message = 'Unsuccessful: ' + error.statusCode + ' ' + error.ErrorMessage
         return ret(error)
       }
 
