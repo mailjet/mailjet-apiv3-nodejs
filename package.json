@@ -1,35 +1,48 @@
 {
   "name": "node-mailjet",
-  "version": "3.0.0",
-  "description": "Mailjet node wrapper",
-  "main": "mailjet-client.js",
+  "version": "3.3.0",
+  "description": "Mailjet NodeJS API client",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "chai": "^3.2.0",
-    "mocha": "^2.2.5",
-    "request": "^2.60.0"
+    "bluebird": "^3.5.0",
+    "json-bigint": "^0.2.3",
+    "qs": "^6.5.0",
+    "superagent": "^3.5.2",
+    "superagent-proxy": "^1.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2",
+    "nock": "^9.0.14",
+    "@segment/to-iso-string": "^1.0.1",
+    "eslint": "^4.2.0"
+  },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GuillaumeBadi/node-mailjet.git"
+    "url": "git+https://github.com/mailjet/mailjet-apiv3-nodejs.git"
   },
   "keywords": [
-    "mailjet",
     "email",
-    "campaign",
+    "sms",
     "node",
-    "marketting"
+    "mail",
+    "mailjet"
   ],
-  "author": "Guillaume Badi",
+  "author": "Guillaume Badi <gbadi@mailjet.com> (https://github.com/GuillaumeBadi)",
+  "contributors": [
+    "Arnaud Breton <arnaud@mailjet.com> (https://github.com/arnaudbreton)",
+    "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
+    "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GuillaumeBadi/node-mailjet/issues"
+    "url": "https://github.com/mailjet/mailjet-apiv3-nodejs/issues"
   },
-  "homepage": "https://github.com/GuillaumeBadi/node-mailjet#readme"
+  "homepage": "https://github.com/mailjet/mailjet-apiv3-nodejs#readme"
 }

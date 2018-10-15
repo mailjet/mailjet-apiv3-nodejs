@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	#container
+		form#form(action="/send" method="post")
+			#wrapper
+				#subject.field
+					input#subject-input(type="text" placeholder="Subject" autocorrect="off" autocapitalize="off" spellcheck="false" autocomplete="false")
+				#recipients.field
+					input#recipients-input(type="text" placeholder="Recipients" autocorrect="off" autocapitalize="off" spellcheck="false" autocomplete="false")
+				#message
+					#editor(contenteditable="true")
+				#send-button
+					button#send-input Send
