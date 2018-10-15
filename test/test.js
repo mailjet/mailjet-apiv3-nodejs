@@ -159,10 +159,16 @@ describe('Advanced API Calls', function () {
     this.fn = fn
     this.payload = payload
     this.format = function (obj) { return JSON.stringify(obj).match(/\S+/g).join('') }
+    var self = this
     this.call = function () {
       var res = this.fn.request(this.payload)
-      var ret = res[0].replace(/\\/g, '/') + ' ' + this.format(res[1])
-      return ret
+      if(res[0]) {
+        return res[0].replace(/\\/g, '/') + ' ' + this.format(res[1])
+      } else {
+        return res.then(function(result) {
+          return result.url.replace(/\\/g, '/') + ' ' + self.format(result.body)
+        })
+      }
     }
   }
 
@@ -210,7 +216,14 @@ describe('Advanced API Calls', function () {
 
   EXPECTED_SET.forEach(function (test, index) {
     it('should output: ' + test, function () {
-      EXAMPLES_SET[index].call().should.equal(test)
+      var call = EXAMPLES_SET[index].call()
+      if(call instanceof Promise) {
+        call.then(function(response) {
+          response.should.equal(test)
+        })
+      } else {
+        call.should.equal(test)      }
+      
     })
   })
 })

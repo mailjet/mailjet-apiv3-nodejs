@@ -292,7 +292,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
   }
   
   if (perform_api_call === false || this.perform_api_call) {
-    return [url, payload]
+    return Promise.resolve({body: payload, url: url})
   }
   
   if (method === 'delete') { method = 'del' }
@@ -318,10 +318,12 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
       }
 
       if (err) {
-        const error = new Error('Unsuccessful')
+        const error = new Error()
         error.ErrorMessage = body.ErrorMessage || err.message
+        error.ErrorIdentifier = body.ErrorIdentifier
         error.statusCode = err.status || null
         error.response = result || null
+        error.message = 'Unsuccessful: ' + error.statusCode + ' ' + error.ErrorMessage
         return ret(error)
       }
 
