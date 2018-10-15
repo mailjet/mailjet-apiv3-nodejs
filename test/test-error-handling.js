@@ -37,7 +37,6 @@ describe('Basic Error Handling', function () {
           .request({ FromTS: +new Date, ToTS: +new Date })
           .then(function (response) {
             expect(response.body).to.be.a('object')
-            expect(response.body.Data.length).to.equal(0)
             done()
           })
           .catch(function (err) {

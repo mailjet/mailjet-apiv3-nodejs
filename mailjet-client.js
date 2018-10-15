@@ -292,7 +292,7 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
   }
   
   if (perform_api_call === false || this.perform_api_call) {
-    return [url, payload]
+    return Promise.resolve({body: payload, url: url})
   }
   
   if (method === 'delete') { method = 'del' }
