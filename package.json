@@ -1,6 +1,6 @@
 {
   "name": "node-mailjet",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "Mailjet NodeJS API client",
   "main": "index.js",
   "directories": {
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
     "nock": "^9.0.14",
     "@segment/to-iso-string": "^1.0.1",
     "eslint": "^4.2.0"
