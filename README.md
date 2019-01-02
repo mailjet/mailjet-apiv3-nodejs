@@ -6,8 +6,7 @@
 [doc]: http://dev.mailjet.com/guides/?javascript#
 [api_doc_repo]: https://github.com/mailjet/api-documentation
 
-![alt text](http://cdn.appstorm.net/web.appstorm.net/files/2012/02/mailjet_logo_200x200.png "Mailjet")
-
+![alt text](https://www.mailjet.com/images/email/transac/logo_header.png "Mailjet")
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
 ![Current Version](https://img.shields.io/badge/version-3.2.1-green.svg)
