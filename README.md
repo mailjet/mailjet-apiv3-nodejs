@@ -69,15 +69,27 @@ On top of that, you can also pass those options locally to a request:
 // the second argument (the object) is not mandatory. Each configuration key is also optional
 const request = mailjet
     .post("send", {
-      url: 'api.mailjet.com', version: 'v3', perform_api_call: false
+      url: 'api.mailjet.com', version: 'v3.1', perform_api_call: false
     })
     .request({
-    	FromEmail: 'pilot@mailjet.com',
-    	FromName: 'Mailjet Pilot',
-    	Subject: 'Hello world Mailjet!',
-    	'Text-part': 'Hello World',
-    	Recipients: [{'Email': 'passenger@mailjet.com'}]
-  })
+        "Messages":[
+                {
+                "From": {
+                        "Email": "pilot@mailjet.com",
+                        "Name": "Mailjet Pilot"
+                },
+                "To": [
+                        {
+                        "Email": "passenger1@mailjet.com",
+                        "Name": "passenger 1"
+                        }
+                ],
+                "Subject": "Your email flight plan!",
+                "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+    })
 ```
 
 The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
