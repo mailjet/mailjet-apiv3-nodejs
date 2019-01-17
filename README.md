@@ -13,31 +13,28 @@
 
 # Mailjet NodeJs Wrapper
 
-Please welcome the new [Mailjet][mailjet] official NodeJS API wrapper!
+Welcome to the [Mailjet][mailjet] official NodeJS API wrapper!
 
-[Mailjet][mailjet] is an Email Service Provider (ESP). Visit the website and get comfortable!
+Check out all the resources and PHP code examples in the official [Mailjet Documentation][doc].
 
-Every code examples can be find on the [Mailjet Documentation][doc]
-
-(Please refer to the [Mailjet Documentation Repository][api_doc_repo] to contribute to the documentation examples)
+(Please refer to the [Mailjet Documentation Repository][api_doc_repo], in case you want to contribute to the documentation)
 
 
 ## Getting started
 
-first, create a project folder
+First, create a project folder:
 
 `mkdir mailjet-project && cd $_`
 
 ### Installation
 
-if you want to get a global installation, you can add `-g`
-
 `npm install node-mailjet`
+
+If you want to do a global installation, add the `-g` flag.
 
 ### Show me the code
 
-To authenticate, go get your API key, and API secret [here][api_credential],
-open your favorite text editor and import the mailjet module
+To authenticate, go get your API Key and API Secret [here][api_credential]. Then open your favorite text editor and import the Mailjet module:
 
 ``` javascript
 
@@ -45,12 +42,15 @@ var Mailjet = require('node-mailjet').connect('api key', 'api secret');
 
 ```
 
-Additional connection options may be passed as the third argument. The supported values are:
+Additional connection options may be specified as a third argument. The supported values are:
 
 - `proxyUrl`: HTTP proxy URL to send the API requests through
 - `timeout`: API request timeout in milliseconds
 - `url` (default: `api.mailjet.com`): Base Mailjet API URL
-- `version` (default: v3): API version to use in the URL
+- `version`: API version to use in the URL
+    - `v3` - The Email API
+    - `v3.1` - Email Send API v3.1, which is the latest version of our Send API
+    - `v4` - SMS API
 - `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
 
 ``` javascript
@@ -94,9 +94,9 @@ const request = mailjet
 
 The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
 
-### Get cosy with Mailjet
+### Get cozy with Mailjet
 
-#### Save your `API_KEY` and `API_SECRET`:
+#### Save and use your API Keys
 
 `echo 'export MJ_APIKEY_PUBLIC=MY_API_KEY' >> ~/.zshrc`
 
@@ -104,9 +104,9 @@ The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTal
 
 `source ~/.zshrc`
 
-replace `zshrc` with `bash_profile` if you are simply using bash
+Replace `zshrc` with `bash_profile` if you are simply using bash. 
 
-#### And use it in your projects
+Then use it in your projects:
 
 ``` javascript
 
@@ -201,19 +201,26 @@ postContact.action('managemanycontacts').request({
 
 ``` javascript
 
-var sendEmail = Mailjet.post('send');
+var sendEmail = Mailjet.post('send', {'version': 'v3.1'});
 
 var emailData = {
-    'FromEmail': 'my@email.com',
-    'FromName': 'My Name',
-    'Subject': 'Test with the NodeJS Mailjet wrapper',
-    'Text-part': 'Hello NodeJs !',
-    'Recipients': [{'Email': 'roger@smith.com'}],
-    'Attachments': [{
-      "Content-Type": "text-plain",
-      "Filename": "test.txt",
-      "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
-    }]
+    "Messages":[{
+        "From": {
+            "Email": "pilot@mailjet.com",
+            "Name": "Mailjet Pilot"
+          },
+        "To": [{
+            "Email": "passenger1@mailjet.com",
+            "Name": "passenger 1"
+          }],
+        'Subject': 'Test with the NodeJS Mailjet wrapper',
+        'Text-part': 'Hello NodeJs !',
+        'Attachments': [{
+            "Content-Type": "text-plain",
+            "Filename": "test.txt",
+            "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
+          }]
+    }]    
 }
 
 sendEmail
@@ -223,37 +230,63 @@ sendEmail
 
 ```
 
+You can also use the previous version of Mailjet's Send API (v3). You can find the documentation explaining the overall differences and code samples [here](https://dev.mailjet.com/guides/?javascript#sending-a-basic-email-v3).
+
+
 ### Send two Emails
 
 ``` javascript
 
-var emailData = {
-    'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Mailjet Pilot',
-    'Subject': 'Hello world Mailjet!',
-    'Text-part': 'Hello world!',
-    'Recipients': [{'Email': 'passenger@mailjet.com'}],
-};
+var sendEmail = Mailjet.post('send', {'version': 'v3.1'});
 
-var emailData2 = {
-    'FromEmail': 'pilot@mailjet.com',
-    'FromName': 'Mailjet Pilot',
-    'Subject': 'Hello world Mailjet!',
-    'Text-part': 'This is another Email',
-    'Recipients': [{'Email': 'passenger@mailjet.com'}],
-};
-
-sendEmail
-  .request(emailData)
-    .then(handleData)
-    .catch(handleError);
-
-sendEmail
-  .request(emailData2)
-    .then(handleData)
-    .catch(handleError);
+const mailjet = require ('node-mailjet')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+    .post("send", {'version': 'v3.1'})
+    .request({
+        "Messages":[
+                {
+                "From": {
+                        "Email": "pilot@mailjet.com",
+                        "Name": "Mailjet Pilot"
+                },
+                "To": [
+                        {
+                        "Email": "passenger1@mailjet.com",
+                        "Name": "passenger 1"
+                        }
+                ],
+                "Subject": "Your email flight plan!",
+                "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                },
+                {
+                "From": {
+                        "Email": "pilot@mailjet.com",
+                        "Name": "Mailjet Pilot"
+                },
+                "To": [
+                        {
+                        "Email": "passenger2@mailjet.com",
+                        "Name": "passenger 2"
+                        }
+                ],
+                "Subject": "Your email flight plan!",
+                "TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
+                "HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+    })
+request
+    .then((result) => {
+        console.log(result.body)
+    })
+    .catch((err) => {
+        console.log(err.statusCode)
+    })
 
 ```
+
 ## Have Fun !
 ``` javascript
 var mailjet = require ('./mailjet-client')
@@ -288,8 +321,8 @@ testEmail('Hello World!');
 
 ##### `IMPORTANT`
 
-In mailjet-client v4 we have introduced new **_token_** authentication method for the sms api.
-You can generate token from [here][api_token]
+In mailjet-client v4 we have introduced a new Bearer Token authentication method for the SMS API.
+You can generate a token from the [SMS Dashboard][api_token] in the Mailjet app.
 
 ```javascript
 var Mailjet = require('node-mailjet').connect('api token');
@@ -312,7 +345,8 @@ const mailjet = require ('node-mailjet')
         perform_api_call: true // used for tests. default is true
       })
 ```
-**_We kept all other functionality unchanged_**
+**_We kept all other functionalities unchanged_**
+
 ### Get cosy with Mailjet SMS
 
 #### Save your `API_TOKEN`:
