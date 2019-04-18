@@ -393,6 +393,18 @@ smsSend
     .catch(handleError);
 
 ```
+## Use our Typings for Typescript
+
+The types are published in npm and ready for use. Here is the npm page:
+https://www.npmjs.com/package/@types/node-mailjet
+
+Feel free to request changes if there is something missing or you just suggest an improvement.
+
+The main repository is here:
+https://github.com/DefinitelyTyped/DefinitelyTyped
+
+And here is the file with our types:
+https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node-mailjet/index.d.ts
 
 ## Run Test
 
