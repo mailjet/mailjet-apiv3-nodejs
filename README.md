@@ -218,7 +218,7 @@ var emailData = {
         'Attachments': [{
             "ContentType": "text-plain",
             "Filename": "test.txt",
-            "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
+            "Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
           }]
     }]    
 }
