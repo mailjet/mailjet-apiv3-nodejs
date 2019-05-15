@@ -216,7 +216,7 @@ var emailData = {
         'Subject': 'Test with the NodeJS Mailjet wrapper',
         'Text-part': 'Hello NodeJs !',
         'Attachments': [{
-            "Content-Type": "text-plain",
+            "ContentType": "text-plain",
             "Filename": "test.txt",
             "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
           }]
