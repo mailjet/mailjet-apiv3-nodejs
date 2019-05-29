@@ -46,7 +46,7 @@ Additional connection options may be specified as a third argument. The supporte
 
 - `proxyUrl`: HTTP proxy URL to send the API requests through
 - `timeout`: API request timeout in milliseconds
-- `url` (default: `api.mailjet.com`): Base Mailjet API URL
+- `url` (default: `api.mailjet.com`): Base Mailjet API URL. If your account is moved to the Mailjet US architecture, you should set this to `api.us.mailjet.com` instead.
 - `version`: API version to use in the URL
     - `v3` - The Email API
     - `v3.1` - Email Send API v3.1, which is the latest version of our Send API
