@@ -331,7 +331,7 @@ Additional connection options may be passed as a **_second_** argument. The supp
 
 - `proxyUrl`: HTTP proxy URL to send the API requests through
 - `timeout`: API request timeout in milliseconds
-- `url` (default: `api.mailjet.com`): Base Mailjet API URL
+- `url` (default: `api.mailjet.com`): Base Mailjet API URL. If your account is moved to the Mailjet US architecture, you should set this to `api.us.mailjet.com` instead.
 - `version` (default: v3): API version to use in the URL
 - `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
 
