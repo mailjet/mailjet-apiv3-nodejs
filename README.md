@@ -214,7 +214,7 @@ var emailData = {
             "Name": "passenger 1"
           }],
         'Subject': 'Test with the NodeJS Mailjet wrapper',
-        'Text-part': 'Hello NodeJs !',
+        'TextPart': 'Hello NodeJs !',
         'Attachments': [{
             "ContentType": "text-plain",
             "Filename": "test.txt",
