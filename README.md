@@ -8,274 +8,109 @@
 
 ![alt text](https://www.mailjet.com/images/email/transac/logo_header.png "Mailjet")
 
-[![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-3.2.1-green.svg)
-
 # Mailjet NodeJs Wrapper
 
-Welcome to the [Mailjet][mailjet] official NodeJS API wrapper!
+![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
+![Current Version](https://img.shields.io/badge/version-3.3.1-green.svg)
 
-Check out all the resources and PHP code examples in the official [Mailjet Documentation][doc].
+## Overview
 
-(Please refer to the [Mailjet Documentation Repository][api_doc_repo], in case you want to contribute to the documentation)
+Welcome to the [Mailjet][mailjet] official NodeJs API wrapper!
 
+Check out all the resources and NodeJs code examples in the official [Mailjet Documentation][doc].
 
-## Getting started
+## Table of contents
+
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+- [Authentication](#authentication)
+- [Make your first call](#make-your-first-call)
+- [Client / Call configuration specifics](#client--call-configuration-specifics)
+  - [Options](#options)
+    - [API versioning](#api-versioning)
+    - [Base URL](#base-url)
+    - [Request timeout](#request-timeout)
+    - [Use proxy](#use-proxy)
+  - [Disable API call](#disable-api-call)
+- [Request examples](#request-examples)
+  - [POST request](#post-request)
+    - [Simple POST request](#simple-post-request)
+    - [Using actions](#using-actions)
+  - [GET request](#get-request)
+    - [Retrieve all objects](#retrieve-all-objects)
+    - [Use filtering](#use-filtering)
+    - [Retrieve a single object](#retrieve-a-single-object)
+  - [PUT request](#put-request)
+  - [DELETE request](#delete-request)
+  - [Response](#response)
+  - [API resources helpers](#api-resources-helpers)
+- [SMS API](#sms-api)
+  - [Token authentication](#token-authentication)
+  - [Example Request](#example-request)
+- [Contribute](#contribute)
+
+## Compatibility
+
+This library officially supports the following Node.js versions:
+
+ - v4.1
+ - v4.0
+ - v5.0.0
+ - v6.11.1
+
+## Installation
 
 First, create a project folder:
 
 `mkdir mailjet-project && cd $_`
 
-### Installation
+Then use the following code to install the wrapper:
 
 `npm install node-mailjet`
 
 If you want to do a global installation, add the `-g` flag.
 
-### Show me the code
+## Authentication
 
-To authenticate, go get your API Key and API Secret [here][api_credential]. Then open your favorite text editor and import the Mailjet module:
+The Mailjet Email API uses your API and Secret keys for authentication. [Grab][api_credential] and save your Mailjet API credentials.
 
-``` javascript
-
-var Mailjet = require('node-mailjet').connect('api key', 'api secret');
-
+```bash
+export MJ_APIKEY_PUBLIC='your API key'
+export MJ_APIKEY_PRIVATE='your API secret'
 ```
 
-Additional connection options may be specified as a third argument. The supported values are:
+> Note: For the SMS API the authorization is based on a Bearer token. See information about it in the [SMS API](#sms-api) section of the readme.
 
-- `proxyUrl`: HTTP proxy URL to send the API requests through
-- `timeout`: API request timeout in milliseconds
-- `url` (default: `api.mailjet.com`): Base Mailjet API URL. If your account is moved to the Mailjet US architecture, you should set this to `api.us.mailjet.com` instead.
-- `version`: API version to use in the URL
-    - `v3` - The Email API
-    - `v3.1` - Email Send API v3.1, which is the latest version of our Send API
-    - `v4` - SMS API
-- `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
+Initialize your [Mailjet][mailjet] Client:
 
 ``` javascript
-
-// The third argument (the object) is not mandatory. Each configuration key is also optional
 const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE, {
-        url: 'api.mailjet.com', // default is the API url
-        version: 'v3.1', // default is '/v3'
-        perform_api_call: true // used for tests. default is true
-      })
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 ```
-On top of that, you can also pass those options locally to a request:
+
+## Make your first call
+
+Here's an example on how to send an email:
 
 ```javascript
-// the second argument (the object) is not mandatory. Each configuration key is also optional
-const request = mailjet
-    .post("send", {
-      url: 'api.mailjet.com', version: 'v3.1', perform_api_call: false
-    })
-    .request({
-        "Messages":[
-                {
-                "From": {
-                        "Email": "pilot@mailjet.com",
-                        "Name": "Mailjet Pilot"
-                },
-                "To": [
-                        {
-                        "Email": "passenger1@mailjet.com",
-                        "Name": "passenger 1"
-                        }
-                ],
-                "Subject": "Your email flight plan!",
-                "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-                "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
-                }
-        ]
-    })
-```
-
-The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
-
-### Get cozy with Mailjet
-
-#### Save and use your API Keys
-
-`echo 'export MJ_APIKEY_PUBLIC=MY_API_KEY' >> ~/.zshrc`
-
-`echo 'export MJ_APIKEY_PRIVATE=MY_API_SECRET' >> ~/.zshrc`
-
-`source ~/.zshrc`
-
-Replace `zshrc` with `bash_profile` if you are simply using bash. 
-
-Then use it in your projects:
-
-``` javascript
-
-var apiKey = process.env.MJ_APIKEY_PUBLIC,
-  apiSecret = process.env.MJ_APIKEY_PRIVATE;
-
-```
-
-### Store a Mailjet resource
-
-``` javascript
-
-// GET resource
-var user = Mailjet.get('user');
-
-// POST resource
-var sender = Mailjet.post('sender');
-
-```
-
-### Request your resource with a callback function
-
-``` javascript
-
-user.request(function (error, response, body) {
-  if (error)
-    console.log ('Oops, something went wrong ' + response.statusCode);
-  else
-    console.log (body);
-});
-
-```
-
-### Make the same request with a Promise
-
-``` javascript
-
-user.request()
-  .then(function (result) {
-    // do something with the result
-    // result structure is {response: {...}, body: {...}}
-  })
-  .catch(function (reason) {
-    // handle the rejection reason
-    console.log(reason.statusCode)
-  })
-
-```
-
-### Pass data to your requests
-
-``` javascript
-
-sender.request({ Email: 'mr@mailjet.com' })
-  .then(handleData)
-  .catch(handleError);
-
-```
-
-### Pass parameters as well as a callback
-
-``` javascript
-
-var getContacts = Mailjet.get('contact');
-
-getContacts.request({Limit: 3}, handleContacts);
-
-```
-
-### Request a resource with an ID
-
-``` javascript
-
-getContacts.id(2).request(handleSingleContact)
-
-````
-
-### Request a ressource with an Action
-
-``` javascript
-
-var postContact = Mailjet.post('contact');
-
-postContact.action('managemanycontacts').request({
-  ContactLists: MyContactListsArray,
-    Contacts: MyContactsArray,
-}, handlePostResponse)
-
-```
-
-### Send an Email
-
-``` javascript
-
-var sendEmail = Mailjet.post('send', {'version': 'v3.1'});
-
-var emailData = {
-    "Messages":[{
-        "From": {
-            "Email": "pilot@mailjet.com",
-            "Name": "Mailjet Pilot"
-          },
-        "To": [{
-            "Email": "passenger1@mailjet.com",
-            "Name": "passenger 1"
-          }],
-        'Subject': 'Test with the NodeJS Mailjet wrapper',
-        'Text-part': 'Hello NodeJs !',
-        'Attachments': [{
-            "ContentType": "text-plain",
-            "Filename": "test.txt",
-            "Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
-          }]
-    }]    
-}
-
-sendEmail
-  .request(emailData)
-    .then(handlePostResponse)
-    .catch(handleError);
-
-```
-
-You can also use the previous version of Mailjet's Send API (v3). You can find the documentation explaining the overall differences and code samples [here](https://dev.mailjet.com/guides/?javascript#sending-a-basic-email-v3).
-
-
-### Send two Emails
-
-``` javascript
-
-var sendEmail = Mailjet.post('send', {'version': 'v3.1'});
-
 const mailjet = require ('node-mailjet')
     .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
     .post("send", {'version': 'v3.1'})
     .request({
-        "Messages":[
-                {
-                "From": {
-                        "Email": "pilot@mailjet.com",
-                        "Name": "Mailjet Pilot"
-                },
-                "To": [
-                        {
-                        "Email": "passenger1@mailjet.com",
-                        "Name": "passenger 1"
-                        }
-                ],
-                "Subject": "Your email flight plan!",
-                "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-                "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
-                },
-                {
-                "From": {
-                        "Email": "pilot@mailjet.com",
-                        "Name": "Mailjet Pilot"
-                },
-                "To": [
-                        {
-                        "Email": "passenger2@mailjet.com",
-                        "Name": "passenger 2"
-                        }
-                ],
-                "Subject": "Your email flight plan!",
-                "TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-                "HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
-                }
-        ]
+        "Messages":[{
+            "From": {
+                "Email": "pilot@mailjet.com",
+                "Name": "Mailjet Pilot"
+            },
+            "To": [{
+                "Email": "passenger1@mailjet.com",
+                "Name": "passenger 1"
+            }],
+            "Subject": "Your email flight plan!",
+            "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+            "HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+        }]
     })
 request
     .then((result) => {
@@ -284,104 +119,336 @@ request
     .catch((err) => {
         console.log(err.statusCode)
     })
-
 ```
 
-## Have Fun !
-``` javascript
-var mailjet = require ('./mailjet-client')
+## Client / Call configuration specifics
+
+To instantiate the library you can use the following constructor:  
+
+```javascript
+const mailjet = require ('node-mailjet')
     .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-
-function handleError (err) {
-  throw new Error(err.ErrorMessage);
-}
-
-function newContact (email) {
-  mailjet.post('contact')
-      .request({Email: email})
-      .catch(handleError);
-}
-
-function testEmail (text) {
-  email = {};
-  email.FromName = 'Your Name';
-  email.FromEmail = 'Your Sender Address';
-  email.Subject = 'Test Email';
-  email.Recipients = [{Email: 'Your email'}];
-  email['Text-Part'] = text;
-
-  mailjet.post('send')
-    .request(email)
-    .catch(handleError);
-}
-
-testEmail('Hello World!');
+const request = mailjet
+    .METHOD(RESOURCE, {OPTIONS})
 ```
+
+ - `MJ_APIKEY_PUBLIC` : public Mailjet API key
+ - `MJ_APIKEY_PRIVATE` : private Mailjet API key
+ - `METHOD` - the method you want to use for this call (`post`, `put`, `get`, `delete`)
+ - `RESOURCE` - the API endpoint you want to call
+ - `OPTIONS` : associative array describing the connection options (see Options bellow for full list)
+
+### Options
+
+#### API Versioning
+
+The Mailjet API is spread among three distinct versions:
+
+- `v3` - The Email API
+- `v3.1` - Email Send API v3.1, which is the latest version of our Send API
+- `v4` - SMS API
+
+Since most Email API endpoints are located under `v3`, it is set as the default one and does not need to be specified when making your request. For the others you need to specify the version using `version`. For example, if using Send API `v3.1`:
+
+```javascript
+const mailjet = require ('node-mailjet')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+    .post("send", {'version': 'v3.1'})
+```
+
+For additional information refer to our [API Reference](https://dev.preprod.mailjet.com/reference/overview/versioning/).
+
+#### Base URL
+
+The default base domain name for the Mailjet API is api.mailjet.com. You can modify this base URL by setting a value for `url` in your call:
+
+```javascript
+const request = mailjet
+    .post("send", {'version': 'v3.1', 'url': 'api.us.mailjet.com'})
+```
+
+If your account has been moved to Mailjet's US architecture, the URL value you need to set is `api.us.mailjet.com`.
+
+#### Request timeout
+
+You are able to set a timeout for your request using the `timeout` parameter. The API request timeout is set in milliseconds:
+
+```javascript
+const request = mailjet
+    .post("send", {'version': 'v3.1', 'timeout': 100})
+```
+
+#### Use proxy
+
+The `proxyUrl` parameter allows you to set a HTTPS proxy URL to send the API requests through:
+
+```javascript
+const request = mailjet
+    .post("send", {'version': 'v3.1', 'proxyUrl': 'YOUR_PROXY_URL'})
+```
+
+The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
+
+
+### Disable API call
+
+By default the API call parameter is always enabled. However, you may want to disable it during testing to prevent unnecessary calls to the Mailjet API. This is done by setting the `perform_api_call` parameter to `false`:
+
+```javascript
+const request = mailjet
+    .post("send", {'version': 'v3.1', 'perform_api_call': false})
+```
+
+## Request examples
+
+### POST Request
+
+Use the `post` method of the Mailjet Client:
+
+```javascript
+const request = mailjet
+  .post($RESOURCE, {$OPTIONS})
+  .id($ID)
+  .request({$PARAMS})
+```
+
+`.request` will contain the body of the POST request. You need to define `.id` if you want to perform an action on a specific object and need to identify it.
+
+#### Simple POST request
+
+```javascript
+/**
+ *
+ * Create a new contact:
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("contact")
+	.request({
+	    "Email":"passenger@mailjet.com",
+	    "IsExcludedFromCampaigns":"true",
+	    "Name":"New Contact"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
+#### Using actions
+
+```javascript
+/**
+*
+* Manage the subscription status of a contact to multiple lists
+*
+**/
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("contact_managecontactslists")
+	.id(Contact_ID)
+	.request({
+    "ContactsLists": [{
+			"ListID": 987654321,
+			"Action": "addnoforce"
+		}]
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
+### GET Request
+
+Use the `get` method of the Mailjet Client:
+
+```javascript
+const request = mailjet
+ .get($RESOURCE, {$OPTIONS})
+ .id($ID)
+ .request({$PARAMS})
+```
+
+`.request` will contain any query parameters applied to the request. You need to define `.id` if you want to retrieve a specific object.
+
+#### Retrieve all objects
+
+```javascript
+/**
+ *
+ * Retrieve all contacts
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
+#### Use filtering
+
+```javascript
+/**
+ *
+ * Retrieve all contacts that are not in the campaign exclusion list :
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request({'IsExcludedFromCampaigns': false})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
+
+#### Retrieve a single object
+
+```javascript
+/**
+ *
+ * Retrieve a specific contact ID :
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.id(Contact_ID)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
+### PUT Request
+
+Use the `put` method of the Mailjet Client:
+
+```javascript
+const request = mailjet
+ .get($RESOURCE, {$OPTIONS})
+ .id($ID)
+ .request({$PARAMS})
+```
+
+You need to define `.id` to specify the object you need to edit. `.request` will contain the body of the PUT request.
+
+A `PUT` request in the Mailjet API will work as a `PATCH` request - the update will affect only the specified properties. The other properties of an existing resource will neither be modified, nor deleted. It also means that all non-mandatory properties can be omitted from your payload.
+
+Here's an example of a PUT request:
+
+```javascript
+/**
+ *
+ * Update the contact properties for a contact:
+ *
+ */
+const mailjet = require ('node-mailjet')
+    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+    .put("contactdata")
+    .id($CONTACT_ID)
+    .request({
+        "Data":[{
+            "first_name": "John",
+            "last_name": "Smith"
+        }]
+    })
+request
+    .then((result) => {
+        console.log(result.body)
+    })
+    .catch((err) => {
+        console.log(err.statusCode)
+    })
+```
+
+### DELETE Request
+
+Use the `delete` method of the Mailjet Client:
+
+```javascript
+const request = mailjet
+ .get($RESOURCE, {$OPTIONS})
+ .id($ID)
+ .request()
+```
+
+You need to define `.id` to specify the object you want to delete. `.request` should be empty.
+
+Upon a successful `DELETE` request the response will not include a response body, but only a `204 No Content` response code.
+
+Here's an example of a `DELETE` request:
+
+```javascript
+/**
+ *
+ * Delete : Delete an email template.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.delete("template")
+	.id(Template_ID)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+
 ## SMS API
 
-##### `IMPORTANT`
+### Token authentication
 
-In mailjet-client v4 we have introduced a new Bearer Token authentication method for the SMS API.
-You can generate a token from the [SMS Dashboard][api_token] in the Mailjet app.
+Authentication for the SMS API endpoints is done using a bearer token. The bearer token is generated in the [SMS section](https://app.mailjet.com/sms) of your Mailjet account.
 
 ```javascript
 var Mailjet = require('node-mailjet').connect('api token');
 ```
-Additional connection options may be passed as a **_second_** argument. The supported values are:
 
-- `proxyUrl`: HTTP proxy URL to send the API requests through
-- `timeout`: API request timeout in milliseconds
-- `url` (default: `api.mailjet.com`): Base Mailjet API URL. If your account is moved to the Mailjet US architecture, you should set this to `api.us.mailjet.com` instead.
-- `version` (default: v3): API version to use in the URL
-- `perform_api_call` (default: true): controls if the must call must be performed to Mailjet API or not (dry run)
+### Example request
 
-``` javascript
+Here's an example SMS API request:
 
-// The second argument (the object) is not mandatory. Each configuration key is also optional
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_API_TOKEN, {
-        url: 'api.mailjet.com', // default is the API url
-        version: 'v4', // default is '/v3'
-        perform_api_call: true // used for tests. default is true
-      })
-```
-**_We kept all other functionalities unchanged_**
+```javascript
+const smsSend = Mailjet.post('sms-send');
 
-### Get cosy with Mailjet SMS
-
-#### Save your `API_TOKEN`:
-
-`echo 'export MJ_API_TOKEN=MY_API_TOKEN' >> ~/.zshrc`
-
-`source ~/.zshrc`
-
-replace `zshrc` with `bash_profile` if you are simply using bash
-
-#### And use it in your projects
-
-``` javascript
-
-var apiToken = process.env.MJ_API_TOKEN;
-
-```
-
-### Store SMS resource
-``` javascript
-
-// GET resource
-var sms = Mailjet.get('sms');
-
-// POST resource
-var sendSms = Mailjet.post('sms-send');
-
-```
-### Send SMS
-
-``` javascript
-
-var smsSend = Mailjet.post('sms-send');
-
-var smsData = {
+const smsData = {
     'Text': 'Have a nice SMS flight with Mailjet !',
     'To': '+33600000000',
     'From': 'MJPilot'
@@ -391,21 +458,7 @@ smsSend
   .request(smsData)
     .then(handlePostResponse)
     .catch(handleError);
-
 ```
-
-## Run Test
-
-``` bash
-npm test
-```
-## Node.js compatibility
-Officially supported Node.js versions:
- - ~~v0.12.0~~ (deprecated)
- - v4.1
- - v4.0
- - v5.0.0
- - v6.11.1
 
 ## Contribute
 
@@ -421,6 +474,4 @@ Feel free to ask anything, and contribute:
 - Add documentation to it.
 - Commit, push, open a pull request and voila.
 
-TODO:
-
-- Extend Error class to create Api errors
+If you have suggestions on how to improve the guides, please submit an issue in our [Official API Documentation repo](https://github.com/mailjet/api-documentation).
