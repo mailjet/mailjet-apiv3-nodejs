@@ -10,7 +10,7 @@
 
 # Mailjet NodeJs Wrapper
 
-![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
+[![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
 ![Current Version](https://img.shields.io/badge/version-3.3.1-green.svg)
 
 ## Overview
