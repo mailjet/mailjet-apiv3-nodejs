@@ -356,7 +356,7 @@ Use the `put` method of the Mailjet Client:
 
 ```javascript
 const request = mailjet
- .get($RESOURCE, {$OPTIONS})
+ .put($RESOURCE, {$OPTIONS})
  .id($ID)
  .request({$PARAMS})
 ```
@@ -399,7 +399,7 @@ Use the `delete` method of the Mailjet Client:
 
 ```javascript
 const request = mailjet
- .get($RESOURCE, {$OPTIONS})
+ .delete($RESOURCE, {$OPTIONS})
  .id($ID)
  .request()
 ```
@@ -446,18 +446,23 @@ var Mailjet = require('node-mailjet').connect('api token');
 Here's an example SMS API request:
 
 ```javascript
-const smsSend = Mailjet.post('sms-send');
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_TOKEN)
+const request = mailjet
+    .post("sms-send", {'version': 'v4'})
+    .request({
+       "Text": "Have a nice SMS flight with Mailjet !",
+       "To": "+33600000000",
+       "From": "MJPilot"
+  })
 
-const smsData = {
-    'Text': 'Have a nice SMS flight with Mailjet !',
-    'To': '+33600000000',
-    'From': 'MJPilot'
-}
-
-smsSend
-  .request(smsData)
-    .then(handlePostResponse)
-    .catch(handleError);
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 
 ## Contribute
