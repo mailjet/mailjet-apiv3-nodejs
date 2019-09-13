@@ -252,8 +252,9 @@ request
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.post("contact_managecontactslists")
-	.id(Contact_ID)
+	.post("contact")
+	.id($contact_ID)
+	.action("managecontactslists")
 	.request({
     "ContactsLists": [{
 			"ListID": 987654321,
