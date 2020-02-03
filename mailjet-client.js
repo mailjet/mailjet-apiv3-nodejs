@@ -71,7 +71,7 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
 
   var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call)
   var self = this
-  // Check if api version requires toekn authentication
+  // Check if api version requires token authentication
   // This is one of the approaches, maybe there is better 
   if (isTokenRequired) {   
     // params are shifted one position to left as we don't have api secret any more
@@ -381,7 +381,7 @@ function MailjetResource (method, func, options, context) {
     }
 
     /*
-    We build the querystring depending on the parameters. if the user explicitly mentionned
+    We build the querystring depending on the parameters. if the user explicitly mentioned
     a filters property, we pass it to the url
     */
     var path = self.path(that.callUrl, that.subPath, (function () {
@@ -537,7 +537,7 @@ MailjetClient.prototype.put = function (func, options) {
  * you can require it like so:
  * var mj = require ('./mailjet-client')
  *
- * or for the bleeding edge developpers out there:
+ * or for the bleeding edge developers out there:
  * import mj from './mailjet-client'
  */
 module.exports = MailjetClient
