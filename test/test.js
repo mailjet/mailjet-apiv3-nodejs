@@ -182,7 +182,7 @@ describe('Advanced API Calls', function () {
     new Example(client2.get('contact'), {countOnly: 1}),
     new Example(client2.get('contact'), {limit: 2}),
     new Example(client2.get('contact'), {offset: 233}),
-    new Example(client2.get('contact'), {contatctList: 34}),
+    new Example(client2.get('contact'), {contactList: 34}),
     new Example(client2.post('contactslist').id(34).action('managecontact'), {email: EMAIL}),
     new Example(client2.post('contactslist').id(34).action('csvdata'), FILE),
     new Example(client2.get('newsletter'), {filters: {CountOnly: 1}}),
@@ -199,13 +199,13 @@ describe('Advanced API Calls', function () {
     'https://api.mailjet.com/v3/REST/contact/2 {}',
     'https://api.mailjet.com/v3/REST/contact/2 {}',
     'https://api.mailjet.com/v3/REST/contact/3/getcontactslist {}',
-    'https://api.mailjet.com/v3/REST/contact/?countOnly=1 {}',
-    'https://api.mailjet.com/v3/REST/contact/?limit=2 {}',
-    'https://api.mailjet.com/v3/REST/contact/?offset=233 {}',
-    'https://api.mailjet.com/v3/REST/contact/?contatctList=34 {}',
+    'https://api.mailjet.com/v3/REST/contact?countOnly=1 {}',
+    'https://api.mailjet.com/v3/REST/contact?limit=2 {}',
+    'https://api.mailjet.com/v3/REST/contact?offset=233 {}',
+    'https://api.mailjet.com/v3/REST/contact?contactList=34 {}',
     'https://api.mailjet.com/v3/REST/contactslist/34/managecontact {"email":"test@mailjet.com"}',
     'https://api.mailjet.com/v3/DATA/contactslist/34/csvdata "FILE"',
-    'https://api.mailjet.com/v3/REST/newsletter/?CountOnly=1 {}',
+    'https://api.mailjet.com/v3/REST/newsletter?CountOnly=1 {}',
     'https://api.mailjet.com/v3/DATA/batchjob/csverror {}',
     'https://api.mailjet.com/v3/REST/contact {"email":"test@mailjet.com"}',
     'https://api.mailjet.com/v3/send {"FromName":"name","FromEmail":"test@mailjet.com","Subject":"subject","Text-Part":"text","Recipients":[{"email":"test@mailjet.com"}]}',
@@ -215,15 +215,15 @@ describe('Advanced API Calls', function () {
   ]
 
   EXPECTED_SET.forEach(function (test, index) {
-    it('should output: ' + test, function () {
+    it('should output: ' + test, async function () {
       var call = EXAMPLES_SET[index].call()
       if(call instanceof Promise) {
-        call.then(function(response) {
+        await call.then(function(response) {
           response.should.equal(test)
-        })
+        });
       } else {
-        call.should.equal(test)      }
-      
+        call.should.equal(test);
+      }
     })
   })
 })
