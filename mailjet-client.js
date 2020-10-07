@@ -484,8 +484,21 @@ MailjetResource.prototype.action = function (name) {
  */
 
 MailjetResource.prototype.request = function (params, callback) {
-  return this.result(params, callback)
-}
+  return this.result(params, callback).catch(function (err) {
+    try {
+      const ErrorDetails = JSON.parse(err.response.text);
+      const fullMessage = ErrorDetails.Messages[0].Errors[0].ErrorMessage;
+
+      if (typeof fullMessage === "string") {
+        err.message = err.message + ";\n" + fullMessage;
+        throw err;
+      }
+      throw err;
+    } catch {
+      throw err;
+    }
+  });
+};
 
 /*
  * post.
