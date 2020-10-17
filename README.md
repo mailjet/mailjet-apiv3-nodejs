@@ -157,7 +157,7 @@ const request = mailjet
     .post("send", {'version': 'v3.1'})
 ```
 
-For additional information refer to our [API Reference](https://dev.preprod.mailjet.com/reference/overview/versioning/).
+For additional information refer to our [API Reference](https://dev.mailjet.com/reference/overview/versioning/).
 
 #### Base URL
 
