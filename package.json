@@ -21,7 +21,7 @@
     "eslint": "^4.2.0"
   },
   "scripts": {
-    "test": "env-cmd -f .env mocha"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
