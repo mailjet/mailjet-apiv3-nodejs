@@ -247,7 +247,7 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
     return _path.join(url, base + '/' + resource)
   }
 
-  var q = qs.stringify(params).replace(/%2B/g, '+')
+  var q = qs.stringify(params);
   return _path.join(url, base + '/' + resource + '/?' + q)
 }
 
