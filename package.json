@@ -11,7 +11,7 @@
     "json-bigint": "^0.2.3",
     "qs": "^6.5.0",
     "superagent": "^3.5.2",
-    "superagent-proxy": "^1.0.2"
+    "superagent-proxy": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.0",
