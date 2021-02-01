@@ -1,4 +1,4 @@
-{
+export default {
   "url": "api.mailjet.com",
   "version": "v3",
   "output": "json",

@@ -208,7 +208,7 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
 }
 
 MailjetClient.prototype.setConfig = function (options) {
-  const config = require('./config')
+  const config = require('./config-mailjet-default')
   if (typeof options === 'object' && options != null && options.length != 0) {
     if (options.url) config.url = options.url
     if (options.version) config.version = options.version
