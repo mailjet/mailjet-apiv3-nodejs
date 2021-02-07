@@ -23,8 +23,7 @@ describe('Basic Error Handling', function () {
       'url': 'api.mailjet.com',
       'version': 'v4',
       'output': 'json',
-      'perform_api_call': true,
-      'secured': true
+      'perform_api_call': true
     }
     var v4Client = Mailjet.connect(API_TOKEN, v4Config)
 
@@ -97,8 +96,7 @@ describe('Basic Error Handling', function () {
         url: 'api.mailjet.com',
         version: 'v3',
         output: 'json',
-        perform_api_call: true,
-        secured: true
+        perform_api_call: true
       }
       var v3Client = Mailjet.connect(API_PUBLIC_KEY, API_PRIVATE_KEY, v3Config)
 
@@ -117,8 +115,8 @@ describe('Basic Error Handling', function () {
               expect(err.ErrorMessage).to.equal(AUTH_V3_ERROR_MESSAGE)
               done()
             })
-        })  
-        
+        })
+
         it('check v3 error status code', function (done) {
           contact.request()
             .then(function (result) {
@@ -143,7 +141,7 @@ describe('Basic Error Handling', function () {
               expect(err.response).to.not.equal(null)
               done()
             })
-        })  
+        })
 
         it('check v3 error identitfier is not empty string', function (done) {
           contact.request()
