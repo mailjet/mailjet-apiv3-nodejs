@@ -187,6 +187,13 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
   }
 
   function basicConnectStrategy(apiKey, apiSecret, options) {
+    if (!apiKey) {
+      throw new Error('Mailjet API_KEY is required');
+    }
+    if (!apiSecret) {
+      throw new Error('Mailjet API_SECRET is required');
+    }
+  
     setOptions(options)
     self.apiKey = apiKey
     self.apiSecret = apiSecret
@@ -195,6 +202,10 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
 
   function tokenConnectStrategy(apiToken, options) {
     setOptions(options)
+    if (!apiToken) {
+      throw new Error('Mailjet API_TOKEN is required');
+    }
+  
     self.apiToken = apiToken
     return self
   }
