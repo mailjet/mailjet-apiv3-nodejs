@@ -57,23 +57,23 @@ require('superagent-proxy')(request)
  * If you don't know what this is about, sign up to Mailjet at:
  * https://www.mailjet.com/
  */
-function MailjetClient (api_key, api_secret, options, perform_api_call) {  
+function MailjetClient (api_key, api_secret, options, perform_api_call) {
   return this.authStrategy(api_key, api_secret, options, perform_api_call)
 }
 
 /**
  * @param (optional){String} api_key || api_token
  * @param (optional){String} api_secret
- * @param (optional){Object} options 
- * @param (optional){any} perform_api_call 
+ * @param (optional){Object} options
+ * @param (optional){any} perform_api_call
  */
 MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, perform_api_call) {
 
   var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call)
   var self = this
   // Check if api version requires toekn authentication
-  // This is one of the approaches, maybe there is better 
-  if (isTokenRequired) {   
+  // This is one of the approaches, maybe there is better
+  if (isTokenRequired) {
     // params are shifted one position to left as we don't have api secret any more
     // api_key becomes api_token
     // api_secret becomes options
@@ -89,10 +89,10 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
    * @param (optional){String} api_key mailjet api key
    * @param (optional){String} api_secret mailjet api secret
    * @param (optional){Object} options additional connection options
-   * @param (optional){boolean} perform_api_call 
+   * @param (optional){boolean} perform_api_call
    */
   function basicAuthentication(api_key, api_secret, options, perform_api_call) {
-    
+
     self.config = self.setConfig(options)
     self.perform_api_call = perform_api_call || false
     // To be updated according to the npm repo version
@@ -105,10 +105,10 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
   }
 
   /**
-   * 
+   *
    * @param (optional){String} api_token mailjet api token
    * @param (optional){Object} options additional connection options
-   * @param (optional){boolean} perform_api_call 
+   * @param (optional){boolean} perform_api_call
    */
   function tokenAuthentication(api_token, options, perform_api_call) {
     self.perform_api_call = perform_api_call || false
@@ -172,8 +172,8 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
 
 /**
  * @param (optional){String} apiKey || apiToken
- * @param (optional){String} apiSecret 
- * @param (optional){Object} options 
+ * @param (optional){String} apiSecret
+ * @param (optional){Object} options
  */
 MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) {
 
@@ -217,7 +217,7 @@ MailjetClient.prototype.setConfig = function (options) {
   } else if (options != null) {
     throw new Error('warning, your options variable is not a valid object.')
   }
-  
+
   return config
 }
 
@@ -238,10 +238,10 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
     console.log('subPath =', sub)
     console.log('filters =', params)
   }
-  
+
   const url = (options && 'url' in options ? options.url : this.config.url)
   const api_version = (options && 'version' in options ? options.version : this.config.version)
-  
+
   var base = _path.join(api_version, sub)
   if (Object.keys(params).length === 0) {
     return _path.join(url, base + '/' + resource)
@@ -263,7 +263,7 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
  * 		and error on error
  */
 
-MailjetClient.prototype.httpRequest = function (method, url, data, callback, perform_api_call){  
+MailjetClient.prototype.httpRequest = function (method, url, data, callback, perform_api_call){
   var req = request[method](url)
     .set('user-agent', 'mailjet-api-v3-nodejs/' + this.version)
 
@@ -290,11 +290,11 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
     console.log('Final url: ' + url)
     console.log('body: ' + JSON.stringify(payload))
   }
-  
+
   if (perform_api_call === false || this.perform_api_call) {
     return Promise.resolve({body: payload, url: url})
   }
-  
+
   if (method === 'delete') { method = 'del' }
   if (method === 'post' || method === 'put') { req = req.send(data) }
 
@@ -395,7 +395,7 @@ function MailjetResource (method, func, options, context) {
         return {}
       }
     })(), that.options)
-    
+
     var secured = null
     if (that.options && 'secured' in that.options) {
       secured = that.options.secured
