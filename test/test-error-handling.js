@@ -18,13 +18,38 @@ describe('Basic Error Handling', function () {
   const AUTH_V3_ERROR_MESSAGE = 'Unauthorized'
   const AUTH_ERROR_CODE = 401
 
+  describe("no auth data provided", function () {
+    it("no api key provided", function () {
+      try {
+        Mailjet.connect();
+      } catch (error) {
+        expect(error.message).to.equal("Mailjet API_KEY is required");
+      }
+    });
+
+    it("no api secret provided", function () {
+      try {
+        Mailjet.connect(null, { url: "api.mailjet.com" });
+      } catch (error) {
+        expect(error.message).to.equal("Mailjet API_TOKEN is required");
+      }
+    });
+
+    it("no api api token provided", function () {
+      try {
+        Mailjet.connect("1234");
+      } catch (error) {
+        expect(error.message).to.equal("Mailjet API_SECRET is required");
+      }
+    });
+  });
+
   describe('invalid token', function () {
     var v4Config = {
       'url': 'api.mailjet.com',
       'version': 'v4',
       'output': 'json',
-      'perform_api_call': true,
-      'secured': true
+      'perform_api_call': true
     }
     var v4Client = Mailjet.connect(API_TOKEN, v4Config)
 
@@ -97,8 +122,7 @@ describe('Basic Error Handling', function () {
         url: 'api.mailjet.com',
         version: 'v3',
         output: 'json',
-        perform_api_call: true,
-        secured: true
+        perform_api_call: true
       }
       var v3Client = Mailjet.connect(API_PUBLIC_KEY, API_PRIVATE_KEY, v3Config)
 
@@ -117,8 +141,8 @@ describe('Basic Error Handling', function () {
               expect(err.ErrorMessage).to.equal(AUTH_V3_ERROR_MESSAGE)
               done()
             })
-        })  
-        
+        })
+
         it('check v3 error status code', function (done) {
           contact.request()
             .then(function (result) {
@@ -143,7 +167,7 @@ describe('Basic Error Handling', function () {
               expect(err.response).to.not.equal(null)
               done()
             })
-        })  
+        })
 
         it('check v3 error identitfier is not empty string', function (done) {
           contact.request()

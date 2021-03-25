@@ -187,6 +187,13 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
   }
 
   function basicConnectStrategy(apiKey, apiSecret, options) {
+    if (!apiKey) {
+      throw new Error('Mailjet API_KEY is required');
+    }
+    if (!apiSecret) {
+      throw new Error('Mailjet API_SECRET is required');
+    }
+  
     setOptions(options)
     self.apiKey = apiKey
     self.apiSecret = apiSecret
@@ -195,6 +202,10 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
 
   function tokenConnectStrategy(apiToken, options) {
     setOptions(options)
+    if (!apiToken) {
+      throw new Error('Mailjet API_TOKEN is required');
+    }
+  
     self.apiToken = apiToken
     return self
   }
@@ -212,7 +223,6 @@ MailjetClient.prototype.setConfig = function (options) {
   if (typeof options === 'object' && options != null && options.length != 0) {
     if (options.url) config.url = options.url
     if (options.version) config.version = options.version
-    if (options.secured) config.secured = options.secured
     if (options.perform_api_call) config.perform_api_call = options.perform_api_call
   } else if (options != null) {
     throw new Error('warning, your options variable is not a valid object.')
@@ -247,7 +257,7 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
     return _path.join(url, base + '/' + resource)
   }
 
-  var q = qs.stringify(params).replace(/%2B/g, '+')
+  var q = qs.stringify(params);
   return _path.join(url, base + '/' + resource + '/?' + q)
 }
 
@@ -396,12 +406,6 @@ function MailjetResource (method, func, options, context) {
       }
     })(), that.options)
 
-    var secured = null
-    if (that.options && 'secured' in that.options) {
-      secured = that.options.secured
-    } else {
-      secured = self.config.secured
-    }
     var perform_api_call = null
     if (that.options && 'perform_api_call' in that.options) {
       perform_api_call = that.options.perform_api_call
@@ -411,7 +415,7 @@ function MailjetResource (method, func, options, context) {
 
     that.callUrl = that.base
     self.lastAdded = RESOURCE
-    return self.httpRequest(method, (secured ? 'https' : 'http') + '://' + path, params, callback, perform_api_call)
+    return self.httpRequest(method, 'https://' + path, params, callback, perform_api_call)
   }
 }
 
@@ -484,8 +488,21 @@ MailjetResource.prototype.action = function (name) {
  */
 
 MailjetResource.prototype.request = function (params, callback) {
-  return this.result(params, callback)
-}
+  return this.result(params, callback).catch(function (err) {
+    try {
+      const ErrorDetails = JSON.parse(err.response.text);
+      const fullMessage = ErrorDetails.Messages[0].Errors[0].ErrorMessage;
+
+      if (typeof fullMessage === "string") {
+        err.message = err.message + ";\n" + fullMessage;
+        throw err;
+      }
+      throw err;
+    } catch {
+      throw err;
+    }
+  });
+};
 
 /*
  * post.
