@@ -21,42 +21,40 @@ Check out all the resources and NodeJs code examples in the official [Mailjet Do
 
 ## Table of contents
 
-- [Compatibility](#compatibility)
-- [Installation](#installation)
-- [Authentication](#authentication)
-- [Make your first call](#make-your-first-call)
-- [Client / Call configuration specifics](#client--call-configuration-specifics)
-  - [Options](#options)
-    - [API versioning](#api-versioning)
-    - [Base URL](#base-url)
-    - [Request timeout](#request-timeout)
-    - [Use proxy](#use-proxy)
-  - [Disable API call](#disable-api-call)
-- [Request examples](#request-examples)
-  - [POST request](#post-request)
-    - [Simple POST request](#simple-post-request)
-    - [Using actions](#using-actions)
-  - [GET request](#get-request)
-    - [Retrieve all objects](#retrieve-all-objects)
-    - [Use filtering](#use-filtering)
-    - [Retrieve a single object](#retrieve-a-single-object)
-  - [PUT request](#put-request)
-  - [DELETE request](#delete-request)
-  - [Response](#response)
-  - [API resources helpers](#api-resources-helpers)
-- [SMS API](#sms-api)
-  - [Token authentication](#token-authentication)
-  - [Example Request](#example-request)
-- [Contribute](#contribute)
+- [Mailjet NodeJs Wrapper](#mailjet-nodejs-wrapper)
+  - [Overview](#overview)
+  - [Table of contents](#table-of-contents)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+  - [Authentication](#authentication)
+  - [Make your first call](#make-your-first-call)
+  - [Client / Call configuration specifics](#client--call-configuration-specifics)
+    - [Options](#options)
+      - [API Versioning](#api-versioning)
+      - [Base URL](#base-url)
+      - [Request timeout](#request-timeout)
+      - [Use proxy](#use-proxy)
+    - [Disable API call](#disable-api-call)
+  - [Request examples](#request-examples)
+    - [POST Request](#post-request)
+      - [Simple POST request](#simple-post-request)
+      - [Using actions](#using-actions)
+    - [GET Request](#get-request)
+      - [Retrieve all objects](#retrieve-all-objects)
+      - [Use filtering](#use-filtering)
+      - [Retrieve a single object](#retrieve-a-single-object)
+    - [PUT Request](#put-request)
+    - [DELETE Request](#delete-request)
+  - [SMS API](#sms-api)
+    - [Token authentication](#token-authentication)
+    - [Example request](#example-request)
+  - [Contribute](#contribute)
 
 ## Compatibility
 
 This library officially supports the following Node.js versions:
 
- - v4.1
- - v4.0
- - v5.0.0
- - v6.11.1
+ - v12
 
 ## Installation
 
@@ -123,7 +121,7 @@ request
 
 ## Client / Call configuration specifics
 
-To instantiate the library you can use the following constructor:  
+To instantiate the library you can use the following constructor:
 
 ```javascript
 const mailjet = require ('node-mailjet')
