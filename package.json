@@ -14,11 +14,11 @@
     "superagent-proxy": "^2.1.0"
   },
   "devDependencies": {
-    "chai": "^4.1.0",
-    "mocha": "^5.2.0",
-    "nock": "^9.0.14",
     "@segment/to-iso-string": "^1.0.1",
-    "eslint": "^4.2.0"
+    "chai": "^4.1.0",
+    "eslint": "^4.2.0",
+    "mocha": "^8.4.0",
+    "nock": "^9.0.14"
   },
   "scripts": {
     "test": "mocha"
