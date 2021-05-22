@@ -18,31 +18,31 @@ describe('Basic Error Handling', function () {
   const AUTH_V3_ERROR_MESSAGE = 'Unauthorized'
   const AUTH_ERROR_CODE = 401
 
-  describe("no auth data provided", function () {
-    it("no api key provided", function () {
+  describe('no auth data provided', function () {
+    it('no api key provided', function () {
       try {
-        Mailjet.connect();
+        Mailjet.connect()
       } catch (error) {
-        expect(error.message).to.equal("Mailjet API_KEY is required");
+        expect(error.message).to.equal('Mailjet API_KEY is required')
       }
-    });
+    })
 
-    it("no api secret provided", function () {
+    it('no api secret provided', function () {
       try {
-        Mailjet.connect(null, { url: "api.mailjet.com" });
+        Mailjet.connect(null, { url: 'api.mailjet.com' })
       } catch (error) {
-        expect(error.message).to.equal("Mailjet API_TOKEN is required");
+        expect(error.message).to.equal('Mailjet API_TOKEN is required')
       }
-    });
+    })
 
-    it("no api api token provided", function () {
+    it('no api api token provided', function () {
       try {
-        Mailjet.connect("1234");
+        Mailjet.connect('1234')
       } catch (error) {
-        expect(error.message).to.equal("Mailjet API_SECRET is required");
+        expect(error.message).to.equal('Mailjet API_SECRET is required')
       }
-    });
-  });
+    })
+  })
 
   describe('invalid token', function () {
     var v4Config = {
