@@ -133,7 +133,11 @@ describe('Basic Error Handling', function () {
         it('check v3 error message', function (done) {
           contact.request()
             .then(function (result) {
-              result.body.should.be.a('object')
+              expect(result).to.have.property('body')
+              expect(result).to.have.property('response')
+              expect(result.response).to.have.property('statusCode')
+
+              expect(result.body).to.be.a('object')
               expect(result.response.statusCode).to.equal(200)
               done()
             })
@@ -146,7 +150,8 @@ describe('Basic Error Handling', function () {
         it('check v3 error status code', function (done) {
           contact.request()
             .then(function (result) {
-              result.body.should.be.a('object')
+              expect(result).to.have.property('body')
+              expect(result.body).to.be.a('object')
               expect(result.response.statusCode).to.equal(200)
               done()
             })

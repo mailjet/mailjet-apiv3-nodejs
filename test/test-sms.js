@@ -27,7 +27,7 @@ describe('Basic Usage', function() {
       expect(connectionType3.apiToken).to.equal(API_TOKEN)
     })
 
-    it('creates an instance of the client wiht options', function() {
+    it('creates an instance of the client with options', function() {
       var smsOptions = {
         version: 'v4'
       }
@@ -68,7 +68,7 @@ describe('Basic Usage', function() {
         expect(Promise.prototype.isPrototypeOf(promise)).to.equal(true)
       })
 
-      it('retirieve list of messages', function(done) {
+      it('retrieve list of messages', function(done) {
         var promise = smsGet
           .request({ FromTS: +new Date, ToTS: +new Date })
           .then(function(response) {
@@ -85,7 +85,7 @@ describe('Basic Usage', function() {
     })
 
     describe('post', function() {
-      it('export sms statisitcs action with timestamp bigger than one year', function(done) {
+      it('export sms statistics action with timestamp bigger than one year', function(done) {
         var promise = client
           .post('sms')
           .action('export')
