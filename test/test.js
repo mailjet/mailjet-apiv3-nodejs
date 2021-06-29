@@ -66,24 +66,31 @@ describe('Basic Usage', function () {
     describe('get', function () {
       var contact = client.get('contact')
 
-      it('calls the contact ressource instance whith no parameters', function (done) {
+      it('calls the contact resource instance with no parameters', function (done) {
         contact.request()
           .then(function (result) {
-            result.body.should.be.a('object')
+            expect(result).to.have.property('body')
+            expect(result).to.have.property('response')
+            expect(result.response).to.have.property('statusCode')
+
+            expect(result.body).to.be.a('object')
             expect(result.response.statusCode).to.equal(200)
             done()
           })
           .catch(function (reason) {
+            console.log(reason)
             // We want it to raise an error if it gets here
             expect(reason).to.equal(undefined)
             done()
           })
       })
 
-      it('calls the contact ressource instance whith parameters', function (done) {
+      it('calls the contact resource instance with parameters', function (done) {
         var promise = contact.request({Name: 'Guillaume Badi'})
           .then(function (result) {
-            result.body.should.be.a('object')
+            expect(result).to.have.property('body')
+            expect(result).to.have.property('response')
+            expect(result.body).to.be.a('object')
             expect(result.response.statusCode).to.be.within(200, 201)
             done()
           })
@@ -95,9 +102,11 @@ describe('Basic Usage', function () {
         expect(Promise.prototype.isPrototypeOf(promise)).to.equal(true)
       })
 
-      it('calls the contact ressource instance with empty parameters', function (done) {
+      it('calls the contact resource instance with empty parameters', function (done) {
         contact.request({}).then(function (result) {
-          result.body.should.be.a('object')
+          expect(result).to.have.property('body')
+          expect(result).to.have.property('response')
+          expect(result.body).to.be.a('object')
           expect(result.response.statusCode).to.be.within(200, 201)
           done()
         })
@@ -113,7 +122,7 @@ describe('Basic Usage', function () {
       var inactiveErrorMessage = 'There is an already existing inactive sender with the same email. ' +
         'You can use "validate" action in order to activate it.'
 
-      it('calls the sender ressource instance whith no parameters', function (done) {
+      it('calls the sender resource instance with no parameters', function (done) {
         sender.request().catch(function (reason) {
           //reason.ErrorMessage.should.equal(deletedErrorMessage)
           reason.statusCode.should.equal(400)
@@ -121,7 +130,7 @@ describe('Basic Usage', function () {
         })
       })
 
-      it('calls the sender ressource instance whith invalid parameters', function (done) {
+      it('calls the sender resource instance with invalid parameters', function (done) {
         sender.request({Name: 'Guillaume Badi'}).catch(function (reason) {
           //expect(reason.ErrorMessage).to.equal(deletedErrorMessage)
           expect(reason.statusCode).to.equal(400)
@@ -129,7 +138,7 @@ describe('Basic Usage', function () {
         })
       })
 
-      it('calls the sender ressource instance whith valid parameters', function (done) {
+      it('calls the sender resource instance with valid parameters', function (done) {
         sender.request({email: 'gbadi@mailjet.com'})
           .then(function (result) {
             expect(result.response.statusCode).to.equal(201)
@@ -223,7 +232,7 @@ describe('Advanced API Calls', function () {
         })
       } else {
         call.should.equal(test)      }
-      
+
     })
   })
 })

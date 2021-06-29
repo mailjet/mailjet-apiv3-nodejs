@@ -21,7 +21,8 @@
     "nock": "^9.0.14"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test-debug": "mocha --inspect-brk"
   },
   "repository": {
     "type": "git",
