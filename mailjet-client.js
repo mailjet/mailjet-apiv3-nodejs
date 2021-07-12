@@ -492,9 +492,13 @@ MailjetResource.prototype.request = function (params, callback) {
     try {
       const ErrorDetails = JSON.parse(err.response.text);
       const fullMessage = ErrorDetails.Messages[0].Errors[0].ErrorMessage;
+      const relatedTo = ErrorDetails.Messages[0].Errors[0].ErrorRelatedTo;
 
       if (typeof fullMessage === "string") {
         err.message = err.message + ";\n" + fullMessage;
+        if (Array.isArray(relatedTo) && relatedTo.length > 0) {
+          err.message += ";\nRelated To:" + relatedTo.join(", ");
+        }
         throw err;
       }
       throw err;
