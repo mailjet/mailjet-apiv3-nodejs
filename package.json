@@ -1,6 +1,6 @@
 {
   "name": "node-mailjet",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Mailjet NodeJS API client",
   "main": "index.js",
   "directories": {
