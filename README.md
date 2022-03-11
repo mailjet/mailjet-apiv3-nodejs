@@ -1,4 +1,3 @@
-
 [mailjet]: http://www.mailjet.com
 [api_credential]: https://app.mailjet.com/account/api_keys
 [api_token]: https://app.mailjet.com/sms
@@ -6,7 +5,7 @@
 [doc]: http://dev.mailjet.com/guides/?javascript#
 [api_doc_repo]: https://github.com/mailjet/api-documentation
 
-![alt text](https://www.mailjet.com/images/email/transac/logo_header.png "Mailjet")
+![alt text](https://www.mailjet.com/images/email/transac/logo_header.png 'Mailjet')
 
 # Mailjet NodeJs Wrapper
 
@@ -54,7 +53,8 @@ Check out all the resources and NodeJs code examples in the official [Mailjet Do
 
 This library officially supports the following Node.js versions:
 
- - v12
+- v14
+- v16
 
 ## Installation
 
@@ -81,9 +81,11 @@ export MJ_APIKEY_PRIVATE='your API secret'
 
 Initialize your [Mailjet][mailjet] Client:
 
-``` javascript
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+```javascript
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
 ```
 
 ## Make your first call
@@ -91,32 +93,38 @@ const mailjet = require ('node-mailjet')
 Here's an example on how to send an email:
 
 ```javascript
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-    .post("send", {'version': 'v3.1'})
-    .request({
-        "Messages":[{
-            "From": {
-                "Email": "pilot@mailjet.com",
-                "Name": "Mailjet Pilot"
-            },
-            "To": [{
-                "Email": "passenger1@mailjet.com",
-                "Name": "passenger 1"
-            }],
-            "Subject": "Your email flight plan!",
-            "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            "HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
-        }]
-    })
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.post('send', { version: 'v3.1' }).request({
+  Messages: [
+    {
+      From: {
+        Email: 'pilot@mailjet.com',
+        Name: 'Mailjet Pilot'
+      },
+      To: [
+        {
+          Email: 'passenger1@mailjet.com',
+          Name: 'passenger 1'
+        }
+      ],
+      Subject: 'Your email flight plan!',
+      TextPart:
+        'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
+      HTMLPart:
+        '<h3>Dear passenger 1, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!</h3><br />May the delivery force be with you!'
+    }
+  ]
+})
 request
-    .then((result) => {
-        console.log(result.body)
-    })
-    .catch((err) => {
-        console.log(err.statusCode)
-    })
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ## Client / Call configuration specifics
@@ -124,17 +132,18 @@ request
 To instantiate the library you can use the following constructor:
 
 ```javascript
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-    .METHOD(RESOURCE, {OPTIONS})
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.METHOD(RESOURCE, { OPTIONS })
 ```
 
- - `MJ_APIKEY_PUBLIC` : public Mailjet API key
- - `MJ_APIKEY_PRIVATE` : private Mailjet API key
- - `METHOD` - the method you want to use for this call (`post`, `put`, `get`, `delete`)
- - `RESOURCE` - the API endpoint you want to call
- - `OPTIONS` : associative array describing the connection options (see Options bellow for full list)
+- `MJ_APIKEY_PUBLIC` : public Mailjet API key
+- `MJ_APIKEY_PRIVATE` : private Mailjet API key
+- `METHOD` - the method you want to use for this call (`post`, `put`, `get`, `delete`)
+- `RESOURCE` - the API endpoint you want to call
+- `OPTIONS` : associative array describing the connection options (see Options bellow for full list)
 
 ### Options
 
@@ -149,10 +158,11 @@ The Mailjet API is spread among three distinct versions:
 Since most Email API endpoints are located under `v3`, it is set as the default one and does not need to be specified when making your request. For the others you need to specify the version using `version`. For example, if using Send API `v3.1`:
 
 ```javascript
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-    .post("send", {'version': 'v3.1'})
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.post('send', { version: 'v3.1' })
 ```
 
 For additional information refer to our [API Reference](https://dev.mailjet.com/reference/overview/versioning/).
@@ -162,8 +172,10 @@ For additional information refer to our [API Reference](https://dev.mailjet.com/
 The default base domain name for the Mailjet API is api.mailjet.com. You can modify this base URL by setting a value for `url` in your call:
 
 ```javascript
-const request = mailjet
-    .post("send", {'version': 'v3.1', 'url': 'api.us.mailjet.com'})
+const request = mailjet.post('send', {
+  version: 'v3.1',
+  url: 'api.us.mailjet.com'
+})
 ```
 
 If your account has been moved to Mailjet's US architecture, the URL value you need to set is `api.us.mailjet.com`.
@@ -173,8 +185,7 @@ If your account has been moved to Mailjet's US architecture, the URL value you n
 You are able to set a timeout for your request using the `timeout` parameter. The API request timeout is set in milliseconds:
 
 ```javascript
-const request = mailjet
-    .post("send", {'version': 'v3.1', 'timeout': 100})
+const request = mailjet.post('send', { version: 'v3.1', timeout: 100 })
 ```
 
 #### Use proxy
@@ -182,20 +193,23 @@ const request = mailjet
 The `proxyUrl` parameter allows you to set a HTTPS proxy URL to send the API requests through:
 
 ```javascript
-const request = mailjet
-    .post("send", {'version': 'v3.1', 'proxyUrl': 'YOUR_PROXY_URL'})
+const request = mailjet.post('send', {
+  version: 'v3.1',
+  proxyUrl: 'YOUR_PROXY_URL'
+})
 ```
 
 The proxy URL is passed directly to [superagent-proxy](https://github.com/TooTallNate/superagent-proxy).
-
 
 ### Disable API call
 
 By default the API call parameter is always enabled. However, you may want to disable it during testing to prevent unnecessary calls to the Mailjet API. This is done by setting the `perform_api_call` parameter to `false`:
 
 ```javascript
-const request = mailjet
-    .post("send", {'version': 'v3.1', 'perform_api_call': false})
+const request = mailjet.post('send', {
+  version: 'v3.1',
+  perform_api_call: false
+})
 ```
 
 ## Request examples
@@ -206,9 +220,9 @@ Use the `post` method of the Mailjet Client:
 
 ```javascript
 const request = mailjet
-  .post($RESOURCE, {$OPTIONS})
+  .post($RESOURCE, { $OPTIONS })
   .id($ID)
-  .request({$PARAMS})
+  .request({ $PARAMS })
 ```
 
 `.request` will contain the body of the POST request. You need to define `.id` if you want to perform an action on a specific object and need to identify it.
@@ -221,51 +235,55 @@ const request = mailjet
  * Create a new contact:
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("contact")
-	.request({
-	    "Email":"passenger@mailjet.com",
-	    "IsExcludedFromCampaigns":"true",
-	    "Name":"New Contact"
-	})
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.post('contact').request({
+  Email: 'passenger@mailjet.com',
+  IsExcludedFromCampaigns: 'true',
+  Name: 'New Contact'
+})
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 #### Using actions
 
 ```javascript
 /**
-*
-* Manage the subscription status of a contact to multiple lists
-*
-**/
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+ *
+ * Manage the subscription status of a contact to multiple lists
+ *
+ **/
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
 const request = mailjet
-	.post("contact")
-	.id($contact_ID)
-	.action("managecontactslists")
-	.request({
-    "ContactsLists": [{
-			"ListID": 987654321,
-			"Action": "addnoforce"
-		}]
-	})
+  .post('contact')
+  .id($contact_ID)
+  .action('managecontactslists')
+  .request({
+    ContactsLists: [
+      {
+        ListID: 987654321,
+        Action: 'addnoforce'
+      }
+    ]
+  })
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ### GET Request
@@ -274,9 +292,9 @@ Use the `get` method of the Mailjet Client:
 
 ```javascript
 const request = mailjet
- .get($RESOURCE, {$OPTIONS})
- .id($ID)
- .request({$PARAMS})
+  .get($RESOURCE, { $OPTIONS })
+  .id($ID)
+  .request({ $PARAMS })
 ```
 
 `.request` will contain any query parameters applied to the request. You need to define `.id` if you want to retrieve a specific object.
@@ -289,18 +307,18 @@ const request = mailjet
  * Retrieve all contacts
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("contact")
-	.request()
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.get('contact').request()
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 #### Use filtering
@@ -311,20 +329,21 @@ request
  * Retrieve all contacts that are not in the campaign exclusion list :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
 const request = mailjet
-	.get("contact")
-	.request({'IsExcludedFromCampaigns': false})
+  .get('contact')
+  .request({ IsExcludedFromCampaigns: false })
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
-
 
 #### Retrieve a single object
 
@@ -334,19 +353,18 @@ request
  * Retrieve a specific contact ID :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("contact")
-	.id(Contact_ID)
-	.request()
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.get('contact').id(Contact_ID).request()
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ### PUT Request
@@ -355,9 +373,9 @@ Use the `put` method of the Mailjet Client:
 
 ```javascript
 const request = mailjet
- .put($RESOURCE, {$OPTIONS})
- .id($ID)
- .request({$PARAMS})
+  .put($RESOURCE, { $OPTIONS })
+  .id($ID)
+  .request({ $PARAMS })
 ```
 
 You need to define `.id` to specify the object you need to edit. `.request` will contain the body of the PUT request.
@@ -372,24 +390,28 @@ Here's an example of a PUT request:
  * Update the contact properties for a contact:
  *
  */
-const mailjet = require ('node-mailjet')
-    .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
 const request = mailjet
-    .put("contactdata")
-    .id($CONTACT_ID)
-    .request({
-        "Data":[{
-            "first_name": "John",
-            "last_name": "Smith"
-        }]
-    })
+  .put('contactdata')
+  .id($CONTACT_ID)
+  .request({
+    Data: [
+      {
+        first_name: 'John',
+        last_name: 'Smith'
+      }
+    ]
+  })
 request
-    .then((result) => {
-        console.log(result.body)
-    })
-    .catch((err) => {
-        console.log(err.statusCode)
-    })
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ### DELETE Request
@@ -397,10 +419,7 @@ request
 Use the `delete` method of the Mailjet Client:
 
 ```javascript
-const request = mailjet
- .delete($RESOURCE, {$OPTIONS})
- .id($ID)
- .request()
+const request = mailjet.delete($RESOURCE, { $OPTIONS }).id($ID).request()
 ```
 
 You need to define `.id` to specify the object you want to delete. `.request` should be empty.
@@ -415,19 +434,18 @@ Here's an example of a `DELETE` request:
  * Delete : Delete an email template.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.delete("template")
-	.id(Template_ID)
-	.request()
+const mailjet = require('node-mailjet').connect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+)
+const request = mailjet.delete('template').id(Template_ID).request()
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ## SMS API
@@ -437,7 +455,7 @@ request
 Authentication for the SMS API endpoints is done using a bearer token. The bearer token is generated in the [SMS section](https://app.mailjet.com/sms) of your Mailjet account.
 
 ```javascript
-var Mailjet = require('node-mailjet').connect('api token');
+var Mailjet = require('node-mailjet').connect('api token')
 ```
 
 ### Example request
@@ -445,23 +463,20 @@ var Mailjet = require('node-mailjet').connect('api token');
 Here's an example SMS API request:
 
 ```javascript
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_TOKEN)
-const request = mailjet
-    .post("sms-send", {'version': 'v4'})
-    .request({
-       "Text": "Have a nice SMS flight with Mailjet !",
-       "To": "+33600000000",
-       "From": "MJPilot"
-  })
+const mailjet = require('node-mailjet').connect(process.env.MJ_TOKEN)
+const request = mailjet.post('sms-send', { version: 'v4' }).request({
+  Text: 'Have a nice SMS flight with Mailjet !',
+  To: '+33600000000',
+  From: 'MJPilot'
+})
 
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 ## Contribute
