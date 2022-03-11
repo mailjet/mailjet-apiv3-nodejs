@@ -39,7 +39,6 @@ const ACTION = 2
 
 const qs = require('querystring')
 const request = require('superagent')
-const Promise = require('bluebird')
 const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
 const version = require('./package.json').version
