@@ -15,6 +15,7 @@ module.exports = {
       'error',
       'unix'
     ],
+    'no-prototype-builtins': 0,
     'quotes': [
       'error',
       'single'

@@ -17,7 +17,6 @@ var Mailjet = require('../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
-var Promise = require('bluebird')
 var nock = require('nock')
 
 if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
