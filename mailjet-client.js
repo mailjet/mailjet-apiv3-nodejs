@@ -249,16 +249,16 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
     console.log('filters =', params)
   }
 
-  const url = (options && 'url' in options ? options.url : this.config.url)
-  const api_version = (options && 'version' in options ? options.version : this.config.version)
+  const url = (options && 'url' in options) ? options.url : this.config.url
+  const api_version = (options && 'version' in options) ? options.version : this.config.version
 
-  var base = _path.join(api_version, sub)
+  const base = _path.join(api_version, sub)
   if (Object.keys(params).length === 0) {
     return _path.join(url, base + '/' + resource)
   }
 
-  var q = qs.stringify(params);
-  return _path.join(url, base + '/' + resource + '/?' + q)
+  const querystring = qs.stringify(params);
+  return _path.join(url, base + '/' + resource + '?' + querystring)
 }
 
 /*
