@@ -17,7 +17,6 @@ var Mailjet = require('../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
-var Promise = require('bluebird')
 var nock = require('nock')
 
 if (typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
@@ -69,7 +68,7 @@ describe('Basic Usage', function () {
       it('calls the contact ressource instance whith no parameters', function (done) {
         contact.request()
           .then(function (result) {
-            result.body.should.be.a('object')
+            expect(result.body).should.be.a('object')
             expect(result.response.statusCode).to.equal(200)
             done()
           })
@@ -83,7 +82,7 @@ describe('Basic Usage', function () {
       it('calls the contact ressource instance whith parameters', function (done) {
         var promise = contact.request({Name: 'Guillaume Badi'})
           .then(function (result) {
-            result.body.should.be.a('object')
+            expect(result.body).should.be.a('object')
             expect(result.response.statusCode).to.be.within(200, 201)
             done()
           })
@@ -97,7 +96,7 @@ describe('Basic Usage', function () {
 
       it('calls the contact ressource instance with empty parameters', function (done) {
         contact.request({}).then(function (result) {
-          result.body.should.be.a('object')
+          expect(result.body).should.be.a('object')
           expect(result.response.statusCode).to.be.within(200, 201)
           done()
         })
