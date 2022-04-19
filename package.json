@@ -10,7 +10,7 @@
     "bluebird": "^3.5.0",
     "json-bigint": "^1.0.0",
     "qs": "^6.5.0",
-    "superagent": "^6.1.0",
+    "superagent": "^7.1.1",
     "superagent-proxy": "^3.0.0"
   },
   "devDependencies": {
