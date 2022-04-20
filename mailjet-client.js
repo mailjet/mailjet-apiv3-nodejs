@@ -46,6 +46,12 @@ const version = require('./package.json').version
 /* Extend superagent request with proxy method */
 require('superagent-proxy')(request)
 
+function setValueIfExist(targetObject, path, value) {
+  if(value) {
+    targetObject[path] = value;
+  }
+}
+
 /*
  * MailjetClient constructor.
  *
@@ -329,10 +335,15 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
       if (err) {
         const error = new Error()
         error.ErrorMessage = body.ErrorMessage || err.message
-        error.ErrorIdentifier = body.ErrorIdentifier
+
         error.statusCode = err.status || null
         error.response = result || null
-        error.message = 'Unsuccessful: ' + error.statusCode + ' ' + error.ErrorMessage
+        error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${error.ErrorMessage}"`
+
+        setValueIfExist(error, 'ErrorIdentifier', body.ErrorIdentifier)
+        setValueIfExist(error, 'ErrorCode', body.ErrorCode)
+        setValueIfExist(error, 'ErrorRelatedTo', body.ErrorRelatedTo)
+
         return ret(error)
       }
 
