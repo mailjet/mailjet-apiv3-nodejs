@@ -7,7 +7,6 @@ var Mailjet = require('../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars
-var Promise = require('bluebird')
 
 describe('Basic Error Handling', function () {
   API_TOKEN = API_TOKEN || '#invalidToken'
@@ -133,7 +132,7 @@ describe('Basic Error Handling', function () {
         it('check v3 error message', function (done) {
           contact.request()
             .then(function (result) {
-              result.body.should.be.a('object')
+              expect(result.body).should.be.a('object')
               expect(result.response.statusCode).to.equal(200)
               done()
             })
@@ -146,7 +145,7 @@ describe('Basic Error Handling', function () {
         it('check v3 error status code', function (done) {
           contact.request()
             .then(function (result) {
-              result.body.should.be.a('object')
+              expect(result.body).should.be.a('object')
               expect(result.response.statusCode).to.equal(200)
               done()
             })
