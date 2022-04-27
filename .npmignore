@@ -1,0 +1,6 @@
+# Dependency directory
+node_modules/
+
+# Internal lib data
+examples/
+test/
