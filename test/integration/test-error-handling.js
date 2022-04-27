@@ -3,7 +3,7 @@ var API_TOKEN = process.env.MJ_API_TOKEN
 var API_PUBLIC_KEY = process.env.MJ_APIKEY_PUBLIC
 var API_PRIVATE_KEY = process.env.MJ_APIKEY_PRIVATE
 
-var Mailjet = require('../mailjet-client')
+var Mailjet = require('../../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars

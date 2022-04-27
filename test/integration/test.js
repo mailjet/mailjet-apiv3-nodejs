@@ -13,7 +13,7 @@ const RECIPIENTS_VARS = [{email: EMAIL, vars: VAR}]
 const API_KEY = process.env.MJ_APIKEY_PUBLIC
 const API_SECRET = process.env.MJ_APIKEY_PRIVATE
 
-var Mailjet = require('../mailjet-client')
+var Mailjet = require('../../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars

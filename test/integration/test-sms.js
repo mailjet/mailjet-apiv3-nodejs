@@ -1,7 +1,7 @@
 /* global describe, it */
 const API_TOKEN = process.env.MJ_API_TOKEN
 
-var Mailjet = require('../mailjet-client')
+var Mailjet = require('../../mailjet-client')
 var chai = require('chai')
 var expect = chai.expect
 var should = chai.should() // eslint-disable-line no-unused-vars

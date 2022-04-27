@@ -6,6 +6,12 @@
   "directories": {
     "test": "test"
   },
+  "scripts": {
+    "test:unit": "mocha test/unit/*",
+    "test:int": "mocha test/integration/*",
+    "test": "npm run test:unit && npm run test:int",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "json-bigint": "^1.0.0",
     "qs": "^6.5.0",
@@ -18,10 +24,6 @@
     "eslint": "^8.9.0",
     "mocha": "^9.0.0",
     "nock": "^13.2.4"
-  },
-  "scripts": {
-    "test": "mocha",
-    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
