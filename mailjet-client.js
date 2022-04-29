@@ -42,15 +42,10 @@ const request = require('superagent')
 const _path = require('path')
 const JSONb = require('json-bigint')({ storeAsString: true })
 const version = require('./package.json').version
+const setValueIfExist = require('./lib/utils/setValueIfExist')
 
 /* Extend superagent request with proxy method */
 require('superagent-proxy')(request)
-
-function setValueIfExist(targetObject, path, value) {
-  if(value) {
-    targetObject[path] = value;
-  }
-}
 
 /*
  * MailjetClient constructor.
