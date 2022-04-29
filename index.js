@@ -1,3 +1,3 @@
 var mailjet = require('./mailjet-client')
 
-module.exports = mailjet
+module.exports = mailjet.MailjetClient

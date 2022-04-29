@@ -557,9 +557,10 @@ MailjetClient.prototype.put = function (func, options) {
  * Exports the Mailjet client.
  *
  * you can require it like so:
- * var mj = require ('./mailjet-client')
+ * var mj = require('./mailjet-client').MailjetClient
  *
  * or for the bleeding edge developpers out there:
- * import mj from './mailjet-client'
+ * import { MailjetClient } from './mailjet-client'
  */
-module.exports = MailjetClient
+module.exports.MailjetClient = MailjetClient
+module.exports.MailjetResource = MailjetResource
