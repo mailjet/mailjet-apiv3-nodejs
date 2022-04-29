@@ -9,7 +9,7 @@
   "scripts": {
     "test:unit": "mocha test/unit/*",
     "test:int": "mocha test/integration/*",
-    "test": "npm run test:unit && npm run test:int",
+    "test": "mocha --recursive",
     "lint": "eslint ."
   },
   "dependencies": {

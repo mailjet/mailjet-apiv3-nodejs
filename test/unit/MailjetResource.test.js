@@ -81,13 +81,13 @@ describe('Unit MailjetResource', () => {
       it('create an instance with empty resource', () => {
         expect(
           () => new MailjetResource('get', undefined, {}, {})
-        ).to.throw(TypeError, 'Cannot read property')
+        ).to.throw(TypeError, 'Cannot read properties')
       })
 
       it('create an instance with both empty "options" and "context" arguments', () => {
         expect(
           () => new MailjetResource('get', 'send', undefined, undefined)
-        ).to.throw(TypeError, 'Cannot read property')
+        ).to.throw(TypeError, 'Cannot read properties')
       })
 
     })
@@ -337,7 +337,7 @@ describe('Unit MailjetResource', () => {
 
         const instance = new MailjetResource(method, resource, options, context)
 
-        expect(() => instance.id()).to.throw(TypeError, 'Cannot read property')
+        expect(() => instance.id()).to.throw(TypeError, 'Cannot read properties')
       })
 
     })
