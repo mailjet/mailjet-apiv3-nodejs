@@ -7,7 +7,7 @@ const { MailjetClient: Mailjet } = require('../../mailjet-client')
 const expect = chai.expect
 
 describe('Basic Usage', () => {
-  const API_TOKEN = process.env.MJ_API_TOKEN || '8964208cb2f14fea8dafd6e02dc51d4c'
+  const API_TOKEN = process.env.MJ_API_TOKEN
 
   let client;
   before(function () {
@@ -21,27 +21,25 @@ describe('Basic Usage', () => {
   describe('connection', () => {
 
     it('creates instance of the client', () => {
-      const connectionType1 = new Mailjet(API_TOKEN)
-      const connectionType2 = new Mailjet().connect(API_TOKEN)
-      const connectionType3 = Mailjet.connect(API_TOKEN)
-
-      expect(connectionType1.apiToken).to.equal(API_TOKEN)
-      expect(connectionType2.apiToken).to.equal(API_TOKEN)
-      expect(connectionType3.apiToken).to.equal(API_TOKEN)
+      [
+        new Mailjet(API_TOKEN),
+        new Mailjet().connect(API_TOKEN),
+        Mailjet.connect(API_TOKEN)
+      ].forEach(connectionType => {
+        expect(connectionType.apiToken).to.equal(API_TOKEN)
+      })
     })
 
     it('creates an instance of the client wiht options', () => {
       const smsOptions = {
         version: 'v4'
-      }
+      };
 
-      const connectionType1 = new Mailjet(API_TOKEN, smsOptions)
-      const connectionType2 = new Mailjet().connect(API_TOKEN, smsOptions)
-      const connectionType3 = Mailjet.connect(API_TOKEN, smsOptions)
-
-      const connections = [connectionType1, connectionType2, connectionType3]
-
-      connections.forEach(function(connection) {
+      [
+        new Mailjet(API_TOKEN, smsOptions),
+        new Mailjet().connect(API_TOKEN, smsOptions),
+        Mailjet.connect(API_TOKEN, smsOptions)
+      ].forEach(connection => {
         expect(connection).to.have.property('apiToken', API_TOKEN)
         expect(connection.options).to.have.property(
           'version',
@@ -65,7 +63,7 @@ describe('Basic Usage', () => {
         const countRequest = smsGet.action('count')
 
         try {
-          const response = await smsGet
+          const response = await countRequest
             .request({ FromTS: +new Date, ToTS: +new Date })
 
           expect(response.body).should.be.a('object')
