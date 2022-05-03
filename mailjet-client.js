@@ -133,15 +133,6 @@ MailjetClient.prototype.isTokenRequired = function () {
   return (vals.length === 1 || (vals.length >= 2 && typeof vals[1] === 'object'))
 }
 
-MailjetClient.prototype.typeJson = function (body) {
-  var keys = Object.keys(body)
-  for (var i in keys) {
-    var key = keys[i]
-    body[key] = parseInt(body[key]) || body[key]
-  }
-  return body
-}
-
 /*
  * [Static] connect.
  *
@@ -197,16 +188,18 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
     setOptions(options)
     self.apiKey = apiKey
     self.apiSecret = apiSecret
+
     return self
   }
 
   function tokenConnectStrategy(apiToken, options) {
-    setOptions(options)
     if (!apiToken) {
       throw new Error('Mailjet API_TOKEN is required');
     }
 
+    setOptions(options)
     self.apiToken = apiToken
+
     return self
   }
 
@@ -220,11 +213,11 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
 
 MailjetClient.prototype.setConfig = function (options) {
   const config = require('./config.json')
-  if (typeof options === 'object' && options != null && options.length != 0) {
+  if (typeof options === 'object' && options !== null) {
     if (options.url) config.url = options.url
     if (options.version) config.version = options.version
-    if (options.perform_api_call) config.perform_api_call = options.perform_api_call
-  } else if (options != null) {
+    if ('perform_api_call' in options) config.perform_api_call = options.perform_api_call
+  } else if (options != null) { // TODO: Bug -> must be strict equal
     throw new Error('warning, your options variable is not a valid object.')
   }
 
