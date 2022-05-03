@@ -6,7 +6,7 @@ const { MailjetClient: Mailjet } = require('../../mailjet-client')
 
 const expect = chai.expect
 
-describe('Basic Usage', () => {
+describe('SMS Basic Usage', () => {
   const API_TOKEN = process.env.MJ_API_TOKEN
 
   let client;
