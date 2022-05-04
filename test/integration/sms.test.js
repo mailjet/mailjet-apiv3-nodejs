@@ -14,7 +14,10 @@ describe('SMS Basic Usage', () => {
     if(typeof API_TOKEN === 'undefined') {
       this.skip()
     } else {
-      client = Mailjet.connect(API_TOKEN)
+      const smsOptions = {
+        version: 'v4'
+      };
+      client = Mailjet.connect(API_TOKEN, smsOptions)
     }
   })
 
