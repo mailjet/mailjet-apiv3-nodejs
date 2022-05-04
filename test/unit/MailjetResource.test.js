@@ -81,13 +81,13 @@ describe('Unit MailjetResource', () => {
       it('create an instance with empty resource', () => {
         expect(
           () => new MailjetResource('get', undefined, {}, {})
-        ).to.throw(TypeError, 'Cannot read properties')
+        ).to.throw(TypeError, /Cannot read propert/)
       })
 
       it('create an instance with both empty "options" and "context" arguments', () => {
         expect(
           () => new MailjetResource('get', 'send', undefined, undefined)
-        ).to.throw(TypeError, 'Cannot read properties')
+        ).to.throw(TypeError, /Cannot read propert/)
       })
 
     })
@@ -337,7 +337,7 @@ describe('Unit MailjetResource', () => {
 
         const instance = new MailjetResource(method, resource, options, context)
 
-        expect(() => instance.id()).to.throw(TypeError, 'Cannot read properties')
+        expect(() => instance.id()).to.throw(TypeError, /Cannot read propert/)
       })
 
     })
@@ -370,7 +370,7 @@ describe('Unit MailjetResource', () => {
           .that.is.a('string')
           .to.equal(action.toLowerCase())
 
-        expectOwnProperty(instance,'callUrl', `${resource}/${action}`)
+        expectOwnProperty(instance,'callUrl', `${resource}/${action.toLowerCase()}`)
         expectOwnProperty(instance,'lastAdded', 2)
         expectOwnProperty(instance,'subPath', 'REST')
       })
@@ -394,7 +394,7 @@ describe('Unit MailjetResource', () => {
           .that.is.a('string')
           .to.equal('csvdata/text:plain')
 
-        expectOwnProperty(instance,'callUrl', `${resource}/${action}`)
+        expectOwnProperty(instance,'callUrl', `${resource}/${action}/text:plain`)
       })
 
       it('call with "action" is csvdata and "resource" is /contactslist', () => {
@@ -416,7 +416,7 @@ describe('Unit MailjetResource', () => {
           .that.is.a('string')
           .to.equal('csvdata/text:plain')
 
-        expectOwnProperty(instance,'callUrl', `${resource}/${action}`)
+        expectOwnProperty(instance,'callUrl', `${resource}/${action}/text:plain`)
         expectOwnProperty(instance,'subPath', 'DATA')
       })
 
@@ -439,7 +439,7 @@ describe('Unit MailjetResource', () => {
           .that.is.a('string')
           .to.equal('csverror/text:csv')
 
-        expectOwnProperty(instance,'callUrl', `${resource}/${action}`)
+        expectOwnProperty(instance,'callUrl', `${resource}/${action}/text:csv`)
       })
 
       it('call with "action" is csverror and "resource" is /batchjob', () => {
@@ -461,7 +461,7 @@ describe('Unit MailjetResource', () => {
           .that.is.a('string')
           .to.equal('csverror/text:csv')
 
-        expectOwnProperty(instance,'callUrl', `${resource}/${action}`)
+        expectOwnProperty(instance,'callUrl', `${resource}/${action}/text:csv`)
         expectOwnProperty(instance,'subPath', 'DATA')
       })
 
@@ -473,7 +473,7 @@ describe('Unit MailjetResource', () => {
 
         const instance = new MailjetResource(method, resource, options, context)
 
-        expect(() => instance.action()).to.throw('The "path" argument must be of type string. Received undefined')
+        expect(() => instance.action()).to.throw(/Cannot read propert/)
       })
 
     })
@@ -556,11 +556,16 @@ describe('Unit MailjetResource', () => {
 
         expect(instance).to.be.a('object')
 
+        let err = null;
         try {
           await instance.request(params, callback)
-        } catch (err) {
-          expect(err).to.equal(error)
-          expect(err).to.have.ownProperty('message', errorMessage)
+        } catch (e) {
+          err = e
+
+          expect(e).to.equal(error)
+          expect(e).to.have.ownProperty('message', errorMessage)
+        } finally {
+          expect(err).to.be.not.null
         }
       })
 
@@ -597,11 +602,16 @@ describe('Unit MailjetResource', () => {
 
         expect(instance).to.be.a('object')
 
+        let err = null;
         try {
           await instance.request(params, callback)
-        } catch (err) {
-          expect(err).to.equal(error)
-          expect(err).to.have.ownProperty('message', errorMessage + ';\n' + additionalErrorMessage)
+        } catch (e) {
+          err = e
+
+          expect(e).to.equal(error)
+          expect(e).to.have.ownProperty('message', errorMessage + ';\n' + additionalErrorMessage)
+        } finally {
+          expect(err).to.be.not.null
         }
       })
 
