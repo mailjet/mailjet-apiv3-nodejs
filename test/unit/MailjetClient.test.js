@@ -1,5 +1,6 @@
 /*external modules*/
 const chai = require('chai')
+const nock = require('nock')
 const qs = require("querystring");
 /*lib*/
 const { MailjetClient } = require('../../mailjet-client')
@@ -10,6 +11,10 @@ const expectOwnProperty = (targetObject, path, value) => {
   return expect(targetObject).to.have.ownProperty(path, value)
 }
 
+function buildBasicAuthStr(apiKey, apiSecret) {
+  return Buffer.from(`${apiKey}:${apiSecret}`, 'utf-8').toString('base64')
+}
+
 describe('Unit MailjetClient', () => {
 
   describe('static part', () => {
@@ -17,7 +22,24 @@ describe('Unit MailjetClient', () => {
     describe('MailjetClient.constructor()', () => {
 
       it('should be call the "authStrategy" method', () => {
-        const originalAuthStrategy = MailjetClient.prototype.authStrategy;
+        const connectArguments = {};
+        const ProxyMailjetClient = new Proxy(MailjetClient, {
+          get(target, prop, receiver) {
+            if(prop === 'prototype') {
+              return {
+                ...MailjetClient.prototype,
+                authStrategy(apiKey, apiSecret, options, perform_api_call) {
+                  connectArguments.apiKey = apiKey;
+                  connectArguments.apiSecret = apiSecret;
+                  connectArguments.options = options;
+                  connectArguments.perform_api_call = perform_api_call;
+                }
+              }
+            } else {
+              return Reflect.get(target, prop, receiver)
+            }
+          }
+        })
 
         const API_KEY = 'key'
         const API_SECRET = 'secret'
@@ -26,22 +48,12 @@ describe('Unit MailjetClient', () => {
           perform_api_call: performApiCall
         }
 
-        const connectArguments = {};
-        MailjetClient.prototype.authStrategy = (apiKey, apiSecret, options, perform_api_call) => {
-          connectArguments.apiKey = apiKey;
-          connectArguments.apiSecret = apiSecret;
-          connectArguments.options = options;
-          connectArguments.perform_api_call = perform_api_call;
-        }
-
-        new MailjetClient(API_KEY, API_SECRET, options, performApiCall)
+        new ProxyMailjetClient(API_KEY, API_SECRET, options, performApiCall)
 
         expectOwnProperty(connectArguments, 'apiKey', API_KEY)
         expectOwnProperty(connectArguments, 'apiSecret', API_SECRET)
         expectOwnProperty(connectArguments, 'perform_api_call', performApiCall)
         expect(connectArguments).to.have.ownProperty('options').that.is.equal(options)
-
-        MailjetClient.prototype.authStrategy = originalAuthStrategy;
       })
 
     })
@@ -53,7 +65,27 @@ describe('Unit MailjetClient', () => {
       })
 
       it('should be call the prototype method "connect"', () => {
-        const originalConnect = MailjetClient.prototype.connect;
+        const connectArguments = {};
+        const ProxyMailjetClient = new Proxy(MailjetClient, {
+          get(target, prop, receiver) {
+            if(prop === 'prototype') {
+              return {
+                ...MailjetClient.prototype,
+                connect(apiKey, apiSecret, options) {
+                  connectArguments.apiKey = apiKey;
+                  connectArguments.apiSecret = apiSecret;
+                  connectArguments.options = options;
+                }
+              }
+            } else if(prop === 'connect') {
+              return (...args) => {
+                new ProxyMailjetClient().connect(...args)
+              }
+            } else {
+              return Reflect.get(target, prop, receiver)
+            }
+          }
+        })
 
         const API_KEY = 'key'
         const API_SECRET = 'secret'
@@ -61,20 +93,11 @@ describe('Unit MailjetClient', () => {
           perform_api_call: false
         }
 
-        const connectArguments = {};
-        MailjetClient.prototype.connect = (apiKey, apiSecret, options) => {
-          connectArguments.apiKey = apiKey;
-          connectArguments.apiSecret = apiSecret;
-          connectArguments.options = options;
-        }
-
-        MailjetClient.connect(API_KEY, API_SECRET, options)
+        ProxyMailjetClient.connect(API_KEY, API_SECRET, options)
 
         expectOwnProperty(connectArguments, 'apiKey', API_KEY)
         expectOwnProperty(connectArguments, 'apiSecret', API_SECRET)
         expect(connectArguments).to.have.ownProperty('options').that.is.equal(options)
-
-        MailjetClient.prototype.connect = originalConnect;
       })
 
     })
@@ -92,20 +115,29 @@ describe('Unit MailjetClient', () => {
       })
 
       it('should be create instance by token strategy', () => {
-        const originalConnect = MailjetClient.prototype.connect;
+        const connectArguments = {};
+        const ProxyMailjetClient = new Proxy(MailjetClient, {
+          get(target, prop, receiver) {
+            if(prop === 'prototype') {
+              return {
+                ...MailjetClient.prototype,
+                connect(apiToken, options) {
+                  connectArguments.apiToken = apiToken;
+                  connectArguments.options = options;
+                }
+              }
+            } else {
+              return Reflect.get(target, prop, receiver)
+            }
+          }
+        })
 
         const API_TOKEN = 'token'
         const options = {
           perform_api_call: false
         }
 
-        const connectArguments = {};
-        MailjetClient.prototype.connect = (apiToken, options) => {
-          connectArguments.apiToken = apiToken;
-          connectArguments.options = options;
-        }
-
-        const client = new MailjetClient(API_TOKEN, options)
+        const client = new ProxyMailjetClient(API_TOKEN, options)
 
         expect(client).to.be.a('object')
 
@@ -114,12 +146,26 @@ describe('Unit MailjetClient', () => {
 
         expectOwnProperty(connectArguments, 'apiToken', API_TOKEN)
         expect(connectArguments).to.have.ownProperty('options').that.is.equal(options)
-
-        MailjetClient.prototype.connect = originalConnect;
       })
 
       it('should be create instance by basic strategy', () => {
-        const originalConnect = MailjetClient.prototype.connect;
+        const connectArguments = {};
+        const ProxyMailjetClient = new Proxy(MailjetClient, {
+          get(target, prop, receiver) {
+            if(prop === 'prototype') {
+              return {
+                ...MailjetClient.prototype,
+                connect(apiKey, apiSecret, options) {
+                  connectArguments.apiKey = apiKey;
+                  connectArguments.apiSecret = apiSecret;
+                  connectArguments.options = options;
+                }
+              }
+            } else {
+              return Reflect.get(target, prop, receiver)
+            }
+          }
+        })
 
         const API_KEY = 'key'
         const API_SECRET = 'secret'
@@ -127,26 +173,17 @@ describe('Unit MailjetClient', () => {
           perform_api_call: false
         }
 
-        const connectArguments = {};
-        MailjetClient.prototype.connect = (apiKey, apiSecret, options) => {
-          connectArguments.apiKey = apiKey;
-          connectArguments.apiSecret = apiSecret;
-          connectArguments.options = options;
-        }
-
-        const client = new MailjetClient(API_KEY, API_SECRET, options)
+        const client = new ProxyMailjetClient(API_KEY, API_SECRET, options)
 
         expect(client).to.be.a('object')
 
         expectOwnProperty(client,'perform_api_call', false)
         expectOwnProperty(client,'version', packageJSON.version)
-        expect(client).to.have.ownProperty('config').that.is.equal(config)
+        expect(client).to.have.ownProperty('config').that.is.deep.equal({ ...config, ...options })
 
         expectOwnProperty(connectArguments, 'apiKey', API_KEY)
         expectOwnProperty(connectArguments, 'apiSecret', API_SECRET)
         expect(connectArguments).to.have.ownProperty('options').that.is.equal(options)
-
-        MailjetClient.prototype.connect = originalConnect;
       })
 
     })
@@ -277,8 +314,6 @@ describe('Unit MailjetClient', () => {
       })
 
       it('should be call the "connectStrategy" method', () => {
-        const originalConnectStrategy = MailjetClient.prototype.connectStrategy;
-
         const API_KEY = 'key'
         const API_SECRET = 'secret'
         const options = {
@@ -299,8 +334,6 @@ describe('Unit MailjetClient', () => {
         expectOwnProperty(connectStrategyArguments, 'apiKey', API_KEY)
         expectOwnProperty(connectStrategyArguments, 'apiSecret', API_SECRET)
         expect(connectStrategyArguments).to.have.ownProperty('options').that.is.equal(options)
-
-        client.connectStrategy = originalConnectStrategy;
       })
 
     })
@@ -320,7 +353,7 @@ describe('Unit MailjetClient', () => {
         const client = new MailjetClient(API_KEY, API_SECRET, options, perform_api_call)
         const clientConfig = client.setConfig({})
 
-        expect(clientConfig).to.equal(config)
+        expect(clientConfig).to.deep.equal(config)
       })
 
       it('should be return config with custom options', () => {
@@ -427,49 +460,437 @@ describe('Unit MailjetClient', () => {
     })
 
     describe('MailjetClient.httpRequest()', () => {
+      const REQUEST_DELAY = 10;
+
+      after(function () {
+        nock.cleanAll()
+      })
 
       it('should be have prototype method #httpRequest()', () => {
         expect(MailjetClient).to.respondsTo('httpRequest')
       })
 
-      it.skip('should be request with content type application/json', () => {
+      it('should be request with content type application/json', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contact'
+        const data = {
+          a: 5,
+          b: 6,
+          c: 7
+        }
+
+        const path = `/${apiVersion}/REST/${resource}`
+        const resultData = {
+          a: 5,
+          b: 'text',
+          c: false
+        }
+        const requestData = {};
+        nock('https://api.mailjet.com')
+          .get(path)
+          .query(true)
+          .delayConnection(REQUEST_DELAY)
+          .reply(200, function (uri, reqBody) {
+            requestData.path = this.req.path;
+            requestData.headers = this.req.headers;
+            requestData.body = reqBody;
+
+            return JSON.stringify(resultData)
+          })
+
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+        const result = await client
+          .get(resource, options)
+          .request(data)
+
+        expect(result).to.be.a('object');
+        expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
+
+        expectOwnProperty(requestData,'path', `${path}?${qs.stringify(data)}`)
+        expectOwnProperty(requestData,'body', '')
+
+        expectOwnProperty(requestData.headers,'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`)
+        expectOwnProperty(requestData.headers,'content-type', 'application/json')
+        expectOwnProperty(requestData.headers,'host', 'api.mailjet.com')
+        expectOwnProperty(requestData.headers,'authorization', `Basic ${buildBasicAuthStr(API_KEY, API_SECRET)}`)
       })
 
-      it.skip('should be request with content type text/plain', () => {
+      it('should be request with content type text/plain', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contactslist'
+        const action = 'csvdata'
+        const contactListId = 124123
+        const CSVData = '"name","age"\n"test",25'
+
+        const path = `/${apiVersion}/DATA/${resource}/${contactListId}/${action}/text:plain`
+        const resultData = {
+          a: 5,
+          b: 'text',
+          c: false
+        }
+        const requestData = {};
+        nock('https://api.mailjet.com')
+          .post(path)
+          .delayConnection(REQUEST_DELAY)
+          .reply(200, function (uri, reqBody) {
+            requestData.path = this.req.path;
+            requestData.headers = this.req.headers;
+            requestData.body = reqBody;
+
+            return JSON.stringify(resultData)
+          })
+
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+        const result = await client
+          .post(resource)
+          .id(contactListId)
+          .action(action)
+          .request(CSVData)
+
+        expect(result).to.be.a('object');
+        expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
+
+        expectOwnProperty(requestData,'path', path)
+        expectOwnProperty(requestData,'body', CSVData)
+
+        expectOwnProperty(requestData.headers,'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`)
+        expectOwnProperty(requestData.headers,'content-type', 'text/plain')
+        expectOwnProperty(requestData.headers,'host', 'api.mailjet.com')
+        expectOwnProperty(requestData.headers,'authorization', `Basic ${buildBasicAuthStr(API_KEY, API_SECRET)}`)
       })
 
-      it.skip('should be request with api token', () => {
+      it('should be request with api token', async () => {
+        const API_TOKEN = 'token'
+        const options = {}
 
+        const apiVersion = 'v4'
+        const resource = 'sms-send'
+        const data = { something: 'text' };
+
+        const path = `/${apiVersion}/${resource}`
+        const resultData = {
+          a: 5,
+          b: 'text',
+          c: false
+        }
+        const requestData = {};
+        nock('https://api.mailjet.com')
+          .post(path)
+          .delayConnection(REQUEST_DELAY)
+          .reply(200, function (uri, reqBody) {
+            requestData.path = this.req.path;
+            requestData.headers = this.req.headers;
+            requestData.body = reqBody;
+
+            return JSON.stringify(resultData)
+          })
+
+        const client = MailjetClient.connect(API_TOKEN, options)
+        const result = await client
+          .post(resource, { version: apiVersion })
+          .request(data)
+
+        expect(result).to.be.a('object');
+        expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
+
+        expectOwnProperty(requestData,'path', path)
+        expect(requestData).to.have.ownProperty('body').that.deep.equal(data);
+
+        expectOwnProperty(requestData.headers,'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`)
+        expectOwnProperty(requestData.headers,'content-type', 'application/json')
+        expectOwnProperty(requestData.headers,'host', 'api.mailjet.com')
+        expectOwnProperty(requestData.headers,'authorization', `Bearer ${API_TOKEN}`)
       })
 
-      it.skip('should be request with basic HTTP auth', () => {
+      it('should be request with payload', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contactdata'
+        const contactId = 2345234
+        const data = {
+          Data: [
+            {
+              firstName: 'John',
+              lastName: 'Smith'
+            }
+          ]
+        }
+
+        await Promise.all(
+          ['post', 'put'].map(async (method) => {
+            const path = `/${apiVersion}/REST/${resource}/${contactId}`
+            const resultData = {
+              a: 5,
+              b: 'text',
+              c: false
+            }
+            const requestData = {};
+            nock('https://api.mailjet.com')
+              [method](path)
+              .delayConnection(REQUEST_DELAY)
+              .reply(200, function (uri, reqBody) {
+                requestData.path = this.req.path;
+                requestData.headers = this.req.headers;
+                requestData.body = reqBody;
+
+                return JSON.stringify(resultData)
+              })
+
+            const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+            const result = await client
+              [method](resource)
+              .id(contactId)
+              .request(data)
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
+
+            expectOwnProperty(requestData,'path', path)
+            expect(requestData).to.have.ownProperty('body').that.deep.equal(data);
+
+            expectOwnProperty(requestData.headers,'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`)
+            expectOwnProperty(requestData.headers,'content-type', 'application/json')
+            expectOwnProperty(requestData.headers,'host', 'api.mailjet.com')
+            expectOwnProperty(requestData.headers,'authorization', `Basic ${buildBasicAuthStr(API_KEY, API_SECRET)}`)
+          })
+        )
       })
 
-      it.skip('should be request with payload', () => {
+      it('should be skip request if perform call is false', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contactdata'
+        const contactId = 2345234
+        const data = {
+          Data: [
+            {
+              firstName: 'John',
+              lastName: 'Smith'
+            }
+          ]
+        }
+
+        await Promise.all(
+          ['post', 'put', 'get', 'delete'].map(async (method) => {
+            const path = `/${apiVersion}/REST/${resource}/${contactId}`
+
+            const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+            const result = await client
+              [method](resource, { perform_api_call: false })
+              .id(contactId)
+              .request(data)
+
+            if(['post', 'put'].includes(method)) {
+              const url = `https://api.mailjet.com${path}`
+
+              expectOwnProperty(result,'url', url)
+              expect(result)
+                .to.have.ownProperty('body')
+                .that.deep.equal(data);
+            } else {
+              const url = `https://api.mailjet.com${path}${method === 'get' ? `?${qs.stringify(data)}` : ''}`
+
+              expectOwnProperty(result,'url', url)
+              expect(result)
+                .to.have.ownProperty('body')
+                .that.deep.equal({});
+            }
+          })
+        )
       })
 
-      it.skip('should be skip request if perform call is false', () => {
+      it('should be request by delete method', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contact'
+        const data = {
+          a: 5,
+          b: 6,
+          c: 7
+        }
+
+        const path = `/${apiVersion}/REST/${resource}`
+        const resultData = {
+          deleted: true
+        }
+        const requestData = {};
+        nock('https://api.mailjet.com')
+          .delete(path)
+          .delayConnection(REQUEST_DELAY)
+          .reply(200, function (uri, reqBody) {
+            requestData.path = this.req.path;
+            requestData.headers = this.req.headers;
+            requestData.body = reqBody;
+
+            return JSON.stringify(resultData)
+          })
+
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+        const result = await client
+          .delete(resource, options)
+          .request(data)
+
+        expect(result).to.be.a('object');
+        expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
+
+        expectOwnProperty(requestData,'path', path)
+        expectOwnProperty(requestData,'body', '')
+
+        expectOwnProperty(requestData.headers,'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`)
+        expectOwnProperty(requestData.headers,'content-type', 'application/json')
+        expectOwnProperty(requestData.headers,'host', 'api.mailjet.com')
+        expectOwnProperty(requestData.headers,'authorization', `Basic ${buildBasicAuthStr(API_KEY, API_SECRET)}`)
       })
 
-      it.skip('should be request by get method', () => {
+      it('should be throw error message', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contact'
+
+        const path = `/${apiVersion}/REST/${resource}`
+        const resultData = {
+          ErrorMessage: 'some reason'
+        }
+        const statusCode = 404;
+        nock('https://api.mailjet.com')
+          .get(path)
+          .query(true)
+          .delayConnection(REQUEST_DELAY)
+          .reply(statusCode, JSON.stringify(resultData))
+
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+
+        let error = null;
+        try {
+          await client
+            .get(resource, options)
+            .request({})
+        } catch (err) {
+          error = err
+
+          expectOwnProperty(err,'ErrorMessage', resultData.ErrorMessage)
+          expectOwnProperty(err,'statusCode', statusCode)
+          expectOwnProperty(err,'message', `Unsuccessful: Status Code: "${statusCode}" Message: "${resultData.ErrorMessage}"`)
+        } finally {
+          expect(error).to.be.not.null
+        }
       })
 
-      it.skip('should be request by post/put method', () => {
+      it('should be throw error with full message', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
+        const apiVersion = 'v3'
+        const resource = 'contact'
+
+        const path = `/${apiVersion}/REST/${resource}`
+        const resultData = {
+          ErrorMessage: 'some reason',
+          Messages: [
+            {
+              Errors: [
+                {
+                  ErrorMessage: 'full information'
+                }
+              ]
+            }
+          ]
+        }
+
+        const statusCode = 404;
+        nock('https://api.mailjet.com')
+          .get(path)
+          .query(true)
+          .delayConnection(REQUEST_DELAY)
+          .reply(statusCode, JSON.stringify(resultData))
+
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+
+        let error = null;
+        try {
+          await client
+            .get(resource, options)
+            .request({})
+        } catch (err) {
+          error = err
+
+          expectOwnProperty(err,'ErrorMessage', resultData.ErrorMessage)
+          expectOwnProperty(err,'statusCode', statusCode)
+
+          const fullMessage = resultData.Messages[0].Errors[0].ErrorMessage
+          expectOwnProperty(
+            err,
+            'message',
+            `Unsuccessful: Status Code: "${statusCode}" Message: "${resultData.ErrorMessage}";\n${fullMessage}`
+          )
+        } finally {
+          expect(error).to.be.not.null
+        }
       })
 
-      it.skip('should be request by delete method', () => {
+      it('should be throw detailed error message', async () => {
+        const API_KEY = 'key'
+        const API_SECRET = 'secret'
+        const options = {}
 
-      })
+        const apiVersion = 'v3'
+        const resource = 'contact'
 
-      it.skip('should be throw detailed error message', () => {
+        const path = `/${apiVersion}/REST/${resource}`
+        const resultData = {
+          ErrorMessage: 'some reason',
+          ErrorIdentifier: '3425-345345-345345-345345',
+          ErrorCode: 710,
+          ErrorRelatedTo: 'Data.Email'
+        }
+        const statusCode = 404;
+        nock('https://api.mailjet.com')
+          .get(path)
+          .query(true)
+          .delayConnection(REQUEST_DELAY)
+          .reply(statusCode, JSON.stringify(resultData))
 
+        const client = MailjetClient.connect(API_KEY, API_SECRET, options)
+
+        let error = null;
+        try {
+          await client
+            .get(resource, options)
+            .request({})
+        } catch (err) {
+          error = err
+
+          expectOwnProperty(err,'statusCode', statusCode)
+          expectOwnProperty(err,'message', `Unsuccessful: Status Code: "${statusCode}" Message: "${resultData.ErrorMessage}"`)
+
+          expectOwnProperty(err,'ErrorMessage', resultData.ErrorMessage)
+          expectOwnProperty(err,'ErrorIdentifier', resultData.ErrorIdentifier)
+          expectOwnProperty(err,'ErrorCode', resultData.ErrorCode)
+          expectOwnProperty(err,'ErrorRelatedTo', resultData.ErrorRelatedTo)
+        } finally {
+          expect(error).to.be.not.null
+        }
       })
 
     })
