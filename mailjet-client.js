@@ -212,7 +212,7 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
 }
 
 MailjetClient.prototype.setConfig = function (options) {
-  const config = require('./config.json')
+  const config = { ...require('./config.json') }
   if (typeof options === 'object' && options !== null) {
     if (options.url) config.url = options.url
     if (options.version) config.version = options.version
@@ -246,12 +246,14 @@ MailjetClient.prototype.path = function (resource, sub, params, options) {
   const api_version = (options && 'version' in options) ? options.version : this.config.version
 
   const base = _path.join(api_version, sub)
+  const path = _path.join(url, base + '/' + resource)
+
   if (Object.keys(params).length === 0) {
-    return _path.join(url, base + '/' + resource)
+    return path
   }
 
   const querystring = qs.stringify(params);
-  return _path.join(url, base + '/' + resource + '?' + querystring)
+  return `${path}?${querystring}`
 }
 
 /*
@@ -452,9 +454,7 @@ MailjetResource.prototype.action = function (name) {
     console.warn('[WARNING] your request may fail due to invalid action chaining')
   }
 
-  this.callUrl = _path.join(this.callUrl, name)
   this.action = name.toLowerCase()
-
   this.lastAdded = ACTION
 
   if (this.action.toLowerCase() === 'csvdata') {
@@ -463,14 +463,14 @@ MailjetResource.prototype.action = function (name) {
     this.action = 'csverror/text:csv'
   }
 
+  this.callUrl = _path.join(this.callUrl, this.action)
+
   var self = this
   this.subPath = (function () {
-    if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
-      self.resource === 'batchjob' && self.action === 'csverror/text:csv') {
-      return 'DATA'
-    } else {
-      return self.subPath
-    }
+    const isContactListWithCSV = self.resource === 'contactslist' && self.action === 'csvdata/text:plain';
+    const isBatchJobWithCSV = self.resource === 'batchjob' && self.action === 'csverror/text:csv';
+
+    return (isContactListWithCSV || isBatchJobWithCSV) ? 'DATA' : self.subPath
   })()
   return self
 }
