@@ -2,7 +2,7 @@
 const chai = require('chai');
 const nock = require('nock');
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../mailjet-client');
+const { MailjetClient: Mailjet } = require('../../lib/mailjet-client');
 /*other*/
 
 const expect = chai.expect;

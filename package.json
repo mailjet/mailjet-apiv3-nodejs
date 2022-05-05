@@ -1,8 +1,8 @@
 {
   "name": "node-mailjet",
   "version": "3.4.1",
+  "main": "lib/index.js",
   "description": "Mailjet NodeJS API client",
-  "main": "index.js",
   "directories": {
     "test": "test"
   },

@@ -1,7 +1,7 @@
 /*external modules*/
 const chai = require('chai');
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../mailjet-client');
+const { MailjetClient: Mailjet } = require('../../lib/mailjet-client');
 /*other*/
 
 const expect = chai.expect;

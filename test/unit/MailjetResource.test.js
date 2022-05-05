@@ -2,7 +2,7 @@
 const chai = require('chai');
 const qs = require('querystring');
 /*lib*/
-const { MailjetResource, MailjetClient } = require('../../mailjet-client');
+const { MailjetResource, MailjetClient } = require('../../lib/mailjet-client');
 /*other*/
 
 const expect = chai.expect;
