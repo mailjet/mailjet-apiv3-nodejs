@@ -6,6 +6,17 @@
   "directories": {
     "test": "test"
   },
+  "scripts": {
+    "test": "mocha --recursive",
+    "test:int": "mocha test/integration/*",
+    "test:unit": "mocha test/unit/*",
+    "cover": "npm run cover:expandable npm run test",
+    "cover:int": "npm run cover:expandable npm run test:int",
+    "cover:unit": "npm run cover:expandable npm run test:unit",
+    "cover:expandable": "nyc --reporter=text-summary --reporter=lcov --report-dir=.coverage --temp-dir=./.coverage/.nyc_output",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
   "dependencies": {
     "json-bigint": "^1.0.0",
     "qs": "^6.5.0",
@@ -17,11 +28,8 @@
     "chai": "^4.1.0",
     "eslint": "^8.9.0",
     "mocha": "^9.0.0",
-    "nock": "^13.2.4"
-  },
-  "scripts": {
-    "test": "mocha",
-    "lint": "eslint ."
+    "nock": "^13.2.4",
+    "nyc": "^15.1.0"
   },
   "repository": {
     "type": "git",

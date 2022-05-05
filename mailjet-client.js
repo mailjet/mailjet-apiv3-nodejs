@@ -23,10 +23,10 @@
  *
  */
 
-const DEBUG_MODE = false
-const RESOURCE = 0
-const ID = 1
-const ACTION = 2
+const DEBUG_MODE = false;
+const RESOURCE = 0;
+const ID = 1;
+const ACTION = 2;
 
 /*
  * Imports.
@@ -37,20 +37,15 @@ const ACTION = 2
  * fs will simply be used to read files
  */
 
-const qs = require('querystring')
-const request = require('superagent')
-const _path = require('path')
-const JSONb = require('json-bigint')({ storeAsString: true })
-const version = require('./package.json').version
+const qs = require('querystring');
+const request = require('superagent');
+const _path = require('path');
+const JSONb = require('json-bigint')({ storeAsString: true });
+const version = require('./package.json').version;
+const setValueIfExist = require('./lib/utils/setValueIfExist');
 
 /* Extend superagent request with proxy method */
-require('superagent-proxy')(request)
-
-function setValueIfExist(targetObject, path, value) {
-  if(value) {
-    targetObject[path] = value;
-  }
-}
+require('superagent-proxy')(request);
 
 /*
  * MailjetClient constructor.
@@ -63,7 +58,7 @@ function setValueIfExist(targetObject, path, value) {
  * https://www.mailjet.com/
  */
 function MailjetClient (api_key, api_secret, options, perform_api_call) {
-  return this.authStrategy(api_key, api_secret, options, perform_api_call)
+  return this.authStrategy(api_key, api_secret, options, perform_api_call);
 }
 
 /**
@@ -74,8 +69,8 @@ function MailjetClient (api_key, api_secret, options, perform_api_call) {
  */
 MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, perform_api_call) {
 
-  var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call)
-  var self = this
+  var isTokenRequired = this.isTokenRequired(api_key, api_secret, options, perform_api_call);
+  var self = this;
   // Check if api version requires toekn authentication
   // This is one of the approaches, maybe there is better
   if (isTokenRequired) {
@@ -83,10 +78,10 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
     // api_key becomes api_token
     // api_secret becomes options
     // options becomes perform_api_call
-    return tokenAuthentication(api_key, api_secret, options)
+    return tokenAuthentication(api_key, api_secret, options);
   } else {
     // params are in correct order
-    return basicAuthentication(api_key, api_secret, options, perform_api_call)
+    return basicAuthentication(api_key, api_secret, options, perform_api_call);
   }
 
   /**
@@ -98,15 +93,15 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
    */
   function basicAuthentication(api_key, api_secret, options, perform_api_call) {
 
-    self.config = self.setConfig(options)
-    self.perform_api_call = perform_api_call || false
+    self.config = self.setConfig(options);
+    self.perform_api_call = perform_api_call || false;
     // To be updated according to the npm repo version
-    self.version = version
+    self.version = version;
     if (api_key && api_secret) {
-      self.connect(api_key, api_secret, options)
+      self.connect(api_key, api_secret, options);
     }
 
-    return self
+    return self;
   }
 
   /**
@@ -116,36 +111,27 @@ MailjetClient.prototype.authStrategy = function(api_key, api_secret, options, pe
    * @param (optional){boolean} perform_api_call
    */
   function tokenAuthentication(api_token, options, perform_api_call) {
-    self.perform_api_call = perform_api_call || false
+    self.perform_api_call = perform_api_call || false;
     // To be updated according to the npm repo version
-    self.version = version
+    self.version = version;
     if (api_token) {
-      self.connect(api_token, options)
+      self.connect(api_token, options);
     }
 
-    return self
+    return self;
   }
-}
+};
 
 MailjetClient.prototype.isTokenRequired = function () {
-  var args = [].slice.call(arguments)
-  var vals = args.filter(a => a !== undefined)
+  var args = [].slice.call(arguments);
+  var vals = args.filter(a => a !== undefined);
 
   if (DEBUG_MODE) {
-    console.log('Defined arguments: ' + JSON.stringify(vals))
+    console.log('Defined arguments: ' + JSON.stringify(vals));
   }
 
-  return (vals.length === 1 || (vals.length >= 2 && typeof vals[1] === 'object'))
-}
-
-MailjetClient.prototype.typeJson = function (body) {
-  var keys = Object.keys(body)
-  for (var i in keys) {
-    var key = keys[i]
-    body[key] = parseInt(body[key]) || body[key]
-  }
-  return body
-}
+  return (vals.length === 1 || (vals.length >= 2 && typeof vals[1] === 'object'));
+};
 
 /*
  * [Static] connect.
@@ -158,8 +144,8 @@ MailjetClient.prototype.typeJson = function (body) {
  *
  */
 MailjetClient.connect = function (k, s, o) {
-  return new MailjetClient().connect(k, s, o)
-}
+  return new MailjetClient().connect(k, s, o);
+};
 
 /*
  * connect.
@@ -172,8 +158,8 @@ MailjetClient.connect = function (k, s, o) {
  *
  */
 MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
-  return this.connectStrategy(apiKey, apiSecret, options)
-}
+  return this.connectStrategy(apiKey, apiSecret, options);
+};
 
 /**
  * @param (optional){String} apiKey || apiToken
@@ -182,13 +168,13 @@ MailjetClient.prototype.connect = function (apiKey, apiSecret, options) {
  */
 MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) {
 
-  var self = this
-  var isTokenRequired = this.isTokenRequired(apiKey, apiSecret, options)
+  var self = this;
+  var isTokenRequired = this.isTokenRequired(apiKey, apiSecret, options);
 
   if (isTokenRequired) {
-    return tokenConnectStrategy(apiKey, apiSecret)
+    return tokenConnectStrategy(apiKey, apiSecret);
   } else {
-    return basicConnectStrategy(apiKey, apiSecret, options)
+    return basicConnectStrategy(apiKey, apiSecret, options);
   }
 
   function basicConnectStrategy(apiKey, apiSecret, options) {
@@ -199,42 +185,44 @@ MailjetClient.prototype.connectStrategy = function (apiKey, apiSecret, options) 
       throw new Error('Mailjet API_SECRET is required');
     }
 
-    setOptions(options)
-    self.apiKey = apiKey
-    self.apiSecret = apiSecret
-    return self
+    setOptions(options);
+    self.apiKey = apiKey;
+    self.apiSecret = apiSecret;
+
+    return self;
   }
 
   function tokenConnectStrategy(apiToken, options) {
-    setOptions(options)
     if (!apiToken) {
       throw new Error('Mailjet API_TOKEN is required');
     }
 
-    self.apiToken = apiToken
-    return self
+    setOptions(options);
+    self.apiToken = apiToken;
+
+    return self;
   }
 
   function setOptions(options) {
-    self.options = options || {}
+    self.options = options || {};
     if (self.options) {
-      self.config = self.setConfig(options)
+      self.config = self.setConfig(options);
     }
   }
-}
+};
 
 MailjetClient.prototype.setConfig = function (options) {
-  const config = require('./config.json')
-  if (typeof options === 'object' && options != null && options.length != 0) {
-    if (options.url) config.url = options.url
-    if (options.version) config.version = options.version
-    if (options.perform_api_call) config.perform_api_call = options.perform_api_call
-  } else if (options != null) {
-    throw new Error('warning, your options variable is not a valid object.')
+  const config = { ...require('./config.json') };
+  if (typeof options === 'object' && options !== null) {
+    if (options.url) config.url = options.url;
+    if (options.version) config.version = options.version;
+    if ('perform_api_call' in options) config.perform_api_call = options.perform_api_call;
+  } else if (options != null) { // TODO: Bug -> must be strict equal
+    throw new Error('warning, your options variable is not a valid object.');
   }
 
-  return config
-}
+  return config;
+};
 
 /*
  * path.
@@ -249,22 +237,24 @@ MailjetClient.prototype.setConfig = function (options) {
  */
 MailjetClient.prototype.path = function (resource, sub, params, options) {
   if (DEBUG_MODE) {
-    console.log('resource =', resource)
-    console.log('subPath =', sub)
-    console.log('filters =', params)
+    console.log('resource =', resource);
+    console.log('subPath =', sub);
+    console.log('filters =', params);
   }
 
-  const url = (options && 'url' in options) ? options.url : this.config.url
-  const api_version = (options && 'version' in options) ? options.version : this.config.version
+  const url = (options && 'url' in options) ? options.url : this.config.url;
+  const api_version = (options && 'version' in options) ? options.version : this.config.version;
 
-  const base = _path.join(api_version, sub)
+  const base = _path.join(api_version, sub);
+  const path = _path.join(url, base + '/' + resource);
+
   if (Object.keys(params).length === 0) {
-    return _path.join(url, base + '/' + resource)
+    return path;
   }
 
   const querystring = qs.stringify(params);
-  return _path.join(url, base + '/' + resource + '?' + querystring)
-}
+  return `${path}?${querystring}`;
+};
 
 /*
  * httpRequest.
@@ -284,34 +274,34 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
 
     .set('Content-type', url.indexOf('text:plain') > -1
       ? 'text/plain'
-      : 'application/json')
+      : 'application/json');
 
   if (this.apiToken) {
-    req.set('Authorization', 'Bearer ' + this.apiToken)
+    req.set('Authorization', 'Bearer ' + this.apiToken);
   } else {
-    req.auth(this.apiKey, this.apiSecret)
+    req.auth(this.apiKey, this.apiSecret);
   }
 
   if (this.options.proxyUrl) {
-    req = req.proxy(this.options.proxyUrl)
+    req = req.proxy(this.options.proxyUrl);
   }
   if (this.options.timeout) {
-    req = req.timeout(this.options.timeout)
+    req = req.timeout(this.options.timeout);
   }
 
-  const payload = method === 'post' || method === 'put' ? data : {}
+  const payload = method === 'post' || method === 'put' ? data : {};
 
   if (DEBUG_MODE) {
-    console.log('Final url: ' + url)
-    console.log('body: ' + JSON.stringify(payload))
+    console.log('Final url: ' + url);
+    console.log('body: ' + JSON.stringify(payload));
   }
 
   if (perform_api_call === false || this.perform_api_call) {
-    return Promise.resolve({body: payload, url: url})
+    return Promise.resolve({body: payload, url: url});
   }
 
-  if (method === 'delete') { method = 'del' }
-  if (method === 'post' || method === 'put') { req = req.send(data) }
+  if (method === 'delete') { method = 'del'; }
+  if (method === 'post' || method === 'put') { req = req.send(data); }
 
   return new Promise(function (resolve, reject) {
 
@@ -320,40 +310,40 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
         ? callback(err, result)
         : err
           ? reject(err)
-          : resolve(result)
-    }
+          : resolve(result);
+    };
 
     req.end(function (err, result) {
-      var body
+      var body;
 
       try {
-        body = JSONb.parse(result.text)
+        body = JSONb.parse(result.text);
       } catch (e) {
-        body = {}
+        body = {};
       }
 
       if (err) {
-        const error = new Error()
-        error.ErrorMessage = body.ErrorMessage || err.message
+        const error = new Error();
+        error.ErrorMessage = body.ErrorMessage || err.message;
 
-        error.statusCode = err.status || null
-        error.response = result || null
-        error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${error.ErrorMessage}"`
+        error.statusCode = err.status || null;
+        error.response = result || null;
+        error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${error.ErrorMessage}"`;
 
-        setValueIfExist(error, 'ErrorIdentifier', body.ErrorIdentifier)
-        setValueIfExist(error, 'ErrorCode', body.ErrorCode)
-        setValueIfExist(error, 'ErrorRelatedTo', body.ErrorRelatedTo)
+        setValueIfExist(error, 'ErrorIdentifier', body.ErrorIdentifier);
+        setValueIfExist(error, 'ErrorCode', body.ErrorCode);
+        setValueIfExist(error, 'ErrorRelatedTo', body.ErrorRelatedTo);
 
-        return ret(error)
+        return ret(error);
       }
 
       return ret(null, {
         response: result,
         body: body
-      })
-    })
-  })
-}
+      });
+    });
+  });
+};
 
 /*
  *
@@ -366,24 +356,24 @@ MailjetClient.prototype.httpRequest = function (method, url, data, callback, per
  * @context {MailjetClient[instance]} parent client
  */
 function MailjetResource (method, func, options, context) {
-  this.base = func
-  this.callUrl = func
-  this.options = options || context.options
+  this.base = func;
+  this.callUrl = func;
+  this.options = options || context.options;
 
-  this.resource = func.toLowerCase()
+  this.resource = func.toLowerCase();
 
-  this.lastAdded = RESOURCE
-  var self = context
+  this.lastAdded = RESOURCE;
+  var self = context;
 
   /*
   It can be REST or nothing if we only know the resource
   */
   this.subPath = (function () {
     if (func.toLowerCase() !== 'send' && func.indexOf('sms') === -1) {
-      return 'REST'
+      return 'REST';
     }
-    return ''
-  })()
+    return '';
+  })();
 
   /**
    *
@@ -392,12 +382,12 @@ function MailjetResource (method, func, options, context) {
    * @params (optional) {Object Littteral} parameters to be sent to the server
    * @callback (optional) {Function} called on response or error
    */
-  var that = this
+  var that = this;
   this.result = function (params, callback) {
-    params = params || {}
+    params = params || {};
     if (typeof params === 'function') {
-      callback = params
-      params = {}
+      callback = params;
+      params = {};
     }
 
     /*
@@ -406,27 +396,27 @@ function MailjetResource (method, func, options, context) {
     */
     var path = self.path(that.callUrl, that.subPath, (function () {
       if (params.filters) {
-        var ret = params.filters
-        delete params.filters
-        return ret
+        var ret = params.filters;
+        delete params.filters;
+        return ret;
       } else if (method === 'get') {
-        return params
+        return params;
       } else {
-        return {}
+        return {};
       }
-    })(), that.options)
+    })(), that.options);
 
-    var perform_api_call = null
+    var perform_api_call = null;
     if (that.options && 'perform_api_call' in that.options) {
-      perform_api_call = that.options.perform_api_call
+      perform_api_call = that.options.perform_api_call;
     } else {
-      perform_api_call = self.config.perform_api_call
+      perform_api_call = self.config.perform_api_call;
     }
 
-    that.callUrl = that.base
-    self.lastAdded = RESOURCE
-    return self.httpRequest(method, 'https://' + path, params, callback, perform_api_call)
-  }
+    that.callUrl = that.base;
+    self.lastAdded = RESOURCE;
+    return self.httpRequest(method, 'https://' + path, params, callback, perform_api_call);
+  };
 }
 
 /**
@@ -441,13 +431,13 @@ function MailjetResource (method, func, options, context) {
  */
 MailjetResource.prototype.id = function (value) {
   if (this.lastAdded === ID && DEBUG_MODE) {
-    console.warn('[WARNING] your request may fail due to invalid id chaining')
+    console.warn('[WARNING] your request may fail due to invalid id chaining');
   }
 
-  this.callUrl = _path.join(this.callUrl, value.toString())
-  this.lastAdded = ID
-  return this
-}
+  this.callUrl = _path.join(this.callUrl, value.toString());
+  this.lastAdded = ID;
+  return this;
+};
 
 /**
  *
@@ -461,31 +451,29 @@ MailjetResource.prototype.id = function (value) {
  */
 MailjetResource.prototype.action = function (name) {
   if (this.lastAdded === ACTION && DEBUG_MODE) {
-    console.warn('[WARNING] your request may fail due to invalid action chaining')
+    console.warn('[WARNING] your request may fail due to invalid action chaining');
   }
 
-  this.callUrl = _path.join(this.callUrl, name)
-  this.action = name.toLowerCase()
-
-  this.lastAdded = ACTION
+  this.action = name.toLowerCase();
+  this.lastAdded = ACTION;
 
   if (this.action.toLowerCase() === 'csvdata') {
-    this.action = 'csvdata/text:plain'
+    this.action = 'csvdata/text:plain';
   } else if (this.action.toLowerCase() === 'csverror') {
-    this.action = 'csverror/text:csv'
+    this.action = 'csverror/text:csv';
   }
 
-  var self = this
+  this.callUrl = _path.join(this.callUrl, this.action);
+
+  var self = this;
   this.subPath = (function () {
-    if (self.resource === 'contactslist' && self.action === 'csvdata/text:plain' ||
-      self.resource === 'batchjob' && self.action === 'csverror/text:csv') {
-      return 'DATA'
-    } else {
-      return self.subPath
-    }
-  })()
-  return self
-}
+    const isContactListWithCSV = self.resource === 'contactslist' && self.action === 'csvdata/text:plain';
+    const isBatchJobWithCSV = self.resource === 'batchjob' && self.action === 'csverror/text:csv';
+
+    return (isContactListWithCSV || isBatchJobWithCSV) ? 'DATA' : self.subPath;
+  })();
+  return self;
+};
 
 /**
  *
@@ -503,10 +491,10 @@ MailjetResource.prototype.request = function (params, callback) {
       const ErrorDetails = JSON.parse(err.response.text);
       const fullMessage = ErrorDetails.Messages[0].Errors[0].ErrorMessage;
 
-      if (typeof fullMessage === "string") {
-        err.message = err.message + ";\n" + fullMessage;
-        throw err;
+      if (typeof fullMessage === 'string') {
+        err.message = err.message + ';\n' + fullMessage;
       }
+
       throw err;
     } catch {
       throw err;
@@ -522,8 +510,8 @@ MailjetResource.prototype.request = function (params, callback) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.post = function (func, options) {
-  return new MailjetResource('post', func, options, this)
-}
+  return new MailjetResource('post', func, options, this);
+};
 
 /*
  * get.
@@ -533,8 +521,8 @@ MailjetClient.prototype.post = function (func, options) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.get = function (func, options) {
-  return new MailjetResource('get', func, options, this)
-}
+  return new MailjetResource('get', func, options, this);
+};
 
 /*
  * delete.
@@ -544,8 +532,8 @@ MailjetClient.prototype.get = function (func, options) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.delete = function (func, options) {
-  return new MailjetResource('delete', func, options, this)
-}
+  return new MailjetResource('delete', func, options, this);
+};
 
 /*
  * put.
@@ -555,16 +543,17 @@ MailjetClient.prototype.delete = function (func, options) {
  * @returns a function that make an httpRequest for each call
  */
 MailjetClient.prototype.put = function (func, options) {
-  return new MailjetResource('put', func, options, this)
-}
+  return new MailjetResource('put', func, options, this);
+};
 
 /*
  * Exports the Mailjet client.
  *
  * you can require it like so:
- * var mj = require ('./mailjet-client')
+ * var mj = require('./mailjet-client').MailjetClient
  *
  * or for the bleeding edge developpers out there:
- * import mj from './mailjet-client'
+ * import { MailjetClient } from './mailjet-client'
  */
-module.exports = MailjetClient
+module.exports.MailjetClient = MailjetClient;
+module.exports.MailjetResource = MailjetResource;

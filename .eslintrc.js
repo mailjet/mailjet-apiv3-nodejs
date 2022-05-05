@@ -1,10 +1,12 @@
 module.exports = {
   'env': {
     'commonjs': true,
-    'es6': true,
-    'node': true
+    'es2020': true,
+    'node': true,
+    'mocha': true
   },
   'extends': 'eslint:recommended',
+  'ignorePatterns': ['examples/**'],
   'rules': {
     'no-console': 0,
     'indent': [
@@ -21,7 +23,7 @@ module.exports = {
     ],
     'semi': [
       'error',
-      'never'
+      'always'
     ]
   }
-}
+};
