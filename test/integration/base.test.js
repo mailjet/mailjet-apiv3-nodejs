@@ -1,26 +1,26 @@
 /*external modules*/
-const chai = require('chai')
+const chai = require('chai');
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../mailjet-client')
+const { MailjetClient: Mailjet } = require('../../mailjet-client');
 /*other*/
 
-const expect = chai.expect
+const expect = chai.expect;
 
 describe('API Basic Usage', () => {
-  const API_KEY = process.env.MJ_APIKEY_PUBLIC
-  const API_SECRET = process.env.MJ_APIKEY_PRIVATE
+  const API_KEY = process.env.MJ_APIKEY_PUBLIC;
+  const API_SECRET = process.env.MJ_APIKEY_PRIVATE;
 
   let client;
   before(function () {
     if(typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
-      this.skip()
+      this.skip();
     } else {
       const emailOptions = {
         version: 'v3'
-      }
-      client = Mailjet.connect(API_KEY, API_SECRET, emailOptions)
+      };
+      client = Mailjet.connect(API_KEY, API_SECRET, emailOptions);
     }
-  })
+  });
 
   describe('Connection', () => {
 
@@ -30,9 +30,9 @@ describe('API Basic Usage', () => {
         new Mailjet().connect(API_KEY, API_SECRET),
         Mailjet.connect(API_KEY, API_SECRET)
       ].forEach(connectionType => {
-        expect(`${connectionType.apiKey}${connectionType.apiSecret}`).to.equal(`${API_KEY}${API_SECRET}`)
-      })
-    })
+        expect(`${connectionType.apiKey}${connectionType.apiSecret}`).to.equal(`${API_KEY}${API_SECRET}`);
+      });
+    });
 
     it('creates an instance of the client with options', () => {
       const options = {
@@ -45,124 +45,124 @@ describe('API Basic Usage', () => {
         new Mailjet().connect(API_KEY, API_SECRET, options),
         Mailjet.connect(API_KEY, API_SECRET, options)
       ].forEach(connection => {
-        expect(connection).to.have.property('apiKey', API_KEY)
-        expect(connection).to.have.property('apiSecret', API_SECRET)
-        expect(connection.options).to.have.property('proxyUrl', options.proxyUrl)
-        expect(connection.options).to.have.property('timeout', 10000)
-      })
-    })
+        expect(connection).to.have.property('apiKey', API_KEY);
+        expect(connection).to.have.property('apiSecret', API_SECRET);
+        expect(connection.options).to.have.property('proxyUrl', options.proxyUrl);
+        expect(connection.options).to.have.property('timeout', 10000);
+      });
+    });
 
-  })
+  });
 
   describe('Method request', () => {
 
     describe('get', function () {
-      this.timeout(3500)
+      this.timeout(3500);
 
       let contact;
       before(() => {
-        contact = client.get('contact')
-      })
+        contact = client.get('contact');
+      });
 
       it('calls the contact resource instance with no parameters', async () => {
         try {
           const result = await contact.request();
 
-          expect(result.body).to.be.a('object')
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.body).to.be.a('object');
+          expect(result.response.statusCode).to.equal(200);
         } catch (err) {
           // We want it to raise an error if it gets here
-          expect(err).to.equal(undefined)
+          expect(err).to.equal(undefined);
         }
-      })
+      });
 
       it('calls the contact resource instance with parameters', async () => {
         try {
-          const result = await contact.request({Name: 'Guillaume Badi'})
+          const result = await contact.request({Name: 'Guillaume Badi'});
 
-          expect(result.body).to.be.a('object')
-          expect(result.response.statusCode).to.be.within(200, 201)
+          expect(result.body).to.be.a('object');
+          expect(result.response.statusCode).to.be.within(200, 201);
         } catch (err) {
           // We want it to raise an error if it gets here
-          expect(err).to.equal(undefined)
+          expect(err).to.equal(undefined);
         }
-      })
+      });
 
       it('calls the contact resource instance with empty parameters', async () => {
         try {
           const result = await contact.request({});
 
-          expect(result.body).to.be.a('object')
-          expect(result.response.statusCode).to.be.within(200, 201)
+          expect(result.body).to.be.a('object');
+          expect(result.response.statusCode).to.be.within(200, 201);
         } catch (err) {
           // We want it to raise an error if it gets here
-          expect(err).to.equal(undefined)
+          expect(err).to.equal(undefined);
         }
-      })
+      });
 
-    })
+    });
 
     describe('post', () => {
       const INACTIVE_ERROR_MESSAGE = 'There is an already existing inactive sender with the same email. ' +
-        'You can use "validate" action in order to activate it.'
+        'You can use "validate" action in order to activate it.';
 
-      let sender
+      let sender;
       before(function () {
-        sender = client.post('sender')
-      })
+        sender = client.post('sender');
+      });
 
       it('calls the sender resource instance with valid parameters', async () => {
         try {
-          const result = await sender.request({email: 'gbadi@mailjet.com'})
+          const result = await sender.request({email: 'gbadi@mailjet.com'});
 
-          expect(result.response.statusCode).to.equal(201)
+          expect(result.response.statusCode).to.equal(201);
         } catch (err) {
           // if it fails because the sender already exist. should be 400
-          expect(err.ErrorMessage).to.equal(INACTIVE_ERROR_MESSAGE)
-          expect(err.statusCode).to.equal(400)
+          expect(err.ErrorMessage).to.equal(INACTIVE_ERROR_MESSAGE);
+          expect(err.statusCode).to.equal(400);
         }
-      })
+      });
 
       it('calls the sender resource instance with no parameters', async () => {
         try {
-          await sender.request()
+          await sender.request();
         } catch (err) {
-          expect(err.statusCode).to.equal(400)
+          expect(err.statusCode).to.equal(400);
         }
-      })
+      });
 
       it('calls the sender resource instance with invalid parameters', async () => {
         try {
-          await sender.request({Name: 'Guillaume Badi'})
+          await sender.request({Name: 'Guillaume Badi'});
         } catch (err) {
-          expect(err.statusCode).to.equal(400)
+          expect(err.statusCode).to.equal(400);
         }
-      })
+      });
 
       it('calls the sender resource with empty parameters', async () => {
         try {
-          await sender.request({})
+          await sender.request({});
         } catch (err) {
-          expect(err.statusCode).to.equal(400)
+          expect(err.statusCode).to.equal(400);
         }
-      })
+      });
 
-    })
+    });
 
-  })
+  });
 
   describe('Advanced API Calls', () => {
-    const FILE = 'FILE'
-    const EMAIL = 'test@mailjet.com'
-    const EMAIL2 = 'test2@mailjet.com'
-    const NAME = 'name'
-    const SUBJECT = 'subject'
-    const TEXT_PART = 'text'
-    const VAR = {'Key1': 'Value1', 'Key2': 'Value2'}
-    const SIMPLE_RECIPIENTS = [{email: EMAIL}, {email: EMAIL2}]
-    const UNIQUE_RECIPIENT = [{email: EMAIL}]
-    const RECIPIENTS_NAME = [{email: EMAIL, name: NAME}, {email: EMAIL2, name: NAME}]
-    const RECIPIENTS_VARS = [{email: EMAIL, vars: VAR}]
+    const FILE = 'FILE';
+    const EMAIL = 'test@mailjet.com';
+    const EMAIL2 = 'test2@mailjet.com';
+    const NAME = 'name';
+    const SUBJECT = 'subject';
+    const TEXT_PART = 'text';
+    const VAR = {'Key1': 'Value1', 'Key2': 'Value2'};
+    const SIMPLE_RECIPIENTS = [{email: EMAIL}, {email: EMAIL2}];
+    const UNIQUE_RECIPIENT = [{email: EMAIL}];
+    const RECIPIENTS_NAME = [{email: EMAIL, name: NAME}, {email: EMAIL2, name: NAME}];
+    const RECIPIENTS_VARS = [{email: EMAIL, vars: VAR}];
 
     const EXAMPLES_SET = [];
     const EXPECTED_SET = [
@@ -186,30 +186,30 @@ describe('API Basic Usage', () => {
     ];
 
     function Example (fn, payload) {
-      const self = this
+      const self = this;
 
-      this.fn = fn
-      this.payload = payload
+      this.fn = fn;
+      this.payload = payload;
       this.format = function (obj) {
-        return JSON.stringify(obj).match(/\S+/g).join('')
-      }
+        return JSON.stringify(obj).match(/\S+/g).join('');
+      };
       this.call = async function () {
-        const res = this.fn.request(this.payload)
+        const res = this.fn.request(this.payload);
         if(res[0]) {
-          return res[0].replace(/\\/g, '/') + ' ' + this.format(res[1])
+          return res[0].replace(/\\/g, '/') + ' ' + this.format(res[1]);
         } else {
           const result = await res;
-          return result.url.replace(/\\/g, '/') + ' ' + self.format(result.body)
+          return result.url.replace(/\\/g, '/') + ' ' + self.format(result.body);
         }
-      }
+      };
     }
 
-    let client
+    let client;
     before(function () {
       const emailOptions = {
         version: 'v3'
-      }
-      client = new Mailjet(API_KEY, API_SECRET, emailOptions, true)
+      };
+      client = new Mailjet(API_KEY, API_SECRET, emailOptions, true);
 
       EXAMPLES_SET.push(
         ...[
@@ -255,17 +255,17 @@ describe('API Basic Usage', () => {
             'Recipients': RECIPIENTS_VARS
           })
         ]
-      )
-    })
+      );
+    });
 
     EXPECTED_SET.forEach((test, index) => {
       it(`should output: "${test}"`, async () => {
         const result = await EXAMPLES_SET[index].call();
 
-        expect(result).to.equal(test)
-      })
-    })
+        expect(result).to.equal(test);
+      });
+    });
 
-  })
+  });
 
-})
+});

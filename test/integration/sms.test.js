@@ -1,25 +1,25 @@
 /*external modules*/
-const chai = require('chai')
+const chai = require('chai');
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../mailjet-client')
+const { MailjetClient: Mailjet } = require('../../mailjet-client');
 /*other*/
 
-const expect = chai.expect
+const expect = chai.expect;
 
 describe('SMS Basic Usage', () => {
-  const API_TOKEN = process.env.MJ_API_TOKEN
+  const API_TOKEN = process.env.MJ_API_TOKEN;
 
   let client;
   before(function () {
     if(typeof API_TOKEN === 'undefined') {
-      this.skip()
+      this.skip();
     } else {
       const smsOptions = {
         version: 'v4'
       };
-      client = Mailjet.connect(API_TOKEN, smsOptions)
+      client = Mailjet.connect(API_TOKEN, smsOptions);
     }
-  })
+  });
 
   describe('connection', () => {
 
@@ -29,9 +29,9 @@ describe('SMS Basic Usage', () => {
         new Mailjet().connect(API_TOKEN),
         Mailjet.connect(API_TOKEN)
       ].forEach(connectionType => {
-        expect(connectionType.apiToken).to.equal(API_TOKEN)
-      })
-    })
+        expect(connectionType.apiToken).to.equal(API_TOKEN);
+      });
+    });
 
     it('creates an instance of the client wiht options', () => {
       const smsOptions = {
@@ -43,15 +43,15 @@ describe('SMS Basic Usage', () => {
         new Mailjet().connect(API_TOKEN, smsOptions),
         Mailjet.connect(API_TOKEN, smsOptions)
       ].forEach(connection => {
-        expect(connection).to.have.property('apiToken', API_TOKEN)
+        expect(connection).to.have.property('apiToken', API_TOKEN);
         expect(connection.options).to.have.property(
           'version',
           smsOptions.version
-        )
-      })
-    })
+        );
+      });
+    });
 
-  })
+  });
 
   describe('method call', () => {
 
@@ -59,36 +59,36 @@ describe('SMS Basic Usage', () => {
 
       let smsGet;
       before(() => {
-        smsGet = client.get('sms')
-      })
+        smsGet = client.get('sms');
+      });
 
       it('calls retrieve sms action count with parameters', async () => {
-        const countRequest = smsGet.action('count')
+        const countRequest = smsGet.action('count');
 
         try {
           const response = await countRequest
-            .request({ FromTS: +new Date, ToTS: +new Date })
+            .request({ FromTS: +new Date, ToTS: +new Date });
 
-          expect(response.body).should.be.a('object')
-          expect(response.body.count).to.equal(0)
+          expect(response.body).should.be.a('object');
+          expect(response.body.count).to.equal(0);
         } catch (err) {
-          expect(err.ErrorMessage).to.equal(undefined)
+          expect(err.ErrorMessage).to.equal(undefined);
         }
-      })
+      });
 
       it('retirieve list of messages', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date })
+            .request({ FromTS: +new Date, ToTS: +new Date });
 
-          expect(response.body).to.be.a('object')
-          expect(response.body.Data.length).to.equal(0)
+          expect(response.body).to.be.a('object');
+          expect(response.body.Data.length).to.equal(0);
         } catch (err) {
-          expect(err).to.equal(undefined)
+          expect(err).to.equal(undefined);
         }
-      })
+      });
 
-    })
+    });
 
     describe('post', () => {
 
@@ -100,18 +100,18 @@ describe('SMS Basic Usage', () => {
             .request({
               FromTS: 1033552800,
               ToTS: 1033574400
-            })
+            });
 
-          expect(response.body).to.be.a('object')
+          expect(response.body).to.be.a('object');
         } catch (err) {
-          expect(err.statusCode).to.equal(400)
-          expect(err.ErrorMessage).to.equal('FromTS must not be older than one year.')
-          expect(err.message).to.include('Unsuccessful')
+          expect(err.statusCode).to.equal(400);
+          expect(err.ErrorMessage).to.equal('FromTS must not be older than one year.');
+          expect(err.message).to.include('Unsuccessful');
         }
-      })
+      });
 
-    })
+    });
 
-  })
+  });
 
-})
+});

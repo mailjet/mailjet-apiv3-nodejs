@@ -1,3 +1,3 @@
-var mailjet = require('./mailjet-client')
+var mailjet = require('./mailjet-client');
 
-module.exports = mailjet.MailjetClient
+module.exports = mailjet.MailjetClient;
