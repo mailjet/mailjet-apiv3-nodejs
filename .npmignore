@@ -1,5 +1,6 @@
 # Dependency directory
 node_modules/
+.idea/
 
 # Internal lib data
 examples/
