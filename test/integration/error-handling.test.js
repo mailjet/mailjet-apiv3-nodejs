@@ -138,7 +138,7 @@ describe('Basic Error Handling', () => {
           try {
             const response = await contact.request();
 
-            expect(response.body).should.be.a('object');
+            expect(response.body).to.be.a('object');
             expect(response.response.statusCode).to.equal(200);
           } catch (err) {
             expect(err.ErrorMessage).to.equal(AUTH_V3_ERROR_MESSAGE);
@@ -149,7 +149,7 @@ describe('Basic Error Handling', () => {
           try {
             const response = await contact.request();
 
-            expect(response.body).should.be.a('object');
+            expect(response.body).to.be.a('object');
             expect(response.response.statusCode).to.equal(200);
           } catch (err) {
             expect(err.statusCode).to.equal(AUTH_ERROR_CODE);

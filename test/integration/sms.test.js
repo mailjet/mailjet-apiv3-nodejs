@@ -69,7 +69,7 @@ describe('SMS Basic Usage', () => {
           const response = await countRequest
             .request({ FromTS: +new Date, ToTS: +new Date });
 
-          expect(response.body).should.be.a('object');
+          expect(response.body).to.be.a('object');
           expect(response.body.count).to.equal(0);
         } catch (err) {
           expect(err.ErrorMessage).to.equal(undefined);
