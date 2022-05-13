@@ -1,7 +1,9 @@
 /*external modules*/
-const chai = require('chai');
+import chai from 'chai';
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../lib/mailjet-client');
+import Mailjet from '../../lib/index.js';
+/*utils*/
+import { isUndefined } from '../../lib/utils/index.js';
 /*other*/
 
 const expect = chai.expect;
@@ -12,13 +14,13 @@ describe('API Basic Usage', () => {
 
   let client;
   before(function () {
-    if(typeof API_KEY === 'undefined' || typeof API_SECRET === 'undefined') {
+    if(isUndefined(API_KEY) || isUndefined(API_SECRET)) {
       this.skip();
     } else {
-      const emailOptions = {
+      const emailConfig = {
         version: 'v3'
       };
-      client = Mailjet.connect(API_KEY, API_SECRET, emailOptions);
+      client = Mailjet.apiConnect(API_KEY, API_SECRET, { config: emailConfig });
     }
   });
 
@@ -26,9 +28,8 @@ describe('API Basic Usage', () => {
 
     it('creates an instance of the client', () => {
       [
-        new Mailjet(API_KEY, API_SECRET),
-        new Mailjet().connect(API_KEY, API_SECRET),
-        Mailjet.connect(API_KEY, API_SECRET)
+        new Mailjet({ apiKey: API_KEY, apiSecret: API_SECRET }),
+        Mailjet.apiConnect(API_KEY, API_SECRET)
       ].forEach(connectionType => {
         expect(`${connectionType.apiKey}${connectionType.apiSecret}`).to.equal(`${API_KEY}${API_SECRET}`);
       });
@@ -41,9 +42,8 @@ describe('API Basic Usage', () => {
       };
 
       [
-        new Mailjet(API_KEY, API_SECRET, options),
-        new Mailjet().connect(API_KEY, API_SECRET, options),
-        Mailjet.connect(API_KEY, API_SECRET, options)
+        new Mailjet({ apiKey: API_KEY, apiSecret: API_SECRET, options }),
+        Mailjet.apiConnect(API_KEY, API_SECRET, { options })
       ].forEach(connection => {
         expect(connection).to.have.property('apiKey', API_KEY);
         expect(connection).to.have.property('apiSecret', API_SECRET);
@@ -78,7 +78,7 @@ describe('API Basic Usage', () => {
 
       it('calls the contact resource instance with parameters', async () => {
         try {
-          const result = await contact.request({Name: 'Guillaume Badi'});
+          const result = await contact.request({ Name: 'Guillaume Badi' });
 
           expect(result.body).to.be.a('object');
           expect(result.response.statusCode).to.be.within(200, 201);
@@ -102,7 +102,9 @@ describe('API Basic Usage', () => {
 
     });
 
-    describe('post', () => {
+    describe('post', function () {
+      this.timeout(3500);
+
       const INACTIVE_ERROR_MESSAGE = 'There is an already existing inactive sender with the same email. ' +
         'You can use "validate" action in order to activate it.';
 
@@ -113,7 +115,7 @@ describe('API Basic Usage', () => {
 
       it('calls the sender resource instance with valid parameters', async () => {
         try {
-          const result = await sender.request({email: 'gbadi@mailjet.com'});
+          const result = await sender.request({ email: 'gbadi@mailjet.com' });
 
           expect(result.response.statusCode).to.equal(201);
         } catch (err) {
@@ -133,7 +135,7 @@ describe('API Basic Usage', () => {
 
       it('calls the sender resource instance with invalid parameters', async () => {
         try {
-          await sender.request({Name: 'Guillaume Badi'});
+          await sender.request({ Name: 'Guillaume Badi' });
         } catch (err) {
           expect(err.statusCode).to.equal(400);
         }
@@ -194,22 +196,18 @@ describe('API Basic Usage', () => {
         return JSON.stringify(obj).match(/\S+/g).join('');
       };
       this.call = async function () {
-        const res = this.fn.request(this.payload);
-        if(res[0]) {
-          return res[0].replace(/\\/g, '/') + ' ' + this.format(res[1]);
-        } else {
-          const result = await res;
-          return result.url.replace(/\\/g, '/') + ' ' + self.format(result.body);
-        }
+        const result = await this.fn.request(this.payload);
+        return result.url.replace(/\\/g, '/') + ' ' + self.format(result.body);
       };
     }
 
     let client;
     before(function () {
-      const emailOptions = {
-        version: 'v3'
+      const emailConfig = {
+        version: 'v3',
+        performAPICall: false
       };
-      client = new Mailjet(API_KEY, API_SECRET, emailOptions, true);
+      client = new Mailjet({ apiKey: API_KEY, apiSecret: API_SECRET, config: emailConfig });
 
       EXAMPLES_SET.push(
         ...[

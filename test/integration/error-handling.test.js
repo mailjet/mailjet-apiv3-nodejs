@@ -1,7 +1,7 @@
 /*external modules*/
-const chai = require('chai');
+import chai from 'chai';
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../lib/mailjet-client');
+import Mailjet from '../../lib/index.js';
 /*other*/
 
 const expect = chai.expect;
@@ -19,7 +19,7 @@ describe('Basic Error Handling', () => {
 
     it('no api key provided', () => {
       try {
-        Mailjet.connect();
+        Mailjet.apiConnect();
       } catch (error) {
         expect(error.message).to.equal('Mailjet API_KEY is required');
       }
@@ -27,17 +27,18 @@ describe('Basic Error Handling', () => {
 
     it('no api secret provided', () => {
       try {
-        Mailjet.connect(null, { url: 'api.mailjet.com' });
+        const config = { host: 'api.mailjet.com' };
+        Mailjet.apiConnect(API_PUBLIC_KEY, null, { config });
       } catch (error) {
-        expect(error.message).to.equal('Mailjet API_TOKEN is required');
+        expect(error.message).to.equal('Mailjet API_SECRET is required');
       }
     });
 
     it('no api api token provided', () => {
       try {
-        Mailjet.connect('1234');
+        Mailjet.smsConnect(null);
       } catch (error) {
-        expect(error.message).to.equal('Mailjet API_SECRET is required');
+        expect(error.message).to.equal('Mailjet API_TOKEN is required');
       }
     });
 
@@ -45,15 +46,15 @@ describe('Basic Error Handling', () => {
 
   describe('invalid token', () => {
     const v4Config = {
-      'url': 'api.mailjet.com',
-      'version': 'v4',
-      'output': 'json',
-      'perform_api_call': true
+      host: 'api.mailjet.com',
+      version: 'v4',
+      output: 'json',
+      performAPICall: true
     };
 
     let v4Client;
     before(function () {
-      v4Client = Mailjet.connect(API_TOKEN, v4Config);
+      v4Client = Mailjet.smsConnect(API_TOKEN, { config: v4Config });
     });
 
     describe('get', function () {
@@ -115,15 +116,15 @@ describe('Basic Error Handling', () => {
 
     describe('invalid public/private keys', () => {
       const v3Config = {
-        url: 'api.mailjet.com',
+        host: 'api.mailjet.com',
         version: 'v3',
         output: 'json',
-        perform_api_call: true
+        performAPICall: true
       };
 
       let v3Client;
       before(function () {
-        v3Client = Mailjet.connect(API_PUBLIC_KEY, API_PRIVATE_KEY, v3Config);
+        v3Client = Mailjet.apiConnect(API_PUBLIC_KEY, API_PRIVATE_KEY, { config: v3Config });
       });
 
       describe('get', function () {

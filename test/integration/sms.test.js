@@ -1,7 +1,9 @@
 /*external modules*/
-const chai = require('chai');
+import chai from 'chai';
 /*lib*/
-const { MailjetClient: Mailjet } = require('../../lib/mailjet-client');
+import Mailjet from '../../lib/index.js';
+/*utils*/
+import { isUndefined } from '../../lib/utils/index.js';
 /*other*/
 
 const expect = chai.expect;
@@ -11,13 +13,13 @@ describe('SMS Basic Usage', () => {
 
   let client;
   before(function () {
-    if(typeof API_TOKEN === 'undefined') {
+    if(isUndefined(API_TOKEN)) {
       this.skip();
     } else {
-      const smsOptions = {
+      const smsConfig = {
         version: 'v4'
       };
-      client = Mailjet.connect(API_TOKEN, smsOptions);
+      client = Mailjet.smsConnect(API_TOKEN, { config: smsConfig });
     }
   });
 
@@ -25,28 +27,26 @@ describe('SMS Basic Usage', () => {
 
     it('creates instance of the client', () => {
       [
-        new Mailjet(API_TOKEN),
-        new Mailjet().connect(API_TOKEN),
-        Mailjet.connect(API_TOKEN)
+        new Mailjet({ apiToken: API_TOKEN }),
+        Mailjet.smsConnect(API_TOKEN)
       ].forEach(connectionType => {
         expect(connectionType.apiToken).to.equal(API_TOKEN);
       });
     });
 
     it('creates an instance of the client wiht options', () => {
-      const smsOptions = {
+      const smsConfig = {
         version: 'v4'
       };
 
       [
-        new Mailjet(API_TOKEN, smsOptions),
-        new Mailjet().connect(API_TOKEN, smsOptions),
-        Mailjet.connect(API_TOKEN, smsOptions)
+        new Mailjet({ apiToken: API_TOKEN, config: smsConfig }),
+        Mailjet.smsConnect(API_TOKEN, { config: smsConfig })
       ].forEach(connection => {
         expect(connection).to.have.property('apiToken', API_TOKEN);
-        expect(connection.options).to.have.property(
+        expect(connection.config).to.have.property(
           'version',
-          smsOptions.version
+          smsConfig.version
         );
       });
     });
@@ -55,7 +55,8 @@ describe('SMS Basic Usage', () => {
 
   describe('method call', () => {
 
-    describe('get', () => {
+    describe('get', function () {
+      this.timeout(3500);
 
       let smsGet;
       before(() => {
@@ -90,7 +91,8 @@ describe('SMS Basic Usage', () => {
 
     });
 
-    describe('post', () => {
+    describe('post', function () {
+      this.timeout(3500);
 
       it('export sms statisitcs action with timestamp bigger than one year', async () => {
         try {
