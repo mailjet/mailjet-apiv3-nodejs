@@ -7,6 +7,9 @@ module.exports = {
   },
   'extends': 'eslint:recommended',
   'ignorePatterns': ['examples/**'],
+  'parserOptions': {
+    'sourceType': 'module',
+  },
   'rules': {
     'no-console': 0,
     'indent': [
