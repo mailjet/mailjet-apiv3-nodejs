@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "sourceMap": true,         /* Generates corresponding '.map' file. */
+    "removeComments": true,    /* Do not emit comments to output. */
+  },
+  "exclude": [
+    "test",
+    "node_modules"
+  ]
+}
