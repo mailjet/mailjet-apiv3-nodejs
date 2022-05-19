@@ -1,26 +1,30 @@
-declare module '@mailjet/types' {
+declare module '@custom/types' {
     export namespace TFunction {
-        export type Args<T> = T extends (...args: infer U) => any ? U : never;
-        export type Arg0<T> = T extends (arg1: infer U) => any ? U : never;
+        export type Args<T> = T extends (...args: infer U) => unknown ? U : never;
+        export type Arg0<T> = T extends (arg1: infer U) => unknown ? U : never;
     }
 
     export namespace TObject {
         export type TKeys<T> = Array<keyof T>;
-        export type TValues<TObject> = TObject extends Record<string, infer TKey> ? Array<TKey> : never;
+        export type TValues<TObj> = TObj extends Record<string, infer TKey>
+          ? Array<TKey>
+          : never;
 
         export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
         export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
-        export type MakeNil<T extends Record, TKeys extends keyof T> = {
-            [TKey in TKeys]?: T[TKey] | null;
+        export type MakeNil<T extends Record, TObjKeys extends keyof T> = {
+            [TKey in TObjKeys]?: T[TKey] | null;
         };
         export type MakeNilAll<T extends Record> = {
             [TKey in keyof T]?: T[TKey] | null;
         };
+
+        export type TUnknownRec = Record<string, unknown>
     }
 
     export namespace TArray {
-        export type TKeys<T> = Array<Exclude<keyof T, keyof Array<any>>>;
+        export type TKeys<T> = Array<Exclude<keyof T, keyof Array<unknown>>>;
         export type TValues<T> = Array<T[number]>;
 
         export type SingleType<TValue> = TValue extends Array<infer TSingle> ? TSingle : TValue;
