@@ -1,25 +1,20 @@
 /*external modules*/
-import chai from 'chai';
-/*lib*/
+import { expect } from 'chai';
+/*types*/
 /*utils*/
-import { isPureObject } from '../../../lib/utils/index.js';
+import { isPureObject } from '@utils/index';
+/*lib*/
 /*helpers*/
 /*other*/
 
-const expect = chai.expect;
-
 describe('Unit utils/isPureObject', () => {
-
   it('should be return true for all pure objects', () => {
     [
       {},
-      new Object(),
       Object.create(null),
-      Object.assign({}),
+      {},
       Object.prototype,
-    ].forEach(type => {
-      expect(isPureObject(type)).to.be.true;
-    });
+    ].forEach((type) => expect(isPureObject(type)).to.be.true);
   });
 
   it('should be return false for all other objects', () => {
@@ -35,26 +30,19 @@ describe('Unit utils/isPureObject', () => {
     ];
     const objects = [
       [],
-      function () {},
-      () => {},
+      function () { return undefined; },
+      () => undefined,
       /x/g,
-      new Promise(() => {}),
+      new Promise((resolve) => resolve(undefined)),
       new Set(),
       new Map(),
       new WeakSet(),
       new WeakMap(),
       new Date(),
-      new Array(),
-      new RegExp(),
-      new Boolean(),
-      new String(),
-      new Number(),
-      Object.create({})
+      [],
+      Object.create({}),
     ];
 
-    [...primitives, ...objects].forEach(type => {
-      expect(isPureObject(type)).to.be.false;
-    });
+    [...primitives, ...objects].forEach((type) => expect(isPureObject(type)).to.be.false);
   });
-
 });
