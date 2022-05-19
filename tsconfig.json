@@ -1,7 +1,10 @@
 {
   "include": ["lib", "test"],
   "typedocOptions": {
-
+    "out": "docs",
+    "entryPoints": ["./lib"],
+    "entryPointStrategy": "expand",
+    "exclude": ["test/**", "dist/**", "docs/**", "examples/**"]
   },
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
