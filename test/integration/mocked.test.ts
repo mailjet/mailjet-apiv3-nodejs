@@ -1,13 +1,12 @@
 /*external modules*/
-import chai from 'chai';
 import nock from 'nock';
-/*lib*/
-import Mailjet from '../../lib/index.js';
+import { expect } from 'chai';
+/*types*/
 /*utils*/
-import { isUndefined } from '../../lib/utils/index.js';
+import { isUndefined } from '@utils/index';
+/*lib*/
+import Mailjet, { Request } from '../../lib/index';
 /*other*/
-
-const expect = chai.expect;
 
 describe('Mocked API calls', () => {
   const API_KEY = process.env.MJ_APIKEY_PUBLIC;
@@ -15,29 +14,27 @@ describe('Mocked API calls', () => {
 
   const REQUEST_TIMEOUT = 10;
 
-  let client;
+  let client: Mailjet;
   before(function () {
-    if(isUndefined(API_KEY) || isUndefined(API_SECRET)) {
+    if (isUndefined(API_KEY) || isUndefined(API_SECRET)) {
       this.skip();
     } else {
       /* Set a very short timeout */
       client = Mailjet.apiConnect(API_KEY, API_SECRET, {
         config: {
-          version: 'v3'
+          version: 'v3',
         },
         options: {
-          timeout: REQUEST_TIMEOUT
-        }
+          timeout: REQUEST_TIMEOUT,
+        },
       });
     }
   });
 
   describe('method request', () => {
-
     describe('get', () => {
-
-      let contact;
-      before(function () {
+      let contact: Request;
+      before(() => {
         contact = client.get('contact');
       });
 
@@ -64,8 +61,6 @@ describe('Mocked API calls', () => {
           nock.cleanAll();
         }
       });
-
     });
-
   });
 });

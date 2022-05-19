@@ -1,64 +1,60 @@
 /*external modules*/
-import chai from 'chai';
-/*lib*/
-import Mailjet from '../../lib/index.js';
+import { expect } from 'chai';
+/*types*/
 /*utils*/
-import { isUndefined } from '../../lib/utils/index.js';
+import { isUndefined } from '@utils/index';
+/*lib*/
+import Mailjet, { Request } from '../../lib/index';
 /*other*/
-
-const expect = chai.expect;
 
 describe('SMS Basic Usage', () => {
   const API_TOKEN = process.env.MJ_API_TOKEN;
 
-  let client;
+  let client: Mailjet;
   before(function () {
-    if(isUndefined(API_TOKEN)) {
+    if (isUndefined(API_TOKEN)) {
       this.skip();
     } else {
       const smsConfig = {
-        version: 'v4'
+        version: 'v4',
       };
       client = Mailjet.smsConnect(API_TOKEN, { config: smsConfig });
     }
   });
 
   describe('connection', () => {
-
     it('creates instance of the client', () => {
       [
         new Mailjet({ apiToken: API_TOKEN }),
-        Mailjet.smsConnect(API_TOKEN)
-      ].forEach(connectionType => {
-        expect(connectionType.apiToken).to.equal(API_TOKEN);
+        Mailjet.smsConnect(API_TOKEN as string),
+      ].forEach((connectionType) => {
+        expect(connectionType['apiToken']).to.equal(API_TOKEN);
       });
     });
 
     it('creates an instance of the client wiht options', () => {
       const smsConfig = {
-        version: 'v4'
+        version: 'v4',
       };
 
       [
         new Mailjet({ apiToken: API_TOKEN, config: smsConfig }),
-        Mailjet.smsConnect(API_TOKEN, { config: smsConfig })
-      ].forEach(connection => {
+        Mailjet.smsConnect(API_TOKEN as string, { config: smsConfig }),
+      ].forEach((connection) => {
         expect(connection).to.have.property('apiToken', API_TOKEN);
-        expect(connection.config).to.have.property(
+        expect(connection['config']).to.have.property(
           'version',
-          smsConfig.version
+          smsConfig.version,
         );
       });
     });
-
   });
 
   describe('method call', () => {
-
     describe('get', function () {
       this.timeout(3500);
 
-      let smsGet;
+      let smsGet: Request;
       before(() => {
         smsGet = client.get('sms');
       });
@@ -68,7 +64,7 @@ describe('SMS Basic Usage', () => {
 
         try {
           const response = await countRequest
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
           expect(response.body.count).to.equal(0);
@@ -80,7 +76,7 @@ describe('SMS Basic Usage', () => {
       it('retirieve list of messages', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -88,7 +84,6 @@ describe('SMS Basic Usage', () => {
           expect(err).to.equal(undefined);
         }
       });
-
     });
 
     describe('post', function () {
@@ -101,7 +96,7 @@ describe('SMS Basic Usage', () => {
             .action('export')
             .request({
               FromTS: 1033552800,
-              ToTS: 1033574400
+              ToTS: 1033574400,
             });
 
           expect(response.body).to.be.a('object');
@@ -111,9 +106,6 @@ describe('SMS Basic Usage', () => {
           expect(err.message).to.include('Unsuccessful');
         }
       });
-
     });
-
   });
-
 });

@@ -1,10 +1,11 @@
 /*external modules*/
-import chai from 'chai';
+import { expect } from 'chai';
+/*types*/
+import { IRequestConfig } from '../../lib/request/IRequest';
+/*utils*/
 /*lib*/
-import Mailjet from '../../lib/index.js';
+import Mailjet, { Request } from '../../lib/index';
 /*other*/
-
-const expect = chai.expect;
 
 describe('Basic Error Handling', () => {
   const API_TOKEN = process.env.MJ_API_TOKEN || '#invalidToken';
@@ -16,9 +17,10 @@ describe('Basic Error Handling', () => {
   const AUTH_ERROR_MESSAGE = 'API key authentication/authorization failure. You may be unauthorized to access the API or your API key may be expired. Visit API keys management section to check your keys.';
 
   describe('no auth data provided', () => {
-
     it('no api key provided', () => {
       try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         Mailjet.apiConnect();
       } catch (error) {
         expect(error.message).to.equal('Mailjet API_KEY is required');
@@ -27,7 +29,10 @@ describe('Basic Error Handling', () => {
 
     it('no api secret provided', () => {
       try {
-        const config = { host: 'api.mailjet.com' };
+        const config: Partial<IRequestConfig> = { host: 'api.mailjet.com' };
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         Mailjet.apiConnect(API_PUBLIC_KEY, null, { config });
       } catch (error) {
         expect(error.message).to.equal('Mailjet API_SECRET is required');
@@ -36,39 +41,39 @@ describe('Basic Error Handling', () => {
 
     it('no api api token provided', () => {
       try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         Mailjet.smsConnect(null);
       } catch (error) {
         expect(error.message).to.equal('Mailjet API_TOKEN is required');
       }
     });
-
   });
 
   describe('invalid token', () => {
-    const v4Config = {
+    const v4Config: IRequestConfig = {
       host: 'api.mailjet.com',
       version: 'v4',
       output: 'json',
-      performAPICall: true
     };
 
-    let v4Client;
-    before(function () {
+    let v4Client: Mailjet;
+    before(() => {
       v4Client = Mailjet.smsConnect(API_TOKEN, { config: v4Config });
     });
 
     describe('get', function () {
       this.timeout(3500);
 
-      let smsGet;
-      before(function () {
+      let smsGet: Request;
+      before(() => {
         smsGet = v4Client.get('sms');
       });
 
       it('check error message', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
         } catch (err) {
@@ -79,7 +84,7 @@ describe('Basic Error Handling', () => {
       it('check status code', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -91,7 +96,7 @@ describe('Basic Error Handling', () => {
       it('check response body is not null on error', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -103,7 +108,7 @@ describe('Basic Error Handling', () => {
       it('check error identitfier is not empty string', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date, ToTS: +new Date });
+            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -111,27 +116,25 @@ describe('Basic Error Handling', () => {
           expect(err.ErrorIdentifier).to.not.equal('');
         }
       });
-
     });
 
     describe('invalid public/private keys', () => {
-      const v3Config = {
+      const v3Config: IRequestConfig = {
         host: 'api.mailjet.com',
         version: 'v3',
         output: 'json',
-        performAPICall: true
       };
 
-      let v3Client;
-      before(function () {
+      let v3Client: Mailjet;
+      before(() => {
         v3Client = Mailjet.apiConnect(API_PUBLIC_KEY, API_PRIVATE_KEY, { config: v3Config });
       });
 
       describe('get', function () {
         this.timeout(3500);
 
-        let contact;
-        before(function () {
+        let contact: Request;
+        before(() => {
           contact = v3Client.get('contact');
         });
 
@@ -168,7 +171,7 @@ describe('Basic Error Handling', () => {
           }
         });
 
-        it('check v3 error identitfier is not empty string', async () =>  {
+        it('check v3 error identitfier is not empty string', async () => {
           try {
             const response = await contact.request();
 
@@ -178,11 +181,7 @@ describe('Basic Error Handling', () => {
             expect(err.ErrorIdentifier).to.not.equal('');
           }
         });
-
       });
-
     });
-
   });
-
 });
