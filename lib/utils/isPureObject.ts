@@ -1,15 +1,10 @@
 /*external modules*/
-/*lib*/
+/*types*/
 /*utils*/
+/*lib*/
 /*other*/
 
-/**
- * @param {any} value
- *
- * @return {boolean} void
- */
-
-function isPureObject(value) {
+function isPureObject(value: unknown): boolean {
   return typeof value === 'object'
     && value !== null
     && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null);
