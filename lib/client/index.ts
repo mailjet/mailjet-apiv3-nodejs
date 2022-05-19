@@ -13,7 +13,7 @@ import Request, { TRequestConstructorConfig } from '../request';
 import packageJSON from '../../package.json';
 /*other*/
 
-type TClientConnectParams = Pick<IClientParams, 'config' | 'options'>;
+export type TClientConnectParams = Pick<IClientParams, 'config' | 'options'>;
 
 class Client {
   private version!: string;
