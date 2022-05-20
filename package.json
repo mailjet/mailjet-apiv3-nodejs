@@ -43,6 +43,7 @@
     "ts:run": "ts-node --transpileOnly --project ./tsconfig.json -r tsconfig-paths/register",
     "ts:watch": "ts-node-dev --respawn --transpile-only --project ./tsconfig.json -r tsconfig-paths/register",
     "ts:mocha": "mocha --extension ts --recursive -r tsconfig-paths/register -r ts-node/register",
+    "ts:patch": "ts-patch install -s",
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
@@ -72,9 +73,11 @@
     "nyc": "^15.1.0",
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
+    "ts-patch": "^2.0.1",
     "tsconfig-paths": "^4.0.0",
     "typedoc": "^0.22.15",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "typescript-transform-paths": "^3.3.1"
   },
   "homepage": "https://github.com/mailjet/mailjet-apiv3-nodejs#readme",
   "repository": {
