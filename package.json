@@ -32,7 +32,8 @@
   "scripts": {
     "test": "npm run ts:mocha test/",
     "test:int": "npm run ts:mocha test/integration/",
-    "test:unit": "npm run ts:mocha --recursive test/unit/",
+    "test:unit": "npm run ts:mocha test/unit/",
+    "test:watch": "mocha --extension ts -r tsconfig-paths/register -r ts-node/register --watch",
     "cover": "npm run cover:expandable npm run test",
     "cover:int": "npm run cover:expandable npm run test:int",
     "cover:unit": "npm run cover:expandable npm run test:unit",
