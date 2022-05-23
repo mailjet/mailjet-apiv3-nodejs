@@ -1,9 +1,9 @@
 {
   "name": "node-mailjet",
   "version": "3.4.1",
-  "main": "lib/index.ts",
-  "browser": "TODO",
-  "types": "TODO",
+  "main": "./dist/mailjet.node.js",
+  "browser": "./dist/mailjet.web.js",
+  "types": "./dist/types/index.d.ts",
   "description": "Mailjet API client",
   "author": "Mailjet",
   "license": "MIT",
@@ -20,14 +20,15 @@
     "npm": ">= 6.9.0"
   },
   "files": [
-    "lib/**/*.js - TODO: change to .ts and .js"
+    "lib/**",
+    "dist/**"
   ],
   "directories": {
     "lib": "./lib",
     "docs": "./docs"
   },
   "typescript": {
-    "definition": "TODO"
+    "definition": "./dist/types/index.d.ts"
   },
   "scripts": {
     "test": "npm run ts:mocha test/",
