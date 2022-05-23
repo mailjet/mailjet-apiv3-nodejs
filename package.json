@@ -7,7 +7,7 @@
   "description": "Mailjet API client",
   "author": "Mailjet",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "keywords": [
     "email",
     "sms",
