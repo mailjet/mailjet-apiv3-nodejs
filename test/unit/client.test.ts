@@ -5,7 +5,7 @@ import { IClientParams } from '../../lib/client/IClient';
 import { IRequestConfig, IRequestOptions } from '../../lib/request/IRequest';
 /*utils*/
 /*lib*/
-import Client, { HttpMethods } from '../../lib/index';
+import { Client, HttpMethods } from '../../lib/index';
 import packageJSON from '../../package.json';
 /*helpers*/
 import { expectOwnProperty } from '../helpers';
