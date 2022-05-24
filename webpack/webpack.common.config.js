@@ -18,7 +18,10 @@ const {
 } = require('./constants');
 
 const buildBaseConfig = (targetEnv) => {
-  const target = targetEnv === TARGET_ENV.NODE ? NODE_VERSION : ['web', 'es5'];
+  const isNodeTarget = targetEnv === TARGET_ENV.NODE;
+
+  const target = isNodeTarget ? NODE_VERSION : ['web', 'es5'];
+  const mainFields = isNodeTarget ? ['main', 'module'] : ['browser', 'main', 'module'];
 
   return {
     target,
@@ -55,6 +58,7 @@ const buildBaseConfig = (targetEnv) => {
       new webpack.BannerPlugin(`${pkg.name} v${pkg.version}`),
     ],
     resolve: {
+      mainFields,
       extensions: ['.ts', '.js'/* ,'.json'*/],
       plugins: [
         new TSConfigPathsWebpackPlugin({
@@ -100,7 +104,7 @@ const buildUsageConfig = (targetEnv, mode) => {
       library: {
         name: LIBRARY_NAME,
         type: 'umd',
-        export: 'default', // TODO: remove ?
+        export: 'default',
       },
     },
   };
@@ -108,7 +112,6 @@ const buildUsageConfig = (targetEnv, mode) => {
     output: {
       filename: `${LIBRARY_NAME}.web.js`,
       library: {
-        // TODO: add name ?
         type: 'amd',
       },
     },
