@@ -1,0 +1,47 @@
+{
+  "name": "node-mailjet",
+  "version": "3.4.1",
+  "main": "./mailjet.node.js",
+  "browser": "./mailjet.web.js",
+  "types": "./declarations/index.d.ts",
+  "description": "Mailjet API client",
+  "author": "Mailjet",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "email",
+    "sms",
+    "node",
+    "mail",
+    "mailjet"
+  ],
+  "engines": {
+    "node": ">= 12.0.0",
+    "npm": ">= 6.9.0"
+  },
+  "files": [
+    "*"
+  ],
+  "typescript": {
+    "definition": "./declarations/index.d.ts"
+  },
+  "dependencies": {
+    "json-bigint": "^1.0.0",
+    "qs": "^6.5.0",
+    "superagent": "^7.1.1",
+    "url-join": "^4.0.0"
+  },
+  "homepage": "https://github.com/mailjet/mailjet-apiv3-nodejs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailjet/mailjet-apiv3-nodejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mailjet/mailjet-apiv3-nodejs/issues"
+  },
+  "contributors": [
+    "Arnaud Breton <arnaud@mailjet.com> (https://github.com/arnaudbreton)",
+    "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
+    "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
+  ]
+}
