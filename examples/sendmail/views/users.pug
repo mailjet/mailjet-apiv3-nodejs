@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    #contacts-container
+        h1 List of your contact:
+        ul#contacts
+          each val in contacts
+              li
+                span.c-id
+                  strong ID:
+                  =val.ID
+                span.c-name
+                  strong Name:
+                  =val.Name || '#empty'
+                span.c-email
+                  strong Email:
+                  =val.Email
+          else
+              li You haven't anyone contact

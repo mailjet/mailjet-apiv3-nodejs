@@ -1,17 +1,22 @@
 {
-  "name": "party",
+  "name": "sendmail",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "watch": "nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "^1.19.2",
     "cookie-parser": "~1.3.5",
     "debug": "^4.0.0",
+    "dotenv": "^16.0.1",
     "express": "^4.17.2",
-    "jade": "^0.29.0",
     "morgan": "^1.10.0",
-    "serve-favicon": "^2.5.0"
+    "node-mailjet": "file:../../dist",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
