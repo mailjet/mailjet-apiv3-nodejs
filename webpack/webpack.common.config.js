@@ -47,7 +47,10 @@ const buildBaseConfig = (targetEnv) => {
               },
             },
             {
-              loader: `ts-loader?configFile=${path.join(MAIN_DIR, 'tsconfig.webpack.json')}`,
+              loader: 'ts-loader',
+              options: {
+                configFile: path.join(MAIN_DIR, 'tsconfig.webpack.json'),
+              },
             },
           ],
           exclude: EXCLUDED_DIRS,

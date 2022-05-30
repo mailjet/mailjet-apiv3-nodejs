@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const childProcess = require('child_process');
 
+const DIST_PATH = path.join(__dirname, './dist');
+
 function readJSONFile(filePath) {
   const source = fs.readFileSync(filePath).toString('utf-8');
   return JSON.parse(source);
@@ -31,21 +33,27 @@ function changePackageLockData(packageLockData) {
 }
 
 function main() {
+  // ts declarations
+  fs.renameSync(path.join(DIST_PATH, './lib'), path.join(DIST_PATH, './declarations'));
+
+  // package.json
   const packageData = readJSONFile(path.join(__dirname, './package.json'));
   changePackageData(packageData);
 
-  fs.writeFileSync(path.join(__dirname, './dist/package.json'), Buffer.from(JSON.stringify(packageData, null, 2), 'utf-8').toString());
-  fs.writeFileSync(path.join(__dirname, './dist/VERSION.md'), Buffer.from(packageData.version, 'utf-8').toString());
+  // common files
+  fs.writeFileSync(path.join(DIST_PATH, './package.json'), Buffer.from(JSON.stringify(packageData, null, 2), 'utf-8').toString());
+  fs.writeFileSync(path.join(DIST_PATH, './VERSION.md'), Buffer.from(packageData.version, 'utf-8').toString());
 
-  fs.copyFileSync(path.join(__dirname, 'LICENSE'), path.join(__dirname, './dist/LICENSE'));
-  fs.copyFileSync(path.join(__dirname, 'README.md'), path.join(__dirname, './dist/README.md'));
+  fs.copyFileSync(path.join(__dirname, 'LICENSE'), path.join(DIST_PATH, './LICENSE'));
+  fs.copyFileSync(path.join(__dirname, 'README.md'), path.join(DIST_PATH, './README.md'));
 
+  // package-lock.json
   childProcess.execSync('npm i --prefix ./dist/ --package-lock-only');
 
-  const packageLockData = readJSONFile(path.join(__dirname, './dist/package-lock.json'));
+  const packageLockData = readJSONFile(path.join(DIST_PATH, './package-lock.json'));
   changePackageLockData(packageLockData);
 
-  fs.writeFileSync(path.join(__dirname, './dist/package-lock.json'), Buffer.from(JSON.stringify(packageLockData, null, 2), 'utf-8').toString());
+  fs.writeFileSync(path.join(DIST_PATH, './package-lock.json'), Buffer.from(JSON.stringify(packageLockData, null, 2), 'utf-8').toString());
 }
 
 main();

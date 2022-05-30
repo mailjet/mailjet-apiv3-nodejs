@@ -3,7 +3,7 @@
   "version": "3.4.1",
   "main": "./dist/mailjet.node.js",
   "browser": "./dist/mailjet.web.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/declarations/index.d.ts",
   "description": "Mailjet API client",
   "author": "Mailjet",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "docs": "./docs"
   },
   "typescript": {
-    "definition": "./dist/types/index.d.ts"
+    "definition": "./dist/declarations/index.d.ts"
   },
   "scripts": {
     "test": "npm run ts:mocha test/",

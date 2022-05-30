@@ -69,7 +69,7 @@
     "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
     // "allowUmdGlobalAccess": true,          /* Allow accessing umd globals from modules. */
-    "declarationDir": "./dist/types",         /* Offers a way to configure the root directory for where declaration files are emitted. */
+    "declarationDir": "dist",                 /* Offers a way to configure the root directory for where declaration files are emitted. */
     "resolveJsonModule": true,                /* Allows importing modules with a ‘.json’ extension */
 
     /* Source Map Options */
