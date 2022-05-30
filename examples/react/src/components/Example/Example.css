@@ -1,0 +1,79 @@
+.example {
+    margin: 0 20px 50px 20px;
+}
+
+.example-title a {
+    text-decoration: none;
+}
+
+.example-container {
+    width: 100%;
+    height: 460px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.example-container > div {
+    width: 100%;
+    height: 100%;
+}
+
+.example-container div:nth-last-child(1) {
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.example-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.example-description span:nth-child(1) {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.example-pagination-container {
+    width: 100%;
+}
+
+.example-pagination-container > p {
+    font-weight: bold;
+    margin: 15px 0 0 0;
+}
+
+.example-pagination {
+    display: flex;
+    flex-direction: column;
+}
+
+.example-pagination label {
+    padding: 5px 0;
+}
+
+.example-pagination input {
+    max-width: max-content;
+    height: 25px;
+    padding: 2px 5px;
+    font-size: 16px;
+}
+
+.example-request {
+    max-width: min-content;
+    padding: 15px;
+    font-size: 20px;
+}

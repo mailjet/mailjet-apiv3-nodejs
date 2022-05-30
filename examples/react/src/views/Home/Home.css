@@ -1,0 +1,20 @@
+.app {
+  font-size: 20px;
+  margin: 8px;
+}
+
+.head {
+  text-align: center;
+  font-size: 30px;
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+}
+
+.examples-header {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 40px;
+}
