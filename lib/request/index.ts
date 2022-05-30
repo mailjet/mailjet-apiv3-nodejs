@@ -141,7 +141,7 @@ class Request {
     if (credentials.apiToken) {
       request.auth(credentials.apiToken, { type: 'bearer' });
     } else {
-      request.auth(credentials.apiKey as string, credentials.apiSecret as string, { type: 'auto' });
+      request.auth(credentials.apiKey as string, credentials.apiSecret as string, { type: 'basic' });
     }
 
     if (clientOptions.requestHeaders && Object.keys(clientOptions.requestHeaders).length > 0) {
