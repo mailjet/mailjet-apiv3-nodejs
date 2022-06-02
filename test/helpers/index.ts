@@ -9,6 +9,4 @@ function expectOwnProperty(targetObject: unknown, path: string, value: unknown) 
   return expect(targetObject).to.have.ownProperty(path, value);
 }
 
-export {
-  expectOwnProperty,
-};
+export default expectOwnProperty;

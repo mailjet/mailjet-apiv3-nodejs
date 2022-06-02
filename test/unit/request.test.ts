@@ -12,7 +12,7 @@ import { IRequestConfig } from '../../lib/request/IRequest';
 import Client, { HttpMethods, Request } from '../../lib/index';
 import packageJSON from '../../package.json';
 /*helpers*/
-import { expectOwnProperty } from '../helpers';
+import expectOwnProperty from '../helpers';
 /*other*/
 
 type TMockRequestData = {

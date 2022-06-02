@@ -33,7 +33,7 @@ describe('Unit utils/isPureObject', () => {
       function () { return undefined; },
       () => undefined,
       /x/g,
-      new Promise((resolve) => resolve(undefined)),
+      new Promise((resolve) => { resolve(undefined); }),
       new Set(),
       new Map(),
       new WeakSet(),

@@ -8,7 +8,7 @@ import { IRequestConfig, IRequestOptions } from '../../lib/request/IRequest';
 import { Client, HttpMethods } from '../../lib/index';
 import packageJSON from '../../package.json';
 /*helpers*/
-import { expectOwnProperty } from '../helpers';
+import expectOwnProperty from '../helpers';
 /*other*/
 
 type TClientConnectParams = Omit<IClientParams, 'config' | 'options'> & {
