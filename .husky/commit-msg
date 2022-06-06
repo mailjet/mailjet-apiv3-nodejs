@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# $1 - file path to temp file with commit message
+npx --no-install commitlint --edit "$1"

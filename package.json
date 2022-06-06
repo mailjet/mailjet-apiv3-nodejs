@@ -51,6 +51,8 @@
     "ts:watch": "ts-node-dev --respawn --transpile-only --project ./tsconfig.json -r tsconfig-paths/register",
     "ts:mocha": "mocha --extension ts --recursive -r tsconfig-paths/register -r ts-node/register",
     "ts:patch": "ts-patch install -s",
+    "pkg:prepare": "husky install",
+    "pkg:precommit": "npm audit && npm run lint:errors && npm run test",
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
@@ -78,6 +80,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-tsdoc": "^0.2.16",
+    "husky": "^8.0.1",
     "mocha": "^9.0.0",
     "nock": "^13.2.4",
     "nyc": "^15.1.0",
