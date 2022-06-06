@@ -13,6 +13,7 @@ function changePackageData(packageData) {
   delete packageData.scripts;
   delete packageData.directories;
   delete packageData.devDependencies;
+  delete packageData['standard-version'];
 
   packageData.private = false;
   packageData.files = ['*'];
@@ -46,6 +47,7 @@ function main() {
 
   fs.copyFileSync(path.join(__dirname, 'LICENSE'), path.join(DIST_PATH, './LICENSE'));
   fs.copyFileSync(path.join(__dirname, 'README.md'), path.join(DIST_PATH, './README.md'));
+  fs.copyFileSync(path.join(__dirname, 'CHANGELOG.md'), path.join(DIST_PATH, './CHANGELOG.md'));
 
   // package-lock.json
   childProcess.execSync('npm i --prefix ./dist/ --package-lock-only');

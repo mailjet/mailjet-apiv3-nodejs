@@ -53,6 +53,12 @@
     "ts:patch": "ts-patch install -s",
     "pkg:prepare": "husky install",
     "pkg:precommit": "npm audit && npm run lint:errors && npm run test",
+    "release": "standard-version -a",
+    "release:dry": "standard-version --dry-run",
+    "release:quiet": "standard-version --no-verify -a",
+    "release:minor": "standard-version -a --release-as minor",
+    "release:patch": "standard-version -a --release-as patch",
+    "release:major": "standard-version -a --release-as major",
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
@@ -86,6 +92,7 @@
     "mocha": "^9.0.0",
     "nock": "^13.2.4",
     "nyc": "^15.1.0",
+    "standard-version": "^9.5.0",
     "terser-webpack-plugin": "^5.3.1",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.7.0",
@@ -112,5 +119,60 @@
     "Arnaud Breton <arnaud@mailjet.com> (https://github.com/arnaudbreton)",
     "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
     "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
-  ]
+  ],
+  "standard-version": {
+    "commitUrlFormat": "https://github.com/mailjet/mailjet-apiv3-nodejs/commits/{{hash}}",
+    "compareUrlFormat": "https://github.com/mailjet/mailjet-apiv3-nodejs/compare/{{previousTag}}...{{currentTag}}",
+    "types": [
+      {
+        "type": "breaking",
+        "section": "Breaking changes"
+      },
+      {
+        "type": "security",
+        "section": "Dependency changes for security"
+      },
+      {
+        "type": "feature",
+        "section": "Added features"
+      },
+      {
+        "type": "deprecate",
+        "section": "Deprecated features"
+      },
+      {
+        "type": "remove",
+        "section": "Removed features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "test",
+        "section": "Tests"
+      },
+      {
+        "type": "build",
+        "section": "Build changes"
+      },
+      {
+        "type": "docs",
+        "section": "Docs changes"
+      },
+      {
+        "type": "other",
+        "section": "Other changes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      }
+    ],
+    "scripts": {
+      "prerelease": "npm run build:release",
+      "postchangelog": "npm run build:prepublish && git add -A dist",
+      "posttag": "git push && git push --tags"
+    }
+  }
 }
