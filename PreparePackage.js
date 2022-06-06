@@ -35,6 +35,9 @@ function changePackageLockData(packageLockData) {
 
 function main() {
   // ts declarations
+  if (fs.existsSync(path.join(DIST_PATH, './declarations'))) {
+    fs.rmSync(path.join(DIST_PATH, './declarations'), { recursive: true });
+  }
   fs.renameSync(path.join(DIST_PATH, './lib'), path.join(DIST_PATH, './declarations'));
 
   // package.json
