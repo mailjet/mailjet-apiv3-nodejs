@@ -51,7 +51,7 @@
     "ts:watch": "ts-node-dev --respawn --transpile-only --project ./tsconfig.json -r tsconfig-paths/register",
     "ts:mocha": "mocha --extension ts --recursive -r tsconfig-paths/register -r ts-node/register",
     "ts:patch": "ts-patch install -s",
-    "init": "npm run i && npm run ts:patch && npm run pkg:prepare",
+    "init": "npm install && npm run ts:patch && npm run pkg:prepare",
     "pkg:link": "cd ./dist && npm link && echo '\n=== link name: node-mailjet ==='",
     "pkg:prepare": "husky install",
     "pkg:precommit": "npm audit && npm run lint:errors && npm run test",
