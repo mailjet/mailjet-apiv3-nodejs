@@ -33,6 +33,46 @@ class Client {
     this.init(this.cloneParams(params));
   }
 
+  public getPackageVersion() {
+    return this.version;
+  }
+
+  public getAPIKey() {
+    return this.apiKey;
+  }
+
+  public getAPISecret() {
+    return this.apiSecret;
+  }
+
+  public getAPIToken() {
+    return this.apiToken;
+  }
+
+  public getConfig() {
+    return { ...this.config };
+  }
+
+  public getOptions() {
+    return { ...this.options };
+  }
+
+  public get(resource: string, config?: TRequestConstructorConfig) {
+    return new Request(this, HttpMethods.Get, resource, config);
+  }
+
+  public post(resource: string, config?: TRequestConstructorConfig) {
+    return new Request(this, HttpMethods.Post, resource, config);
+  }
+
+  public put(resource: string, config?: TRequestConstructorConfig) {
+    return new Request(this, HttpMethods.Put, resource, config);
+  }
+
+  public delete(resource: string, config?: TRequestConstructorConfig) {
+    return new Request(this, HttpMethods.Delete, resource, config);
+  }
+
   private init(params: IClientParams) {
     if (!isPureObject(params)) {
       throw new Error('Argument "params" must be object');
@@ -123,22 +163,6 @@ class Client {
     this.apiSecret = apiSecret;
 
     return this;
-  }
-
-  public get(resource: string, config?: TRequestConstructorConfig) {
-    return new Request(this, HttpMethods.Get, resource, config);
-  }
-
-  public post(resource: string, config?: TRequestConstructorConfig) {
-    return new Request(this, HttpMethods.Post, resource, config);
-  }
-
-  public put(resource: string, config?: TRequestConstructorConfig) {
-    return new Request(this, HttpMethods.Put, resource, config);
-  }
-
-  public delete(resource: string, config?: TRequestConstructorConfig) {
-    return new Request(this, HttpMethods.Delete, resource, config);
   }
 
   public static apiConnect(apiKey: string, apiSecret: string, params?: TClientConnectParams) {
