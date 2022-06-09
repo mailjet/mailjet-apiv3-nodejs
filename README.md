@@ -473,10 +473,10 @@ Install it with:
 npm install -g http-proxy
 ```
 
-Then run the following command from the mailgun-js directory:
+Then run the following command from the `mailjet-apiv3-nodejs` directory:
 
 ```sh
-http-server -p 4001 --proxy="https://api.mailgun.net"
+http-server -p 4001 --proxy="https://api.mailjet.com"
 ```
 
 Demo should be up and running at http://0.0.0.0:4001/examples/
@@ -490,6 +490,9 @@ List of basic applications that was built in different environments:
 2. [Node](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/node) - Basic app that contain simple scripts with some requests
 3. [Sendmail](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/sendmail) - `ExpressJS` based app that allow to retrieve list of **contacts** and send email to some person
 4. [ReactJS](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/react) - `ReactJS` based app that provide page where you can make some requests
+
+> **NOTE:**
+> For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
 
 ---
 

@@ -3,6 +3,9 @@
 ## 1. Description
 This app provides basic simple `ReactJS` application.
 
+> **NOTE:**
+> For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+
 ## 2. Start using 
 
 ---
@@ -12,6 +15,24 @@ Install node dependencies with:
 ```sh
 npm install
 ```
+
+#### Work with Proxy Server
+
+For this demo to work, you'll need to install and run `http-proxy` locally.
+
+Install it with:
+
+```sh
+npm install -g http-proxy
+```
+
+Then run the following command from the `mailjet-apiv3-nodejs` directory:
+
+```sh
+http-server -p 4001 --proxy="https://api.mailjet.com"
+```
+
+Demo should be up and running at http://0.0.0.0:4001/examples/
 
 ---
 ### 2. Available Scripts

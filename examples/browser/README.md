@@ -4,12 +4,34 @@
 This app provides an example of using mailjet library in the browser.  
 For work in the browser was built the application example which is using the library `RequireJS`.
 
+> **NOTE:**
+> For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+
 ## 2. Start using
+
 To start using this app you need open file `index.html` which is located in the folder `www`. \
 After this action, you saw the main application page in your browser. \
 You need to paste the **public key** and **secret key** in the `SET CREDENTIALS` section.
 
 Each _example_ has got the button **"request"** - after all these required actions you can click this button and receive the response from the Mailjet.
+
+### Work with Proxy Server
+
+For this demo to work, you'll need to install and run `http-proxy` locally.
+
+Install it with:
+
+```sh
+npm install -g http-proxy
+```
+
+Then run the following command from the `mailjet-apiv3-nodejs` directory:
+
+```sh
+http-server -p 4001 --proxy="https://api.mailjet.com"
+```
+
+Demo should be up and running at http://0.0.0.0:4001/examples/
 
 ## 3. Advance
 
