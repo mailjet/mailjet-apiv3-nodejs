@@ -28,6 +28,7 @@ class Request {
   private readonly method: HttpMethods;
   private readonly config: Partial<IRequestConfig>;
   private readonly resource: string;
+
   private url: string;
   private subPath: 'REST' | 'DATA' | '';
   private actionPath: string | null;
@@ -81,11 +82,19 @@ class Request {
     };
   }
 
-  getUserAgent() {
-    return `mailjet-api-v3-nodejs/${this.client['version']}`;
+  public getUserAgent() {
+    return `mailjet-api-v3-nodejs/${this.client.getPackageVersion()}`;
   }
 
-  getContentType(url: string) {
+  public getCredentials() {
+    return {
+      apiToken: this.client.getAPIToken(),
+      apiKey: this.client.getAPIKey(),
+      apiSecret: this.client.getAPISecret(),
+    };
+  }
+
+  private getContentType(url: string) {
     if (typeof url !== 'string') {
       throw new Error('Argument "url" must be string');
     }
@@ -95,15 +104,7 @@ class Request {
       : 'application/json';
   }
 
-  getCredentials() {
-    return {
-      apiToken: this.client['apiToken'],
-      apiKey: this.client['apiKey'],
-      apiSecret: this.client['apiSecret'],
-    };
-  }
-
-  getParams(params: string | IRequestData) {
+  private getParams(params: string | IRequestData) {
     if (typeof params !== 'object' || isNull(params)) {
       return {};
     }
@@ -121,15 +122,15 @@ class Request {
     return {};
   }
 
-  getRequest(url: string) {
+  private getRequest(url: string) {
     if (typeof url !== 'string') {
       throw new Error('Argument "url" must be string');
     }
 
     const credentials = this.getCredentials();
 
-    const clientConfig = this.client['config'];
-    const clientOptions = this.client['options'];
+    const clientConfig = this.client.getConfig();
+    const clientOptions = this.client.getOptions();
 
     const request = superagent[this.method](url);
 
@@ -168,12 +169,12 @@ class Request {
     return request;
   }
 
-  buildPath(params: IRequestData) {
+  private buildPath(params: IRequestData) {
     if (!isPureObject(params)) {
       throw new Error('Argument "params" must be object');
     }
 
-    const clientConfig = this.client['config'];
+    const clientConfig = this.client.getConfig();
 
     const host = this.config.host ?? clientConfig.host;
     const version = this.config.version ?? clientConfig.version;
@@ -189,7 +190,7 @@ class Request {
     return `${path}?${querystring}`;
   }
 
-  buildSubPath() {
+  private buildSubPath() {
     if (this.actionPath) {
       const isContactListWithCSV = this.resource === 'contactslist' && this.actionPath === 'csvdata/text:plain';
       const isBatchJobWithCSV = this.resource === 'batchjob' && this.actionPath === 'csverror/text:csv';
@@ -202,7 +203,7 @@ class Request {
     return (!isSendResource && !resourceContainSMS) ? 'REST' : '';
   }
 
-  parseToJSONb(text: string) {
+  private parseToJSONb(text: string) {
     if (typeof text !== 'string') {
       throw new Error('Argument "text" must be string');
     }
@@ -217,7 +218,7 @@ class Request {
     return body;
   }
 
-  id(value: string | number) {
+  public id(value: string | number) {
     if (!['string', 'number'].includes(typeof value)) {
       throw new Error('Argument "value" must be string or number');
     }
@@ -227,7 +228,7 @@ class Request {
     return this;
   }
 
-  action(name: string) {
+  public action(name: string) {
     if (typeof name !== 'string') {
       throw new Error('Argument "name" must be string');
     }
@@ -254,17 +255,17 @@ class Request {
     return this;
   }
 
-  async request<TBody extends TUnknownRec>(
-    data?: TRequestData,
-    performAPICall?: true,
+  public async request<TBody extends TUnknownRec>(
+      data?: TRequestData,
+      performAPICall?: true,
   ): Promise<IAPIResponse<TBody>>
 
-  async request<TBody extends TRequestData>(
-    data?: TBody,
-    performAPICall?: false,
+  public async request<TBody extends TRequestData>(
+      data?: TBody,
+      performAPICall?: false,
   ): Promise<IAPILocalResponse<TBody>>
 
-  async request<TBody extends TUnknownRec>(
+  public async request<TBody extends TUnknownRec>(
     data?: TRequestData | TBody,
     performAPICall = true,
   ): Promise<IAPIResponse<TBody> | IAPILocalResponse<TBody>> {
@@ -332,7 +333,7 @@ class Request {
     }
   }
 
-  static protocol = 'https://' as const;
+  public static protocol = 'https://' as const;
 }
 
 export default Request;
