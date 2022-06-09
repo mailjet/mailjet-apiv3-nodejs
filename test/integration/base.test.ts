@@ -35,7 +35,7 @@ describe('API Basic Usage', () => {
         new Mailjet({ apiKey: API_KEY, apiSecret: API_SECRET }),
         Mailjet.apiConnect(API_KEY as string, API_SECRET as string),
       ].forEach((connectionType) => {
-        expect(`${connectionType['apiKey']}${connectionType['apiSecret']}`).to.equal(`${API_KEY}${API_SECRET}`);
+        expect(`${connectionType.getAPIKey()}${connectionType.getAPISecret()}`).to.equal(`${API_KEY}${API_SECRET}`);
       });
     });
 
@@ -51,8 +51,8 @@ describe('API Basic Usage', () => {
       ].forEach((connection) => {
         expect(connection).to.have.property('apiKey', API_KEY);
         expect(connection).to.have.property('apiSecret', API_SECRET);
-        expect(connection['options']).to.have.property('proxyUrl', options.proxyUrl);
-        expect(connection['options']).to.have.property('timeout', 10000);
+        expect(connection.getOptions()).to.have.property('proxyUrl', options.proxyUrl);
+        expect(connection.getOptions()).to.have.property('timeout', 10000);
       });
     });
   });

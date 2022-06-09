@@ -28,7 +28,7 @@ describe('SMS Basic Usage', () => {
         new Mailjet({ apiToken: API_TOKEN }),
         Mailjet.smsConnect(API_TOKEN as string),
       ].forEach((connectionType) => {
-        expect(connectionType['apiToken']).to.equal(API_TOKEN);
+        expect(connectionType.getAPIToken()).to.equal(API_TOKEN);
       });
     });
 
@@ -42,7 +42,7 @@ describe('SMS Basic Usage', () => {
         Mailjet.smsConnect(API_TOKEN as string, { config: smsConfig }),
       ].forEach((connection) => {
         expect(connection).to.have.property('apiToken', API_TOKEN);
-        expect(connection['config']).to.have.property(
+        expect(connection.getConfig()).to.have.property(
           'version',
           smsConfig.version,
         );

@@ -206,7 +206,7 @@ describe('Unit Request', () => {
           `${API_MAILJET_URL}/v3/DATA/batchjob/csverror/text:csv`,
           `${API_MAILJET_URL}/v3/send`,
         ].forEach((url) => {
-          const contentType = Request.prototype.getContentType.call(null, url);
+          const contentType = Request.prototype['getContentType'].call(null, url);
 
           expect(contentType).to.equal('application/json');
         });
@@ -215,14 +215,14 @@ describe('Unit Request', () => {
       it('should be return content type "text/plain"', () => {
         const url = `${API_MAILJET_URL}/v3/DATA/contactslist/34/csvdata/text:plain`;
 
-        const contentType = Request.prototype.getContentType.call(null, url);
+        const contentType = Request.prototype['getContentType'].call(null, url);
 
         expect(contentType).to.equal('text/plain');
       });
 
       it('should be throw error if argument "url" is not string', () => {
         [5, true, undefined, null, Symbol(''), BigInt(5), {}].forEach((url) => {
-          expect(() => Request.prototype.getContentType.call(null, url as string))
+          expect(() => Request.prototype['getContentType'].call(null, url as string))
             .to.throw(Error, 'Argument "url" must be string');
         });
       });
@@ -265,7 +265,7 @@ describe('Unit Request', () => {
           },
         };
 
-        const result = Request.prototype.getParams.call(null, params);
+        const result = Request.prototype['getParams'].call(null, params);
 
         expect(result).to.be.a('object');
 
@@ -289,7 +289,7 @@ describe('Unit Request', () => {
         const client = new Client(params);
         const request = new Request(client, HttpMethods.Get, resource);
 
-        const result = request.getParams(queryParams);
+        const result = request['getParams'](queryParams);
 
         expect(result).to.be.a('object');
 
@@ -314,7 +314,7 @@ describe('Unit Request', () => {
           const client = new Client(params);
           const request = new Request(client, method, resource);
 
-          const result = request.getParams(queryParams);
+          const result = request['getParams'](queryParams);
 
           expect(result).to.be.a('object');
 
@@ -324,7 +324,7 @@ describe('Unit Request', () => {
 
       it('should be return empty object if passed argument is not object or null', () => {
         [5, true, undefined, null, Symbol(''), BigInt(5)].forEach((params) => {
-          const result = Request.prototype.getParams.call(null, params as unknown as string);
+          const result = Request.prototype['getParams'].call(null, params as unknown as string);
 
           expect(result).to.be.a('object');
           expect(result).to.deep.equal({});
@@ -606,7 +606,7 @@ describe('Unit Request', () => {
 
       it('should be throw error if argument "url" is not string', () => {
         [5, true, undefined, null, Symbol(''), BigInt(5), {}].forEach((url) => {
-          expect(() => Request.prototype.getRequest.call(null, url as string))
+          expect(() => Request.prototype['getRequest'].call(null, url as string))
             .to.throw(Error, 'Argument "url" must be string');
         });
       });
@@ -635,7 +635,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).get(resource, customConfig);
-        const path = request.buildPath({});
+        const path = request['buildPath']({});
 
         expect(path).to.be.a('string');
         expect(path).to.equal(`${customConfig.host}/${customConfig.version}/${subPath}/${resource}`);
@@ -655,7 +655,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).get(resource);
-        const path = request.buildPath({});
+        const path = request['buildPath']({});
 
         expect(path).to.be.a('string');
         expect(path).to.equal(`${params.config?.host}/${params.config?.version}/${subPath}/${resource}`);
@@ -684,7 +684,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).get(resource, customConfig);
-        const path = request.buildPath(queryParams);
+        const path = request['buildPath'](queryParams);
 
         const querystring = qs.stringify(queryParams);
 
@@ -694,7 +694,7 @@ describe('Unit Request', () => {
 
       it('should be throw error if passed argument "params" is not object', () => {
         ['', 5, true, undefined, null, Symbol(''), BigInt(5)].forEach((params) => {
-          expect(() => Request.prototype.buildPath.call(
+          expect(() => Request.prototype['buildPath'].call(
             null,
             params as unknown as TObject.TUnknownRec,
           ))
@@ -717,7 +717,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).get(resource);
-        const subPath = request.buildSubPath();
+        const subPath = request['buildSubPath']();
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('REST');
@@ -732,7 +732,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).post(resource);
-        const subPath = request.buildSubPath();
+        const subPath = request['buildSubPath']();
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('');
@@ -747,7 +747,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).post(resource);
-        const subPath = request.buildSubPath();
+        const subPath = request['buildSubPath']();
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('');
@@ -763,7 +763,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).put(resource).action(action);
-        const subPath = request.buildSubPath();
+        const subPath = request['buildSubPath']();
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('DATA');
@@ -779,7 +779,7 @@ describe('Unit Request', () => {
         };
 
         const request = new Client(params).delete(resource).action(action);
-        const subPath = request.buildSubPath();
+        const subPath = request['buildSubPath']();
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('DATA');
@@ -800,7 +800,7 @@ describe('Unit Request', () => {
           "obj": {}
         }`;
 
-        const obj = Request.prototype.parseToJSONb.call(null, json);
+        const obj = Request.prototype['parseToJSONb'].call(null, json);
 
         expect(obj).to.be.a('object');
 
@@ -824,7 +824,7 @@ describe('Unit Request', () => {
           "obj": {}
         }`;
 
-        const obj = Request.prototype.parseToJSONb.call(null, json);
+        const obj = Request.prototype['parseToJSONb'].call(null, json);
 
         expect(obj).to.be.a('object');
 
@@ -833,7 +833,7 @@ describe('Unit Request', () => {
 
       it('should be throw error if argument "text" is not string', () => {
         [5, true, undefined, null, Symbol(''), BigInt(5), {}].forEach((url) => {
-          expect(() => Request.prototype.parseToJSONb.call(null, url as string))
+          expect(() => Request.prototype['parseToJSONb'].call(null, url as string))
             .to.throw(Error, 'Argument "text" must be string');
         });
       });

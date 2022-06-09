@@ -47,8 +47,8 @@ describe('Unit Client', () => {
         new Client(params);
 
         expect(initParams).to.be.not.equal(params);
-        expect(initParams['options']).to.be.not.equal(params.options);
-        expect(initParams['config']).to.be.not.equal(params.config);
+        expect(initParams?.options).to.be.not.equal(params.options);
+        expect(initParams?.config).to.be.not.equal(params.config);
 
         expect(initParams).to.be.deep.equal(params);
 
@@ -180,6 +180,126 @@ describe('Unit Client', () => {
   });
 
   describe('instance part', () => {
+    describe('Client.getPackageVersion()', () => {
+      it('should be have prototype method #getPackageVersion()', () => {
+        expect(Client).to.respondsTo('getPackageVersion');
+      });
+
+      it('should be return package version value', () => {
+        const params: IClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const client = new Client(params);
+        const packageVersion = client.getPackageVersion();
+
+        expect(packageVersion).to.equal(packageJSON.version);
+      });
+    });
+
+    describe('Client.getAPIKey()', () => {
+      it('should be have prototype method #getAPIKey()', () => {
+        expect(Client).to.respondsTo('getAPIKey');
+      });
+
+      it('should be return api key', () => {
+        const params: IClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const client = new Client(params);
+        const apiKey = client.getAPIKey();
+
+        expect(apiKey).to.equal(params.apiKey);
+      });
+    });
+
+    describe('Client.getAPISecret()', () => {
+      it('should be have prototype method #getAPISecret()', () => {
+        expect(Client).to.respondsTo('getAPISecret');
+      });
+
+      it('should be return api secret', () => {
+        const params: IClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const client = new Client(params);
+        const apiSecret = client.getAPISecret();
+
+        expect(apiSecret).to.equal(params.apiSecret);
+      });
+    });
+
+    describe('Client.getAPIToken()', () => {
+      it('should be have prototype method #getAPIToken()', () => {
+        expect(Client).to.respondsTo('getAPIToken');
+      });
+
+      it('should be return api token', () => {
+        const params: IClientParams = {
+          apiToken: 'token',
+        };
+
+        const client = new Client(params);
+        const apiToken = client.getAPIToken();
+
+        expect(apiToken).to.equal(params.apiToken);
+      });
+    });
+
+    describe('Client.getConfig()', () => {
+      it('should be have prototype method #getConfig()', () => {
+        expect(Client).to.respondsTo('getConfig');
+      });
+
+      it('should be return config', () => {
+        const params: IClientParams = {
+          apiToken: 'token',
+          config: {
+            host: 'new.mailjet.com',
+            version: 'v5',
+            output: 'xml',
+          },
+        };
+
+        const client = new Client(params);
+        const config = client.getConfig();
+
+        expect(config).to.be.not.equal(params.config);
+        expect(config).to.be.deep.equal(params.config);
+      });
+    });
+
+    describe('Client.getOptions()', () => {
+      it('should be have prototype method #getOptions()', () => {
+        expect(Client).to.respondsTo('getOptions');
+      });
+
+      it('should be return options', () => {
+        const params: IClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+          options: {
+            requestHeaders: {
+              'X-API-Key': 'foobar',
+            },
+            timeout: 1000,
+            proxyUrl: 'www.test-proxy.com',
+          },
+        };
+
+        const client = new Client(params);
+        const options = client.getOptions();
+
+        expect(options).to.be.not.equal(params.options);
+        expect(options).to.be.deep.equal(params.options);
+      });
+    });
+
     describe('Client.init()', () => {
       it('should be have prototype method #init()', () => {
         expect(Client).to.respondsTo('init');
@@ -327,7 +447,7 @@ describe('Unit Client', () => {
         const client = Client.prototype['setConfig'].call(context, null);
 
         expect(client).to.be.a('object');
-        expect(client['config']).to.be.deep.equal(DEFAULT_CONFIG);
+        expect(client.getConfig()).to.be.deep.equal(DEFAULT_CONFIG);
       });
 
       it('should be set changed config', () => {
@@ -342,8 +462,8 @@ describe('Unit Client', () => {
 
         expect(client).to.be.a('object');
 
-        expect(client['config']).to.be.not.equal(customConfig);
-        expect(client['config']).to.be.deep.equal(customConfig);
+        expect(client.getConfig()).to.be.not.equal(customConfig);
+        expect(client.getConfig()).to.be.deep.equal(customConfig);
       });
 
       it('should be throw error if passed argument "customConfig" is not object', () => {
