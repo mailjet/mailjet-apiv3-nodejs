@@ -6,7 +6,15 @@ This app provides basic simple `ReactJS` application.
 ## 2. Start using 
 
 ---
-### 1. Available Scripts
+### 1. Init application
+
+Install node dependencies with:
+```sh
+npm install
+```
+
+---
+### 2. Available Scripts
 
 In the project directory, you can run:
 
@@ -27,7 +35,7 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 ---
-### 2. Application features
+### 3. Application features
 
 After startup application and when you already see this application in your browser you need do this action: 
 - paste the **public key** and **secret key** in the `SET CREDENTIALS` section
@@ -36,7 +44,7 @@ After this action you saw examples on the page.
 Each _example_ has got the button **"request"** - you can click this button and receive the response from the Mailjet.
 As well, you can set some **pagination** filters such as: `Limit` and `Offset`.
 
-## 3. Advance
+## 4. Advance
 
 --- 
 1. Receive `source-map` feature for the library
