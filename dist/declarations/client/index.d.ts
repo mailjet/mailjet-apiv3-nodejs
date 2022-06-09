@@ -10,16 +10,30 @@ declare class Client {
     private apiSecret?;
     private apiToken?;
     constructor(params: IClientParams);
+    getPackageVersion(): string;
+    getAPIKey(): string | undefined;
+    getAPISecret(): string | undefined;
+    getAPIToken(): string | undefined;
+    getConfig(): {
+        host: string;
+        version: string;
+        output: string;
+    };
+    getOptions(): {
+        requestHeaders?: import("../types").TObject.TUnknownRec | undefined;
+        timeout?: number | undefined;
+        proxyUrl?: string | undefined;
+    };
+    get(resource: string, config?: TRequestConstructorConfig): Request;
+    post(resource: string, config?: TRequestConstructorConfig): Request;
+    put(resource: string, config?: TRequestConstructorConfig): Request;
+    delete(resource: string, config?: TRequestConstructorConfig): Request;
     private init;
     private cloneParams;
     private setConfig;
     private setOptions;
     private tokenConnectStrategy;
     private basicConnectStrategy;
-    get(resource: string, config?: TRequestConstructorConfig): Request;
-    post(resource: string, config?: TRequestConstructorConfig): Request;
-    put(resource: string, config?: TRequestConstructorConfig): Request;
-    delete(resource: string, config?: TRequestConstructorConfig): Request;
     static apiConnect(apiKey: string, apiSecret: string, params?: TClientConnectParams): Client;
     static smsConnect(apiToken: string, params?: TClientConnectParams): Client;
     static config: Readonly<IRequestConfig>;
@@ -62,10 +76,21 @@ declare class Client {
             "build:watch": string;
             lint: string;
             "lint:fix": string;
+            "lint:errors": string;
             "ts:run": string;
             "ts:watch": string;
             "ts:mocha": string;
             "ts:patch": string;
+            init: string;
+            "pkg:link": string;
+            "pkg:prepare": string;
+            "pkg:precommit": string;
+            release: string;
+            "release:dry": string;
+            "release:quiet": string;
+            "release:minor": string;
+            "release:patch": string;
+            "release:major": string;
             docs: string;
         };
         readonly dependencies: {
@@ -77,6 +102,8 @@ declare class Client {
         readonly devDependencies: {
             "@babel/core": string;
             "@babel/preset-env": string;
+            "@commitlint/cli": string;
+            "@commitlint/config-conventional": string;
             "@types/chai": string;
             "@types/json-bigint": string;
             "@types/mocha": string;
@@ -93,9 +120,11 @@ declare class Client {
             "eslint-import-resolver-typescript": string;
             "eslint-plugin-import": string;
             "eslint-plugin-tsdoc": string;
+            husky: string;
             mocha: string;
             nock: string;
             nyc: string;
+            "standard-version": string;
             "terser-webpack-plugin": string;
             "ts-loader": string;
             "ts-node": string;
@@ -119,6 +148,24 @@ declare class Client {
             url: string;
         };
         readonly contributors: string[];
+        readonly "standard-version": {
+            commitUrlFormat: string;
+            compareUrlFormat: string;
+            types: ({
+                type: string;
+                section: string;
+                hidden?: undefined;
+            } | {
+                type: string;
+                hidden: boolean;
+                section?: undefined;
+            })[];
+            scripts: {
+                prerelease: string;
+                postchangelog: string;
+                posttag: string;
+            };
+        };
     }>;
 }
 export default Client;

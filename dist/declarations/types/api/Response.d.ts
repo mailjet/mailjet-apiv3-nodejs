@@ -1,5 +1,5 @@
 import { Response } from 'superagent';
-import { TObject } from '@custom/types';
+import { TObject } from "..";
 export interface IAPIResponse<TBody extends TObject.TUnknownRec> {
     response: Response;
     body: TBody;

@@ -1,8 +1,7 @@
-import * as superagent from 'superagent';
-import { TObject } from '@custom/types';
-import { IAPILocalResponse, IAPIResponse } from '@mailjet/types/api/Response';
+import { TObject } from "../types";
+import { IAPILocalResponse, IAPIResponse } from "../types/api/Response";
 import HttpMethods from './HttpMethods';
-import { IRequestConfig, IRequestData, TRequestData } from './IRequest';
+import { IRequestConfig, TRequestData } from './IRequest';
 import Client from '../client';
 declare type TUnknownRec = TObject.TUnknownRec;
 export declare type TRequestConstructorConfig = null | Partial<IRequestConfig>;
@@ -16,20 +15,17 @@ declare class Request {
     private actionPath;
     constructor(client: Client, method: HttpMethods, resource: string, config?: null | Partial<IRequestConfig>);
     getUserAgent(): string;
-    getContentType(url: string): "application/json" | "text/plain";
     getCredentials(): {
         apiToken: string | undefined;
         apiKey: string | undefined;
         apiSecret: string | undefined;
     };
-    getParams(params: string | IRequestData): {
-        [x: string]: unknown;
-        filters?: TObject.TUnknownRec | undefined;
-    };
-    getRequest(url: string): superagent.SuperAgentRequest;
-    buildPath(params: IRequestData): string;
-    buildSubPath(): "" | "REST" | "DATA";
-    parseToJSONb(text: string): any;
+    private getContentType;
+    private getParams;
+    private getRequest;
+    private buildPath;
+    private buildSubPath;
+    private parseToJSONb;
     id(value: string | number): this;
     action(name: string): this;
     request<TBody extends TUnknownRec>(data?: TRequestData, performAPICall?: true): Promise<IAPIResponse<TBody>>;

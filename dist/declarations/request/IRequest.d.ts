@@ -1,4 +1,4 @@
-import { TObject } from '@custom/types';
+import { TObject } from "../types";
 export interface IRequestConfig {
     host: string;
     version: string;
