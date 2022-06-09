@@ -7,7 +7,13 @@ This app provides some small `NodeJS` basic scripts in the folder `src`.
 To start using this app you need to install all dependencies by the following command `npm install`. \
 After you need to create file `.env` which should be based on the sample file `.env.sample` but with real credentials.
 
-And after this steps you can run following command `node ./src/<filename>.js` for execute selected script.
+And after these steps you can run the following commands to execute selected prepared script: 
+- `npm run start:user` - retrieve `user` info
+- `npm run start:sender` - retrieve `sender` info by `email`
+- `npm run start:contract` - retrieve list of `contact` 
+- `npm run start:eventcallbackurl` - retrieve `eventcallbackurl` info
+
+Or using the following command `node ./src/<filename>.js` to execute your custom scripts.
 
 ## 3. Advance
 
