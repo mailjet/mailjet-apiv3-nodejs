@@ -1,26 +1,24 @@
-var mailjetController = require('../mailjetController');
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-	mailjetController.contactList(function (err, response, body) {
-		if (err) {
-			// dont do that
-			process.exit(1);
-		} else {
-			res.render('index', {
-				title: 'Hello Mailjet!',
-				contacts: body.Data
-			});
-		}
-	});
+const mailjetController = require('../controllers/mailjetController');
+
+router.get('/', (req, res) => {
+	return res.render('index', { title: 'Send email' });
 });
 
-router.post('/send/', function (req, res) {
-	mailjetController.sendMail(req.body, function (err, r, body) {
-		res.redirect('/');
-	});
+router.post('/send', (req, res, next) => {
+	if(Object.keys(req.body).length > 0) {
+		return mailjetController
+			.sendMail(req.body)
+			.then(response => {
+				console.log('response => ', response.body)
+				res.redirect('/');
+			})
+			.catch(err => next(err))
+	}
+
+	return res.redirect('/')
 });
 
 module.exports = router;

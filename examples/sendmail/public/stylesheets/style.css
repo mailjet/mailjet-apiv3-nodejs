@@ -12,7 +12,7 @@
 }
 
 input:focus , #editor:focus {
- 	outline: none; 
+ 	outline: none;
 	border: 1px solid #2c97de;
 }
 
@@ -59,4 +59,40 @@ input:focus , #editor:focus {
 	height: 500px;
 	outline: none;
 	padding: 20px;
+}
+
+#contacts-container {
+	box-sizing: border-box;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	margin: 150px 30px;
+}
+
+#contacts-container > h1 {
+	margin-bottom: 15px;
+}
+
+#contacts {
+	border: 2px solid #9CDCFE;
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 20px;
+}
+
+#contacts > li {
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+	margin-bottom: 10px;
+}
+
+#contacts > li > span {
+	padding-right: 10px;
+	min-width: 200px;
+}
+
+#contacts > li > span > strong {
+	padding-right: 10px;
 }

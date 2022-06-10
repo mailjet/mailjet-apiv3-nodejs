@@ -1,9 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+const mailjetController = require('../controllers/mailjetController');
+
+router.get('/', (req, res, next) => {
+  return mailjetController
+  	.contactList()
+  	.then(response => {
+  		console.log('response => ', response.body)
+  		res.render('users', {
+  			title: 'List of contacts',
+  			contacts: response.body.Data
+  		});
+  	})
+  	.catch(err => next(err))
 });
 
 module.exports = router;

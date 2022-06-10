@@ -5,6 +5,10 @@ node_modules/
 # Internal lib data
 examples/
 test/
+webpack/
 
 # Coverage directory
 .coverage
+
+# Docs
+docs/

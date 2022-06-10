@@ -1,40 +1,13 @@
 {
   "name": "node-mailjet",
   "version": "3.4.1",
-  "description": "Mailjet NodeJS API client",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "mocha --recursive",
-    "test:int": "mocha test/integration/*",
-    "test:unit": "mocha test/unit/*",
-    "cover": "npm run cover:expandable npm run test",
-    "cover:int": "npm run cover:expandable npm run test:int",
-    "cover:unit": "npm run cover:expandable npm run test:unit",
-    "cover:expandable": "nyc --reporter=text-summary --reporter=lcov --report-dir=.coverage --temp-dir=./.coverage/.nyc_output",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  },
-  "dependencies": {
-    "json-bigint": "^1.0.0",
-    "qs": "^6.5.0",
-    "superagent": "^7.1.1",
-    "superagent-proxy": "^3.0.0"
-  },
-  "devDependencies": {
-    "@segment/to-iso-string": "^1.0.1",
-    "chai": "^4.1.0",
-    "eslint": "^8.9.0",
-    "mocha": "^9.0.0",
-    "nock": "^13.2.4",
-    "nyc": "^15.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mailjet/mailjet-apiv3-nodejs.git"
-  },
+  "main": "./dist/mailjet.node.js",
+  "browser": "./dist/mailjet.web.js",
+  "types": "./dist/declarations/index.d.ts",
+  "description": "Mailjet API client",
+  "author": "Mailjet",
+  "license": "MIT",
+  "private": true,
   "keywords": [
     "email",
     "sms",
@@ -42,15 +15,166 @@
     "mail",
     "mailjet"
   ],
-  "author": "Guillaume Badi <gbadi@mailjet.com> (https://github.com/GuillaumeBadi)",
+  "engines": {
+    "node": ">= 12.0.0",
+    "npm": ">= 6.9.0"
+  },
+  "files": [
+    "lib/**",
+    "dist/**"
+  ],
+  "directories": {
+    "lib": "./lib",
+    "docs": "./docs"
+  },
+  "typescript": {
+    "definition": "./dist/declarations/index.d.ts"
+  },
+  "scripts": {
+    "test": "npm run ts:mocha test/",
+    "test:int": "npm run ts:mocha test/integration/",
+    "test:unit": "npm run ts:mocha test/unit/",
+    "test:watch": "mocha --extension ts -r tsconfig-paths/register -r ts-node/register --watch",
+    "cover": "npm run cover:expandable npm run test",
+    "cover:int": "npm run cover:expandable npm run test:int",
+    "cover:unit": "npm run cover:expandable npm run test:unit",
+    "cover:expandable": "nyc --reporter=text-summary --reporter=lcov --report-dir=.coverage --temp-dir=./.coverage/.nyc_output",
+    "build": "npm run build:release && npm run build:prepublish",
+    "build:dev": "webpack --config ./webpack/webpack.dev.config.js --progress --color",
+    "build:release": "webpack --config ./webpack/webpack.release.config.js --progress --color",
+    "build:prepublish": "node ./PreparePackage.js",
+    "build:watch": "webpack --watch --config ./webpack/webpack.dev.config.js --progress --color",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "lint:errors": "eslint --quiet .",
+    "ts:run": "ts-node --transpileOnly --project ./tsconfig.json -r tsconfig-paths/register",
+    "ts:watch": "ts-node-dev --respawn --transpile-only --project ./tsconfig.json -r tsconfig-paths/register",
+    "ts:mocha": "mocha --extension ts --recursive -r tsconfig-paths/register -r ts-node/register",
+    "ts:patch": "ts-patch install -s",
+    "init": "npm install && npm run ts:patch && npm run pkg:prepare",
+    "pkg:link": "cd ./dist && npm link && echo '\n=== link name: node-mailjet ==='",
+    "pkg:prepare": "husky install",
+    "pkg:precommit": "npm audit && npm run lint:errors && npm run test",
+    "release": "standard-version -a",
+    "release:dry": "standard-version --dry-run",
+    "release:quiet": "standard-version --no-verify -a",
+    "release:minor": "standard-version -a --release-as minor",
+    "release:patch": "standard-version -a --release-as patch",
+    "release:major": "standard-version -a --release-as major",
+    "docs": "typedoc --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "json-bigint": "^1.0.0",
+    "qs": "^6.5.0",
+    "superagent": "^7.1.1",
+    "url-join": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
+    "@types/chai": "^4.3.1",
+    "@types/json-bigint": "^1.0.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.34",
+    "@types/qs": "^6.9.7",
+    "@types/superagent": "^4.1.15",
+    "@types/url-join": "^4.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.24.0",
+    "@typescript-eslint/parser": "^5.24.0",
+    "babel-loader": "^8.2.5",
+    "chai": "^4.1.0",
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "husky": "^8.0.1",
+    "mocha": "^9.0.0",
+    "nock": "^13.2.4",
+    "nyc": "^15.1.0",
+    "standard-version": "^9.5.0",
+    "terser-webpack-plugin": "^5.3.1",
+    "ts-loader": "^9.3.0",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "ts-patch": "^2.0.1",
+    "tsconfig-paths": "^4.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
+    "typedoc": "^0.22.15",
+    "typescript": "^4.6.4",
+    "typescript-transform-paths": "^3.3.1",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
+  },
+  "homepage": "https://github.com/mailjet/mailjet-apiv3-nodejs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailjet/mailjet-apiv3-nodejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mailjet/mailjet-apiv3-nodejs/issues"
+  },
   "contributors": [
     "Arnaud Breton <arnaud@mailjet.com> (https://github.com/arnaudbreton)",
     "Nicholas Smith <nicksmith.biz@gmail.com> (https://github.com/safani)",
     "Jérémie Parker <jeremie@vizeat.com> (https://github.com/p-j)"
   ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mailjet/mailjet-apiv3-nodejs/issues"
-  },
-  "homepage": "https://github.com/mailjet/mailjet-apiv3-nodejs#readme"
+  "standard-version": {
+    "commitUrlFormat": "https://github.com/mailjet/mailjet-apiv3-nodejs/commits/{{hash}}",
+    "compareUrlFormat": "https://github.com/mailjet/mailjet-apiv3-nodejs/compare/{{previousTag}}...{{currentTag}}",
+    "types": [
+      {
+        "type": "breaking",
+        "section": "Breaking changes"
+      },
+      {
+        "type": "security",
+        "section": "Dependency changes for security"
+      },
+      {
+        "type": "feature",
+        "section": "Added features"
+      },
+      {
+        "type": "deprecate",
+        "section": "Deprecated features"
+      },
+      {
+        "type": "remove",
+        "section": "Removed features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "test",
+        "section": "Tests"
+      },
+      {
+        "type": "build",
+        "section": "Build changes"
+      },
+      {
+        "type": "docs",
+        "section": "Docs changes"
+      },
+      {
+        "type": "other",
+        "section": "Other changes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      }
+    ],
+    "scripts": {
+      "prerelease": "npm run build:release",
+      "postchangelog": "npm run build:prepublish && git add -A dist",
+      "posttag": "git push && git push --tags"
+    }
+  }
 }

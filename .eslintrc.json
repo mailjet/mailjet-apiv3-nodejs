@@ -1,0 +1,65 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "mocha": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {},
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
+  },
+  "ignorePatterns": ["dist/**", "docs/**", "examples/**"],
+  "rules": {
+    "tsdoc/syntax": "warn",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "linebreak-style": ["error", "unix"],
+    "spaced-comment": "off",
+    "func-names": "off",
+    "no-shadow": "off",
+    "class-methods-use-this": "off",
+    "dot-notation": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "import/extensions": 0,
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/ban-types": [
+          "error",
+          {
+            "extendDefaults": true,
+            "types": {
+              "{}": false
+            }
+          }
+        ]
+      },
+      "plugins": [
+        "eslint-plugin-tsdoc",
+        "@typescript-eslint"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "node",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start:user": "node ./src/user.js",
+    "start:sender": "node ./src/sender.js",
+    "start:contract": "node ./src/contract.js",
+    "start:eventcallbackurl": "node ./src/callback.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "node-mailjet": "file:../../dist"
+  }
+}

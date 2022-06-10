@@ -1,0 +1,13 @@
+.__json-pretty__ {
+    overflow: scroll;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 5px;
+
+    border-radius: 5px;
+
+    font-size: 16px;
+}

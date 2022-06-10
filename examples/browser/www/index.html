@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Mailjet in Browser</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+    <script data-main="app.js" src="lib/require.js"></script>
+</head>
+<body>
+    <section>
+        <header class="head">Basic API</header>
+
+        <div class="creds">
+            <p>Set credentials</p>
+
+            <form>
+                <label for="api-key">API key:</label>
+                <input type="text" id="api-key">
+
+                <label for="api-secret">API secret:</label>
+                <input type="text" id="api-secret">
+
+                <button type="submit">Set</button>
+            </form>
+        </div>
+
+        <div id="get_messages" class="example-wrap">
+            <p>1. Get detailed information on all processed messages - <a href="https://dev.mailjet.com/email/reference/messages/index.html#v3_get_message">GET /message</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Get a list of messages with specific information on the type of content, tracking, sending and delivery.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="get_contacts" class="example-wrap">
+            <p>2. Get a list of all contacts - <a href="https://dev.mailjet.com/email/reference/contacts/contact/#v3_get_contact">GET /contact</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Retrieve a list of all contacts. Includes information about contact status and creation / activity timestamps.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="get_contact_lists" class="example-wrap">
+            <p>3. Retrieve general details for all contact lists - <a href="https://dev.mailjet.com/email/reference/contacts/contact-list/#v3_get_contactslist">GET /contactslist</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Retrieve details for all contact lists - name, subscriber count, creation timestamp, deletion status.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="get_templates" class="example-wrap">
+            <p>4. Get all email templates - <a href="https://dev.mailjet.com/email/reference/templates/#v3_get_template">GET /template</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Retrieve a list of all templates and their configuration settings.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="get_click_statistic" class="example-wrap">
+            <p>5. Get a list of all click events - <a href="https://dev.mailjet.com/email/reference/message-events/#v3_get_clickstatistics">GET /clickstatistics</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Retrieve a list of all click events and details about them - message and contact IDs, timestamp, URL and click delay.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="get_open_statistic" class="example-wrap">
+            <p>6. Get a list of all open events - <a href="https://dev.mailjet.com/email/reference/message-events/#v3_get_openinformation">GET /openinformation</a></p>
+            <div class="example-exec">
+                <div class="example-desc-container">
+                    <div class="example-description">
+                        <span>Description:</span>
+                        <span>Retrieve a list of all open events and details about them - message, campaign and contact IDs, timestamp etc.</span>
+                    </div>
+                    <div class="example-filters">
+                        <label>Request filters:</label>
+                        <input type="text" placeholder='{ "Limit": 5 }'>
+                    </div>
+                    <button>request</button>
+                </div>
+                <div class="example-result">
+                    <textarea disabled></textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

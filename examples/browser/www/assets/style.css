@@ -1,0 +1,119 @@
+a {
+    text-decoration: none;
+}
+
+section {
+    font-size: 20px;
+    font-family: sans-serif, arial;
+}
+
+.head {
+    text-align: center;
+    font-size: 30px;
+}
+
+.creds {
+    margin-bottom: 50px;
+}
+
+.creds p {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.creds form {
+    width: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    border: 3px solid #9CDCFE;
+    border-radius: 10px;
+}
+
+.creds form input {
+    height: 25px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border-width: 2px;
+    font-size: 20px;
+}
+
+.creds form button {
+    font-size: 22px;
+    max-width: min-content;
+}
+
+.example-wrap {
+    margin: 50px 20px;
+}
+
+.example-wrap > div {
+    width: 100%;
+    height: 300px;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.example-exec {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+}
+
+.example-exec > div {
+    width: 100%;
+    height: 100%;
+}
+
+.example-desc-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-desc-container .example-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.example-desc-container .example-description span:nth-child(1) {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.example-desc-container .example-filters {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.example-desc-container .example-filters label {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.example-desc-container .example-filters input {
+    height: 25px;
+    padding: 3px 5px;
+}
+
+.example-desc-container button {
+    max-width: min-content;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.example-result {
+    padding-left: 10px;
+}
+
+.example-result textarea {
+    width: 100%;
+    height: 100%;
+}
