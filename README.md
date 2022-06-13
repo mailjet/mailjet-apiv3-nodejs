@@ -409,7 +409,7 @@ const mailjet = new Mailjet({
     apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
 
-interface IContract {
+interface IContact {
     IsExcludedFromCampaigns: boolean;
     Name: string;
     CreatedAt: string;
@@ -425,7 +425,7 @@ type TResponse<TEntity> = {
 
 const request = mailjet
 	.get('contact')
-	.request<TResponse<IContract>>()
+	.request<TResponse<IContact>>()
 ```
 
 And `response` will have this shape:
