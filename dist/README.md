@@ -10,7 +10,7 @@
 # Mailjet JS
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-4.0.0-green.svg)
+![Current Version](https://img.shields.io/badge/version-4.0.1-green.svg)
 
 ## Overview
 
@@ -409,7 +409,7 @@ const mailjet = new Mailjet({
     apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
 
-interface IContract {
+interface IContact {
     IsExcludedFromCampaigns: boolean;
     Name: string;
     CreatedAt: string;
@@ -425,7 +425,7 @@ type TResponse<TEntity> = {
 
 const request = mailjet
 	.get('contact')
-	.request<TResponse<IContract>>()
+	.request<TResponse<IContact>>()
 ```
 
 And `response` will have this shape:

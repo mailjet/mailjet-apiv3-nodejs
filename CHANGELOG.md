@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v4.0.0...v4.0.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* Typo in readme ([80a2902](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/80a2902fd9184c002821d53d9fc8c63b1e9f4468))
+
 ## [4.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/3.4.1...v4.0.0) (2022-06-10)
 
 
