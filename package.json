@@ -42,7 +42,7 @@
     "build": "npm run build:release && npm run build:prepublish",
     "build:dev": "webpack --config ./webpack/webpack.dev.config.js --progress --color",
     "build:release": "webpack --config ./webpack/webpack.release.config.js --progress --color",
-    "build:prepublish": "node ./PreparePackage.js",
+    "build:prepublish": "node ./scripts/PreparePackage.js",
     "build:watch": "webpack --watch --config ./webpack/webpack.dev.config.js --progress --color",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
