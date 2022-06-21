@@ -110,6 +110,44 @@ describe('Unit Client', () => {
         expectOwnProperty(connectArguments, 'apiSecret', API_SECRET);
         expect(connectArguments).to.have.ownProperty('params').that.is.equal(params);
       });
+
+      it('should be return Client', () => {
+        const API_KEY = 'key';
+        const API_SECRET = 'secret';
+        const params: IClientParams = {
+          options: {
+            timeout: 10,
+          },
+          config: {
+            version: 'v3',
+          },
+        };
+
+        const client = Client.apiConnect(API_KEY, API_SECRET, params);
+
+        expectOwnProperty(client, 'version', packageJSON.version);
+        expectOwnProperty(client, 'apiKey', API_KEY);
+        expectOwnProperty(client, 'apiSecret', API_SECRET);
+
+        expect(client)
+          .to.have.ownProperty('options')
+          .that.is.not.equal(params.options);
+
+        expect(client)
+          .to.have.ownProperty('options')
+          .that.is.deep.equal(params.options);
+
+        expect(client)
+          .to.have.ownProperty('config')
+          .that.is.not.equal(params.config);
+
+        expect(client)
+          .to.have.ownProperty('config')
+          .that.is.deep.equal({
+            ...Client.config,
+            ...params.config,
+          });
+      });
     });
 
     describe('Client.smsConnect()', () => {
@@ -154,6 +192,42 @@ describe('Unit Client', () => {
 
         expectOwnProperty(connectArguments, 'apiToken', API_TOKEN);
         expect(connectArguments).to.have.ownProperty('params').that.is.equal(params);
+      });
+
+      it('should be return Client', () => {
+        const API_TOKEN = 'token';
+        const params: IClientParams = {
+          options: {
+            timeout: 10,
+          },
+          config: {
+            version: 'v3',
+          },
+        };
+
+        const client = Client.smsConnect(API_TOKEN, params);
+
+        expectOwnProperty(client, 'version', packageJSON.version);
+        expectOwnProperty(client, 'apiToken', API_TOKEN);
+
+        expect(client)
+          .to.have.ownProperty('options')
+          .that.is.not.equal(params.options);
+
+        expect(client)
+          .to.have.ownProperty('options')
+          .that.is.deep.equal(params.options);
+
+        expect(client)
+          .to.have.ownProperty('config')
+          .that.is.not.equal(params.config);
+
+        expect(client)
+          .to.have.ownProperty('config')
+          .that.is.deep.equal({
+            ...Client.config,
+            ...params.config,
+          });
       });
     });
 
@@ -262,7 +336,7 @@ describe('Unit Client', () => {
           config: {
             host: 'new.mailjet.com',
             version: 'v5',
-            output: 'xml',
+            output: 'text',
           },
         };
 
@@ -284,11 +358,15 @@ describe('Unit Client', () => {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
-            requestHeaders: {
+            headers: {
               'X-API-Key': 'foobar',
             },
             timeout: 1000,
-            proxyUrl: 'www.test-proxy.com',
+            proxy: {
+              protocol: 'http',
+              host: 'www.test-proxy.co',
+              port: 88,
+            },
           },
         };
 
@@ -343,7 +421,7 @@ describe('Unit Client', () => {
           },
           config: {
             version: 'v4',
-            output: 'png',
+            output: 'arraybuffer',
           },
         };
 
@@ -407,24 +485,33 @@ describe('Unit Client', () => {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
-            requestHeaders: {
+            headers: {
               Accept: 'application/json',
             },
             timeout: 100,
-            proxyUrl: 'proxy.com',
+            proxy: {
+              protocol: 'http',
+              host: 'proxy.com',
+              port: 8080,
+            },
+            maxBodyLength: 100,
+            maxContentLength: 1500,
           },
           config: {
             host: 'new.api.mailjet',
             version: 'v7',
-            output: 'xml',
+            output: 'blob',
           },
         };
 
         const clonedParams = Client.prototype['cloneParams'].call(null, params);
 
         expect(params).to.be.not.equal(clonedParams);
-        expect(params.options).to.be.not.equal(clonedParams.options);
         expect(params.config).to.be.not.equal(clonedParams.config);
+
+        expect(params.options).to.be.not.equal(clonedParams.options);
+        expect(params.options?.proxy).to.be.not.equal(clonedParams.options?.proxy);
+        expect(params.options?.headers).to.be.not.equal(clonedParams.options?.headers);
 
         expect(params).to.be.deep.equal(clonedParams);
       });
@@ -454,7 +541,7 @@ describe('Unit Client', () => {
         const customConfig: IRequestConfig = {
           host: 'new.api.mailjet',
           version: 'v7',
-          output: 'xml',
+          output: 'text',
         };
 
         const context = Object.create(Client.prototype);
@@ -481,11 +568,15 @@ describe('Unit Client', () => {
 
       it('should be set options', () => {
         const options: IRequestOptions = {
-          requestHeaders: {
+          headers: {
             Accept: 'application/json',
           },
           timeout: 100,
-          proxyUrl: 'proxy.com',
+          proxy: {
+            protocol: 'http',
+            host: 'proxy.com',
+            port: 8080,
+          },
         };
 
         const context = Object.create(Client.prototype);
@@ -583,16 +674,20 @@ describe('Unit Client', () => {
             apiKey: 'key',
             apiSecret: 'secret',
             options: {
-              requestHeaders: {
+              headers: {
                 Accept: 'application/json',
               },
               timeout: 100,
-              proxyUrl: 'proxy.com',
+              proxy: {
+                protocol: 'http',
+                host: 'proxy.com',
+                port: 8080,
+              },
             },
             config: {
               host: 'new.api.mailjet',
               version: 'v7',
-              output: 'xml',
+              output: 'text',
             },
           };
 
