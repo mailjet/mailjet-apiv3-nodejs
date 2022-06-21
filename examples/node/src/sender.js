@@ -8,7 +8,11 @@ const client = Mailjet
 
 client
 	.post('sender')
-	.request({ Email: 'mailjet@moon.com' })
+	.request({
+		data: {
+			Email: 'mailjet@moon.com'
+		}
+	})
 	.then(response => {
 		console.log('response => ', response.body)
 	})

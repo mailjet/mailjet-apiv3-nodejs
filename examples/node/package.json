@@ -9,7 +9,7 @@
   "scripts": {
     "start:user": "node ./src/user.js",
     "start:sender": "node ./src/sender.js",
-    "start:contract": "node ./src/contract.js",
+    "start:contact": "node ./src/contact.js",
     "start:eventcallbackurl": "node ./src/callback.js"
   },
   "dependencies": {
