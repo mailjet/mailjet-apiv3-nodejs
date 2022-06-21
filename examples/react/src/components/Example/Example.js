@@ -21,9 +21,9 @@ function Example(props) {
   }
 
   const execRequest = () => {
-    const filters = getPagination();
-    console.log('filters => ', filters)
-    request({ filters })
+    const params = getPagination();
+    console.log('filters => ', params)
+    request({ params })
       .then(response => {
         console.log('response => ', response)
         setResult(response.body)
