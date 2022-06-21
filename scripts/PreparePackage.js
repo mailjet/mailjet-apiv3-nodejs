@@ -5,6 +5,9 @@ const childProcess = require('child_process');
 const ROOT_DIR = path.join(__dirname, '../');
 const DIST_PATH = path.join(ROOT_DIR, './dist');
 
+const LIB_PATH = path.join(DIST_PATH, './lib');
+const DECLARATIONS_PATH = path.join(DIST_PATH, './declarations');
+
 function readJSONFile(filePath) {
   const source = fs.readFileSync(filePath).toString('utf-8');
   return JSON.parse(source);
@@ -36,10 +39,10 @@ function changePackageLockData(packageLockData) {
 
 function main() {
   // ts declarations
-  if (fs.existsSync(path.join(DIST_PATH, './declarations'))) {
-    fs.rmSync(path.join(DIST_PATH, './declarations'), { recursive: true });
-    fs.renameSync(path.join(DIST_PATH, './lib'), path.join(DIST_PATH, './declarations'));
+  if (fs.existsSync(DECLARATIONS_PATH) && fs.existsSync(LIB_PATH)) {
+    fs.rmSync(DECLARATIONS_PATH, { recursive: true });
   }
+  fs.renameSync(LIB_PATH, DECLARATIONS_PATH);
 
   // package.json
   const packageData = readJSONFile(path.join(ROOT_DIR, './package.json'));
