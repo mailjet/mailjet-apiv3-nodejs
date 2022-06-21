@@ -10,10 +10,10 @@ define(['bindToExample'], bindToExample => {
         throw new Error(errorMessage);
       }
 
-      const filters = example.getFilters();
+      const params = example.getFilters();
       window.mailjet
         .get('openinformation')
-        .request({ filters })
+        .request({ params })
         .then(response => {
           console.log('response => ', response);
           example.setText(

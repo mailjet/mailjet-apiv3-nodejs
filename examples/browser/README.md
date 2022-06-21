@@ -5,7 +5,8 @@ This app provides an example of using mailjet library in the browser.
 For work in the browser was built the application example which is using the library `RequireJS`.
 
 > **NOTE:**
-> For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+> - For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+> - In the `www/app/main.js` you can find commented snippet for using the proxy.
 
 ## 2. Start using
 
