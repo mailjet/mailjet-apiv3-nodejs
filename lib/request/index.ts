@@ -1,25 +1,27 @@
 /*external modules*/
-import qs from 'qs';
 import urlJoin from 'url-join';
-import * as superagent from 'superagent';
 import JSONBigInt from 'json-bigint';
+import axios, { AxiosError } from 'axios';
 /*utils*/
-import {
-  isNull,
-  isPureObject,
-  setValueIfNotNil,
-} from '@utils/index';
+import { setValueIfNotNil } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
 import { IAPILocalResponse, IAPIResponse } from '@mailjet/types/api/Response';
 import HttpMethods from './HttpMethods';
-import { IRequestConfig, IRequestData, TRequestData } from './IRequest';
+import {
+  IRequestConfig,
+  TRequestData,
+  TRequestParams,
+  TRequestMethodOptions,
+  TRequestConstructorConfig,
+  TRequestAxiosConfig,
+  TSubPath,
+} from './IRequest';
 /*lib*/
 import Client from '../client';
 /*other*/
 
 type TUnknownRec = TObject.TUnknownRec
-export type TRequestConstructorConfig = null | Partial<IRequestConfig>;
 
 const JSONb = JSONBigInt({ storeAsString: true });
 
@@ -30,14 +32,14 @@ class Request {
   private readonly resource: string;
 
   private url: string;
-  private subPath: 'REST' | 'DATA' | '';
+  private subPath: TSubPath;
   private actionPath: string | null;
 
   constructor(
     client: Client,
     method: HttpMethods,
     resource: string,
-    config?: null | Partial<IRequestConfig>,
+    config?: TRequestConstructorConfig,
   ) {
     if (!(client instanceof Client)) {
       throw new Error('Argument "client" must be instance of Client');
@@ -60,26 +62,6 @@ class Request {
     this.actionPath = null;
 
     this.config = { ...config };
-
-    // https://github.com/visionmedia/superagent/blob/master/docs/index.md#parsing-response-bodies
-    superagent.parse['application/json'] = (result, cb) => {
-      if (typeof result === 'string') {
-        // browser
-        return this.parseToJSONb(result);
-      }
-      // node
-      const data: Uint8Array[] = [];
-
-      result.on('data', (chunk) => data.push(chunk));
-      result.on('end', () => {
-        const responseText = Buffer.concat(data).toString('utf-8');
-        result.text = responseText;
-
-        cb(null, this.parseToJSONb(responseText));
-      });
-
-      return undefined;
-    };
   }
 
   public getUserAgent() {
@@ -104,90 +86,21 @@ class Request {
       : 'application/json';
   }
 
-  private getParams(params: string | IRequestData) {
-    if (typeof params !== 'object' || isNull(params)) {
-      return {};
-    }
-
-    if (params.filters) {
-      return {
-        ...params.filters,
-      };
-    } if (this.method === 'get') {
-      return {
-        ...params,
-      };
-    }
-
-    return {};
+  private getRequestBody(data: TRequestData) {
+    return [
+      HttpMethods.Put,
+      HttpMethods.Post,
+      HttpMethods.Delete,
+    ].includes(this.method) ? data : {};
   }
 
-  private getRequest(url: string) {
-    if (typeof url !== 'string') {
-      throw new Error('Argument "url" must be string');
-    }
-
-    const credentials = this.getCredentials();
-
-    const clientConfig = this.client.getConfig();
-    const clientOptions = this.client.getOptions();
-
-    const request = superagent[this.method](url);
-
-    request
-      .set('user-agent', this.getUserAgent())
-      .set('Content-type', this.getContentType(url));
-
-    // https://github.com/visionmedia/superagent/blob/master/docs/index.md#authentication
-    if (credentials.apiToken) {
-      request.auth(credentials.apiToken, { type: 'bearer' });
-    } else {
-      request.auth(credentials.apiKey as string, credentials.apiSecret as string, { type: 'basic' });
-    }
-
-    if (clientOptions.requestHeaders && Object.keys(clientOptions.requestHeaders).length > 0) {
-      // https://github.com/visionmedia/superagent/blob/master/docs/index.md#forcing-specific-connection-ip-address
-      request.set({ ...clientOptions.requestHeaders });
-    }
-
-    if (clientOptions.timeout) {
-      // https://github.com/visionmedia/superagent/blob/master/docs/index.md#forcing-specific-connection-ip-address
-      request.timeout({ response: clientOptions.timeout });
-    }
-
-    if (clientOptions.proxyUrl) {
-      // https://github.com/visionmedia/superagent/blob/master/docs/index.md#forcing-specific-connection-ip-address
-      (request as any).connect({ '*': clientOptions.proxyUrl });
-    }
-
-    const output = this.config.output ?? clientConfig.output;
-    if (output) {
-      // https://github.com/visionmedia/superagent/blob/master/docs/index.md#setting-accept
-      request.accept(output);
-    }
-
-    return request;
-  }
-
-  private buildPath(params: IRequestData) {
-    if (!isPureObject(params)) {
-      throw new Error('Argument "params" must be object');
-    }
-
+  private buildFullUrl() {
     const clientConfig = this.client.getConfig();
 
     const host = this.config.host ?? clientConfig.host;
     const version = this.config.version ?? clientConfig.version;
 
-    const base = urlJoin(version, this.subPath);
-    const path = urlJoin(host, base, this.url);
-
-    if (Object.keys(params).length === 0) {
-      return path;
-    }
-
-    const querystring = qs.stringify(params);
-    return `${path}?${querystring}`;
+    return urlJoin(Request.protocol, host, version, this.subPath, this.url);
   }
 
   private buildSubPath() {
@@ -203,19 +116,93 @@ class Request {
     return (!isSendResource && !resourceContainSMS) ? 'REST' : '';
   }
 
-  private parseToJSONb(text: string) {
-    if (typeof text !== 'string') {
-      throw new Error('Argument "text" must be string');
+  private makeRequest(url: string, data: TRequestData, params: TRequestParams) {
+    // https://github.com/axios/axios#request-config
+    const requestConfig: TRequestAxiosConfig = {
+      url,
+      params,
+      data: this.getRequestBody(data),
+      method: this.method,
+      responseType: 'json',
+      headers: {
+        'User-Agent': this.getUserAgent(),
+        'Content-Type': this.getContentType(url),
+      },
+      transformResponse(responseData: unknown) {
+        const dataIsString = typeof responseData === 'string';
+        const isJSONRequested = this.responseType === 'json';
+
+        if (responseData && dataIsString && isJSONRequested) {
+          return Request.parseToJSONb(responseData);
+        }
+
+        return responseData;
+      },
+    };
+
+    // BROWSER SIDE
+    if (Request.isBrowser()) {
+      requestConfig.headers['X-User-Agent'] = requestConfig.headers['User-Agent'];
     }
 
-    let body;
-    try {
-      body = JSONb.parse(text);
-    } catch (e) {
-      body = {};
+    // AUTH
+    const credentials = this.getCredentials();
+
+    if (credentials.apiToken) {
+      requestConfig.headers['Authorization'] = `Bearer ${credentials.apiToken}`;
+    } else {
+      requestConfig.auth = {
+        username: credentials.apiKey as string,
+        password: credentials.apiSecret as string,
+      };
     }
 
-    return body;
+    // OPTIONS
+    const clientConfig = this.client.getConfig();
+    const clientOptions = this.client.getOptions();
+
+    // 1. Timeout
+    if (clientOptions.timeout) {
+      requestConfig.timeout = clientOptions.timeout;
+    }
+
+    // 2. Proxy
+    if (clientOptions.proxy) {
+      requestConfig.proxy = clientOptions.proxy;
+    }
+
+    // 3. Headers
+    if (clientOptions.headers && Object.keys(clientOptions.headers).length > 0) {
+      requestConfig.headers = {
+        ...requestConfig.headers,
+        ...clientOptions.headers,
+      };
+    }
+
+    // 4. Output
+    const output = this.config.output ?? clientConfig.output;
+    if (output) {
+      requestConfig.responseType = output;
+    }
+
+    // NODE SIDE
+    // 5. Max request content size
+    if (clientOptions.maxBodyLength) {
+      requestConfig.maxBodyLength = clientOptions.maxBodyLength;
+    }
+
+    // NODE SIDE
+    // 6. Max response content size
+    if (clientOptions.maxContentLength) {
+      requestConfig.maxContentLength = clientOptions.maxContentLength;
+    }
+
+    return axios(requestConfig);
+  }
+
+  private setBaseURL(baseUrl: string) {
+    this.url = baseUrl.toLowerCase();
+    return this;
   }
 
   public id(value: string | number) {
@@ -255,85 +242,122 @@ class Request {
     return this;
   }
 
-  public async request<TBody extends TUnknownRec>(
-      data?: TRequestData,
-      performAPICall?: true,
+  public async request<TBody extends TRequestData>(
+      options?: {
+        data?: TRequestData;
+        params?: TRequestParams;
+        performAPICall?: true;
+      }
   ): Promise<IAPIResponse<TBody>>
 
-  public async request<TBody extends TRequestData>(
-      data?: TBody,
-      performAPICall?: false,
-  ): Promise<IAPILocalResponse<TBody>>
+  public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
+      options?: {
+        data?: TBody;
+        params?: TParams;
+        performAPICall?: false;
+      }
+  ): Promise<IAPILocalResponse<TBody, TParams>>
 
-  public async request<TBody extends TUnknownRec>(
-    data?: TRequestData | TBody,
-    performAPICall = true,
-  ): Promise<IAPIResponse<TBody> | IAPILocalResponse<TBody>> {
-    const params = this.getParams(data ?? {});
-    const url = `${Request.protocol}${this.buildPath(params)}`;
-
-    this.url = this.resource;
+  public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
+    {
+      data = {},
+      params = {},
+      performAPICall = true,
+    }: TRequestMethodOptions<TBody, TParams> = {},
+  ): Promise<IAPIResponse<TBody> | IAPILocalResponse<TBody, TParams>> {
+    const url = this.buildFullUrl();
+    this.setBaseURL(this.resource);
 
     if (!performAPICall) {
-      const body = ['post', 'put'].includes(this.method) ? data : {};
-      return { body, url } as IAPILocalResponse<TBody>;
-    }
+      const body = this.getRequestBody(data);
 
-    const request = this.getRequest(url);
-    if (['post', 'put'].includes(this.method) && data) {
-      request.send(data);
+      return {
+        body,
+        params,
+        url,
+      } as IAPILocalResponse<TBody, TParams>;
     }
 
     try {
-      const response = await request;
+      const response = await this.makeRequest(url, data, params);
       return {
         response,
-        body: response.body,
+        body: response.data,
       };
-    } catch (err: any) {
-      const result = err.response;
-      const body = result?.body ?? {};
-      const errorMessage = body.ErrorMessage ?? err.message;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        const error: any = new Error();
 
-      const error: any = new Error();
+        error.code = err.code;
+        error.config = err.config;
 
-      error.response = result ?? null;
-      error.statusCode = err.status ?? null;
-      error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${errorMessage}"`;
+        if (err.response) {
+          const {
+            status,
+            statusText,
+            data: body,
+          } = err.response;
 
-      if (result) {
-        // https://dev.mailjet.com/email/guides/send-api-v31/#send-in-bulk
-        const fullMessage = body.Messages?.[0]?.Errors?.[0]?.ErrorMessage;
-        if (typeof fullMessage === 'string') {
-          error.message += `;\n${fullMessage}`;
+          error.response = err.response;
+
+          error.statusCode = status;
+          error.statusText = statusText;
+
+          const errorMessage = body?.ErrorMessage ?? err.message;
+          error.originalMessage = errorMessage;
+          error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${errorMessage}"`;
+
+          if (body) {
+            // https://dev.mailjet.com/email/guides/send-api-v31/#send-in-bulk
+            const fullMessage = body.Messages?.[0]?.Errors?.[0]?.ErrorMessage;
+            if (typeof fullMessage === 'string') {
+              error.message += `;\n${fullMessage}`;
+            }
+
+            // v3.1 case
+            // https://dev.mailjet.com/email/guides/send-api-v31/#sandbox-mode
+            setValueIfNotNil(error, 'ErrorMessage', body.ErrorMessage);
+            setValueIfNotNil(error, 'ErrorCode', body.ErrorCode);
+            setValueIfNotNil(error, 'ErrorIdentifier', body.ErrorIdentifier);
+            setValueIfNotNil(error, 'ErrorRelatedTo', body.ErrorRelatedTo);
+          }
+        } else {
+          error.response = null;
+
+          error.statusCode = null;
+          error.statusText = null;
+
+          error.originalMessage = err.message;
+          error.message = `Unsuccessful: Error Code: "${error.code}" Message: "${err.message}"`;
         }
 
-        // https://github.com/visionmedia/superagent/blob/master/docs/index.md#response-status
-        error.statuses = {
-          ok: result.ok,
-          clientError: result.clientError,
-          serverError: result.serverError,
-        };
+        throw error;
       }
 
-      // timeout case
-      // https://github.com/visionmedia/superagent/blob/master/docs/index.md#timeouts
-      setValueIfNotNil(error, 'timeout', err.timeout);
-      setValueIfNotNil(error, 'code', err.code);
-      setValueIfNotNil(error, 'errno', err.errno);
-
-      // v3.1 case
-      // https://dev.mailjet.com/email/guides/send-api-v31/#sandbox-mode
-      setValueIfNotNil(error, 'ErrorMessage', errorMessage);
-      setValueIfNotNil(error, 'ErrorCode', body.ErrorCode);
-      setValueIfNotNil(error, 'ErrorIdentifier', body.ErrorIdentifier);
-      setValueIfNotNil(error, 'ErrorRelatedTo', body.ErrorRelatedTo);
-
-      throw error;
+      throw err;
     }
   }
 
   public static protocol = 'https://' as const;
+
+  public static parseToJSONb(text: string) {
+    if (typeof text !== 'string') {
+      throw new Error('Argument "text" must be string');
+    }
+
+    let body;
+    try {
+      body = JSONb.parse(text);
+    } catch (e) {
+      body = {};
+    }
+
+    return body;
+  }
+
+  public static isBrowser() {
+    return typeof window === 'object';
+  }
 }
 
 export default Request;

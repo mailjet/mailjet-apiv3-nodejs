@@ -7,9 +7,9 @@ import {
 /*types*/
 import HttpMethods from '../request/HttpMethods';
 import { IClientParams } from './IClient';
-import { IRequestConfig, IRequestOptions } from '../request/IRequest';
+import { IRequestConfig, IRequestOptions, TRequestConstructorConfig } from '../request/IRequest';
 /*lib*/
-import Request, { TRequestConstructorConfig } from '../request';
+import Request from '../request';
 import packageJSON from '../../package.json';
 /*other*/
 
@@ -103,11 +103,28 @@ class Client {
 
     const clonedParams = { ...params };
 
-    if (params.options) {
-      clonedParams.options = { ...params.options };
-    }
     if (params.config) {
-      clonedParams.config = { ...params.config };
+      clonedParams.config = {
+        ...params.config,
+      };
+    }
+
+    if (params.options) {
+      clonedParams.options = {
+        ...params.options,
+      };
+
+      if (clonedParams.options.proxy) {
+        clonedParams.options.proxy = {
+          ...clonedParams.options.proxy,
+        };
+      }
+
+      if (clonedParams.options.headers) {
+        clonedParams.options.headers = {
+          ...clonedParams.options.headers,
+        };
+      }
     }
 
     return clonedParams;
