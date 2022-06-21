@@ -73,7 +73,14 @@ describe('Basic Error Handling', () => {
       it('check error message', async () => {
         try {
           const response = await smsGet
-            .request({ FromTS: +new Date(), ToTS: +new Date() });
+            .request(
+              {
+                params: {
+                  FromTS: +new Date(),
+                  ToTS: +new Date(),
+                },
+              },
+            );
 
           expect(response.body).to.be.a('object');
         } catch (err) {
@@ -84,7 +91,14 @@ describe('Basic Error Handling', () => {
       it('check status code', async () => {
         try {
           const response = await smsGet
-            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
+            .request<{ Data: unknown[] }>(
+              {
+                params: {
+                  FromTS: +new Date(),
+                  ToTS: +new Date(),
+                },
+              },
+            );
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -96,7 +110,14 @@ describe('Basic Error Handling', () => {
       it('check response body is not null on error', async () => {
         try {
           const response = await smsGet
-            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
+            .request<{ Data: unknown[] }>(
+              {
+                params: {
+                  FromTS: +new Date(),
+                  ToTS: +new Date(),
+                },
+              },
+            );
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -108,7 +129,14 @@ describe('Basic Error Handling', () => {
       it('check error identitfier is not empty string', async () => {
         try {
           const response = await smsGet
-            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
+            .request<{ Data: unknown[] }>(
+              {
+                params: {
+                  FromTS: +new Date(),
+                  ToTS: +new Date(),
+                },
+              },
+            );
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -143,9 +171,9 @@ describe('Basic Error Handling', () => {
             const response = await contact.request();
 
             expect(response.body).to.be.a('object');
-            expect(response.response.statusCode).to.equal(200);
+            expect(response.response.status).to.equal(200);
           } catch (err) {
-            expect(err.ErrorMessage).to.equal(AUTH_V3_ERROR_MESSAGE);
+            expect(err.statusText).to.equal(AUTH_V3_ERROR_MESSAGE);
           }
         });
 
@@ -154,7 +182,7 @@ describe('Basic Error Handling', () => {
             const response = await contact.request();
 
             expect(response.body).to.be.a('object');
-            expect(response.response.statusCode).to.equal(200);
+            expect(response.response.status).to.equal(200);
           } catch (err) {
             expect(err.statusCode).to.equal(AUTH_ERROR_CODE);
           }
@@ -165,7 +193,7 @@ describe('Basic Error Handling', () => {
             const response = await contact.request();
 
             expect(response.body).to.be.a('object');
-            expect(response.response.statusCode).to.equal(200);
+            expect(response.response.status).to.equal(200);
           } catch (err) {
             expect(err.response).to.not.equal(null);
           }
@@ -176,7 +204,7 @@ describe('Basic Error Handling', () => {
             const response = await contact.request();
 
             expect(response.body).to.be.a('object');
-            expect(response.response.statusCode).to.equal(200);
+            expect(response.response.status).to.equal(200);
           } catch (err) {
             expect(err.ErrorIdentifier).to.not.equal('');
           }
