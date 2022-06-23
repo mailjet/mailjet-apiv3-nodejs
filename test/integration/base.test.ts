@@ -92,9 +92,7 @@ describe('API Basic Usage', () => {
         try {
           const result = await contact.request(
             {
-              data: {
-                Name: 'Guillaume Badi',
-              },
+              Name: 'Guillaume Badi',
             },
           );
 
@@ -134,9 +132,7 @@ describe('API Basic Usage', () => {
         try {
           const result = await sender.request(
             {
-              data: {
-                email: 'gbadi@mailjet.com',
-              },
+              email: 'gbadi@mailjet.com',
             },
           );
 
@@ -160,9 +156,7 @@ describe('API Basic Usage', () => {
         try {
           await sender.request(
             {
-              data: {
-                Name: 'Guillaume Badi',
-              },
+              Name: 'Guillaume Badi',
             },
           );
         } catch (err) {
@@ -214,10 +208,7 @@ describe('API Basic Usage', () => {
       public async call() {
         const result = await this
           .fn
-          .request({
-            ...this.payload,
-            performAPICall: false,
-          });
+          .request(this.payload?.data, this.payload?.params, false);
 
         return this.buildUrl(result);
       }

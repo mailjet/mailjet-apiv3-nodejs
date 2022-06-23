@@ -65,11 +65,10 @@ describe('SMS Basic Usage', () => {
         try {
           const response = await countRequest
             .request<{ count: number }>(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 
@@ -84,11 +83,10 @@ describe('SMS Basic Usage', () => {
         try {
           const response = await smsGet
             .request<{ Data: unknown[] }>(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 
@@ -109,11 +107,10 @@ describe('SMS Basic Usage', () => {
             .post('sms')
             .action('export')
             .request(
+              {},
               {
-                params: {
-                  FromTS: 1033552800,
-                  ToTS: 1033574400,
-                },
+                FromTS: 1033552800,
+                ToTS: 1033574400,
               },
             );
 

@@ -74,11 +74,10 @@ describe('Basic Error Handling', () => {
         try {
           const response = await smsGet
             .request(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 
@@ -92,11 +91,10 @@ describe('Basic Error Handling', () => {
         try {
           const response = await smsGet
             .request<{ Data: unknown[] }>(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 
@@ -111,11 +109,10 @@ describe('Basic Error Handling', () => {
         try {
           const response = await smsGet
             .request<{ Data: unknown[] }>(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 
@@ -130,11 +127,10 @@ describe('Basic Error Handling', () => {
         try {
           const response = await smsGet
             .request<{ Data: unknown[] }>(
+              {},
               {
-                params: {
-                  FromTS: +new Date(),
-                  ToTS: +new Date(),
-                },
+                FromTS: +new Date(),
+                ToTS: +new Date(),
               },
             );
 

@@ -1147,11 +1147,7 @@ describe('Unit Request', () => {
               const url = `${API_MAILJET_URL}/${apiVersion}/REST/${resource}/${contactId}`;
 
               const request = client[method](resource).id(contactId);
-              const result = await request.request({
-                performAPICall,
-                data,
-                params: requestParams,
-              });
+              const result = await request.request(data, requestParams, performAPICall);
 
               expectOwnProperty(request, 'url', resource);
               expectOwnProperty(result, 'url', url);
@@ -1233,10 +1229,7 @@ describe('Unit Request', () => {
                 });
 
               const request = client[method](resource).id(contactId);
-              const result = await request.request({
-                data,
-                params: requestParams,
-              });
+              const result = await request.request(data, requestParams);
 
               expectOwnProperty(request, 'url', resource);
 
@@ -1299,10 +1292,7 @@ describe('Unit Request', () => {
           });
 
         const request = await client.get(resource);
-        const result = await request.request({
-          data,
-          params: requestParams,
-        });
+        const result = await request.request(data, requestParams);
 
         expectOwnProperty(request, 'url', resource);
 
