@@ -168,25 +168,23 @@ const mailjet = Mailjet.apiConnect(
 const request = mailjet
         .post('send', { version: 'v3.1' })
         .request({
-          data: {
-            Messages: [
-              {
-                From: {
-                  Email: "pilot@mailjet.com",
-                  Name: "Mailjet Pilot"
-                },
-                To: [
-                  {
-                    Email: "passenger1@mailjet.com",
-                    Name: "passenger 1"
-                  }
-                ],
-                Subject: "Your email flight plan!",
-                TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-                HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
-              }
-            ]
-          }
+          Messages: [
+            {
+              From: {
+                Email: "pilot@mailjet.com",
+                Name: "Mailjet Pilot"
+              },
+              To: [
+                {
+                  Email: "passenger1@mailjet.com",
+                  Name: "passenger 1"
+                }
+              ],
+              Subject: "Your email flight plan!",
+              TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+              HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+            }
+          ]
         })
 
 request
@@ -213,11 +211,7 @@ const mailjet = new Mailjet({
 
 const request = mailjet
     .METHOD(RESOURCE, CONFIG)
-    .request({
-      data: DATA,
-      params: PARAMS,
-      performAPICall: Boolean
-    })
+    .request(DATA, PARAMS, PERFORM_API_CALL)
 ```
 
 - `METHOD`: the method you want to use for this call _(one of: `post`, `put`, `get`, `delete`)_
@@ -226,11 +220,12 @@ const request = mailjet
 - `CONFIG`: associative array describing the connection config (see [Config](#config) bellow for full list)
 - `DATA`: is the data to be sent as the request body _(only for `post`, `put`, `delete` methods)_
 - `PARAMS`: are the URL parameters to be sent with the request
+- `PERFORM_API_CALL`: is the Boolean parameter that determine need make local or real request 
 
 ### Options
 
 `options` have this structure:
-- `headers` - associative array describing custom header fields which you can pass to the request
+- `headers` - associative array describing additional header fields which you can pass to the request
 - `timeout` -  specifies the number of milliseconds before the request times out
 - `proxy` - defines the hostname, port, and protocol of the proxy server to redirect all requests _(Node only option)_
 - `maxBodyLength` - defines the max size of the http request content in bytes allowed _(Node only option)_
@@ -452,14 +447,12 @@ The `output` parameter allowing you to specify the type of response data:
 By default, the API call parameter is always enabled. \
 However, you may want to disable it during testing to prevent unnecessary calls to the Mailjet API.
 
-This is done by passing the `performAPICall` argument with value `false` to `.request({ data, params, performAPICall })` method:
+This is done by passing the `performAPICall` argument with value `false` to `.request(data, params, performAPICall)` method:
 
 ```javascript
 const request = mailjet
     .post('send', { version: 'v3.1' })
-    .request({
-      performAPICall: false
-    })
+    .request({}, {}, false)
 ```
 
 ---
@@ -571,10 +564,10 @@ Use the `post` method of the Mailjet client:
 const request = mailjet
   .post($RESOURCE, $CONFIG)
   .id($ID)
-  .request($OPTIONS)
+  .request($DATA, $PARAMS, $PERFORM_API_CALL)
 ```
 
-`.request` parameter `$OPTIONS` (`{ data, ...other }`) will contain the body of the `POST` request. \
+`.request` parameter `$DATA` will contain the body of the `POST` request. \
 You need to define `.id` if you want to perform an action on a specific object and need to identify it.
 
 ##### Simple `POST` request
@@ -591,11 +584,9 @@ const mailjet = new Mailjet({
 const request = mailjet
         .post('contact')
         .request({
-          data: {
-            Email: "passenger@mailjet.com",
-            IsExcludedFromCampaigns: true,
-            Name: "New Contact"
-          }
+          Email: "passenger@mailjet.com",
+          IsExcludedFromCampaigns: true,
+          Name: "New Contact"
         })
 
 request
@@ -623,14 +614,12 @@ const request = mailjet
         .id($contactID)
         .action('managecontactslists')
         .request({
-          data: {
-            ContactsLists: [
-              {
-                ListID: $listID,
-                Action: "addnoforce"
-              }
-            ]
-          }
+          ContactsLists: [
+            {
+              ListID: $listID,
+              Action: "addnoforce"
+            }
+          ]
         })
 
 request
@@ -650,10 +639,10 @@ Use the `get` method of the Mailjet client:
 const request = mailjet
  .get($RESOURCE, $CONFIG)
  .id($ID)
- .request($OPTIONS)
+ .request($DATA, $PARAMS, $PERFORM_API_CALL)
 ```
 
-`.request` parameter `$OPTIONS` (`{ params, ...other }`) will contain any query parameters applied to the request. \
+`.request` parameter `$PARAMS` will contain any query parameters applied to the request. \
 You need to define `.id` if you want to retrieve a specific object.
 
 ##### Retrieve all objects
@@ -693,11 +682,7 @@ const mailjet = new Mailjet({
 
 const request = mailjet
         .get('contact')
-        .request({
-          params: {
-            IsExcludedFromCampaigns: false
-          }
-        })
+        .request({}, { IsExcludedFromCampaigns: false })
 
 request
         .then((result) => {
@@ -741,11 +726,11 @@ Use the `put` method of the Mailjet client:
 const request = mailjet
     .put($RESOURCE, $CONFIG)
     .id($ID)
-    .request($OPTIONS)
+    .request($DATA, $PARAMS, $PERFORM_API_CALL)
 ```
 
 You need to define `.id` to specify the object that you need to edit. \
-`.request` parameter `$OPTIONS` (`{ data, ...other }`) will contain the body of the `PUT` request.
+`.request` parameter `$DATA` will contain the body of the `PUT` request.
 
 A `PUT` request in the Mailjet API will work as a `PATCH` request - the update will affect only the specified properties. \
 The other properties of an existing resource will neither be modified, nor deleted. \
@@ -764,14 +749,12 @@ const request = mailjet
         .put('contactdata')
         .id($contactID)
         .request({
-          data: {
-            Data: [
-              {
-                first_name: "John",
-                last_name: "Smith"
-              }
-            ]
-          }
+          Data: [
+            {
+              first_name: "John",
+              last_name: "Smith"
+            }
+          ]
         })
 
 request
@@ -791,11 +774,11 @@ Use the `delete` method of the Mailjet client:
 const request = mailjet
  .delete($RESOURCE, $CONFIG)
  .id($ID)
- .request()
+ .request($DATA, $PARAMS, $PERFORM_API_CALL)
 ```
 
 You need to define `.id` to specify the object you want to delete. \
-`.request` should be empty.
+`.request` parameter `$DATA` should be empty.
 
 Upon a successful `DELETE` request the response will not include a response body, but only a `204 No Content` response code.
 
@@ -849,11 +832,9 @@ const mailjet = Mailjet.smsConnect(process.env.MJ_API_TOKEN, {
 const request = mailjet
         .post('sms-send')
         .request({
-          data: {
-            Text: "Have a nice SMS flight with Mailjet !",
-            To: "+33600000000",
-            From: "MJPilot"
-          }
+          Text: "Have a nice SMS flight with Mailjet !",
+          To: "+33600000000",
+          From: "MJPilot"
         })
 
 request
