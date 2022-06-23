@@ -13,7 +13,7 @@ define(['bindToExample'], bindToExample => {
       const params = example.getFilters();
       window.mailjet
         .get('openinformation')
-        .request({ params })
+        .request({}, params)
         .then(response => {
           console.log('response => ', response);
           example.setText(

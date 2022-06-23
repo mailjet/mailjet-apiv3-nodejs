@@ -22,8 +22,8 @@ function Example(props) {
 
   const execRequest = () => {
     const params = getPagination();
-    console.log('filters => ', params)
-    request({ params })
+    console.log('params => ', params)
+    request({}, params)
       .then(response => {
         console.log('response => ', response)
         setResult(response.body)
@@ -46,14 +46,14 @@ function Example(props) {
           <div className='example-pagination-container'>
             <p>Pagination:</p>
             <form className='example-pagination'>
-              <label htmlFor="limit">Limit:</label>
-              <input {...register('limit', { required: false })} type="number" min="0" placeholder='0' />
+              <label htmlFor="Limit">Limit:</label>
+              <input {...register('Limit', { required: false })} type="number" min="0" placeholder='0' />
 
-              <label htmlFor="offset">Offset:</label>
-              <input {...register('offset', { required: false })} type="number" min='0' placeholder='0' />
+              <label htmlFor="Offset">Offset:</label>
+              <input {...register('Offset', { required: false })} type="number" min='0' placeholder='0' />
 
-              <label htmlFor="sort">Sort:</label>
-              <input {...register('sort', { required: false })} type="text" placeholder='ASC' />
+              <label htmlFor="Sort">Sort:</label>
+              <input {...register('Sort', { required: false })} type="text" placeholder='ASC' />
             </form>
           </div>
           <button className='example-request' onClick={execRequest}>request</button>

@@ -4,27 +4,21 @@ const mailjet = require('node-mailjet')
 exports.contactList = function() {
 	return mailjet
 		.get('contact')
-		.request({
-			params: {
-				Limit: 20
-			}
-		});
+		.request({}, { Limit: 20 });
 }
 
 exports.sendMail = function (mail) {
 	return mailjet
 		.post('send', { version: 'v3.1' })
 		.request({
-			data: {
-				Messages: [{
-					From: {
-						Name: process.env.NAME,
-						Email: process.env.EMAIL
-					},
-					To: mail.Recipients,
-					HTMLPart: mail.HTMLPart,
-					Subject: mail.Subject
-				}]
-			}
+			Messages: [{
+				From: {
+					Name: process.env.NAME,
+					Email: process.env.EMAIL
+				},
+				To: mail.Recipients,
+				HTMLPart: mail.HTMLPart,
+				Subject: mail.Subject
+			}]
 		});
 }

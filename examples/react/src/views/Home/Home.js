@@ -102,7 +102,7 @@ function Home() {
                   <Example
                     {...exampleData}
                     key={exampleData.title}
-                    request={(data) => mailjet.get(exampleData.requestResource).request(data)}
+                    request={(data, params) => mailjet.get(exampleData.requestResource).request(data, params)}
                   />
                 )
               })
