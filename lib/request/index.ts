@@ -12,7 +12,6 @@ import {
   IRequestConfig,
   TRequestData,
   TRequestParams,
-  TRequestMethodOptions,
   TRequestConstructorConfig,
   TRequestAxiosConfig,
   TSubPath,
@@ -243,27 +242,21 @@ class Request {
   }
 
   public async request<TBody extends TRequestData>(
-      options?: {
-        data?: TRequestData;
-        params?: TRequestParams;
-        performAPICall?: true;
-      }
+    data?: TRequestData,
+    params?: TRequestParams,
+    performAPICall?: true,
   ): Promise<IAPIResponse<TBody>>
 
   public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
-      options?: {
-        data?: TBody;
-        params?: TParams;
-        performAPICall?: false;
-      }
+    data?: TBody,
+    params?: TParams,
+    performAPICall?: false,
   ): Promise<IAPILocalResponse<TBody, TParams>>
 
   public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
-    {
-      data = {},
-      params = {},
-      performAPICall = true,
-    }: TRequestMethodOptions<TBody, TParams> = {},
+    data: TRequestData | TBody = {},
+    params: TRequestParams | TParams = {},
+    performAPICall = true,
   ): Promise<IAPIResponse<TBody> | IAPILocalResponse<TBody, TParams>> {
     const url = this.buildFullUrl();
     this.setBaseURL(this.resource);

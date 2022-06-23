@@ -25,18 +25,10 @@ export interface IRequestOptions {
   maxContentLength?: number;
 }
 
+export type TSubPath = 'REST' | 'DATA' | '';
+
 export type TRequestData = string | TObject.TUnknownRec;
 export type TRequestParams = TObject.TUnknownRec;
-
-export type TRequestMethodOptions<
-  TBody extends TRequestData,
-  TParams extends TObject.TUnknownRec,
-> = {
-  data?: TRequestData | TBody;
-  params?: TRequestParams | TParams;
-  performAPICall?: boolean;
-};
-
 export type TRequestConstructorConfig = null | Partial<IRequestConfig>;
 
 export type TRequestAxiosConfig = Required<Pick<
@@ -50,5 +42,3 @@ export type TRequestAxiosConfig = Required<Pick<
     | 'transformResponse'
   >
 > & Pick<AxiosRequestConfig, 'auth' | 'timeout' | 'proxy' | 'maxBodyLength' | 'maxContentLength'>
-
-export type TSubPath = 'REST' | 'DATA' | '';
