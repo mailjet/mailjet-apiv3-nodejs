@@ -12,4 +12,4 @@
  * MIT Licensed
  */
 
-/*! node-mailjet v4.0.1 */
+/*! node-mailjet v5.0.0 */

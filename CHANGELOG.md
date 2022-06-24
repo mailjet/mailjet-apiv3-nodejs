@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v4.0.1...v5.0.0) (2022-06-24)
+
+
+### Bug Fixes
+
+* PreparePackage script ([57730b8](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/57730b8ad1a6de8a0de51c4fae6c31d654ebea34))
+
+
+### Breaking changes
+
+* Replace superagent http client with axios ([54c06d0](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/54c06d05b715e0d3493b03973156603e64f1e3d9))
+
+
+### Added features
+
+* Update "request" method signature in the class Request ([bbed64a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/bbed64aea20b5bf7326d301bedc743bc6d6b14d2))
+
+
+### Tests
+
+* Update integration tests ([39d4cb5](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/39d4cb5544560d77079381f5e1ccba00f9ad4d9e))
+* Update unit and integration tests after change Request.request method ([5362aa5](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/5362aa532601d0f0512f175cb68e7e1dd5c53af9))
+* Update unit tests for Client and Request ([87c456e](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/87c456e27d728396b98d1a5cb8d6fceac719c459))
+
+
+### Docs changes
+
+* Update "sendmail" example ([0393327](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/03933278088ef1cad840e8b2d4a561fda9f5b7f2))
+* Update auto-generated TypeScript docs ([758d080](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/758d0809296e63fcee2d1ec6c79e61debba812c2))
+* Update auto-generated TypeScript docs after change Request.request method ([d0ee581](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/d0ee581fbdc172694feadb208a372785754632db))
+* Update example for browser ([024484b](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/024484bd593ca12814aede3d22a8c1e012e3e385))
+* Update example for NodeJS ([34a449a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/34a449adc1c2adb609d032fe3f83a2a933f545a5))
+* Update example for ReactJS ([bc120ba](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/bc120bac988e2ec2a0c7843500dbf2b43ea00e30))
+* Update examples after change Request.request method ([578a59c](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/578a59c8fb99d9801339939bd79ccabcefa64e4a))
+* Update README ([6eb525d](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/6eb525dfdea6c4af53af7980efc46838efc3d6ad))
+* Update README after change Request.request method ([35df465](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/35df465a9602c8c072ca1fee8db4dc7415921b3f))
+
+
+### Build changes
+
+* Move PreparePackage script to scripts folder ([41b07f1](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/41b07f100dea92c62bb6461ff817a1da679e9639))
+* Update library bundle ([5d40aa7](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/5d40aa74c8046cfd44098fcd304e1fd9303f903e))
+* Update library bundle after change Request.request method ([34e85e0](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/34e85e0a757b34eea71612c1492871ac9a7fd6bb))
+
 ### [4.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v4.0.0...v4.0.1) (2022-06-14)
 
 
