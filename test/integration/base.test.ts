@@ -1,17 +1,20 @@
 /*external modules*/
+import qs from 'qs';
 import { expect } from 'chai';
 /*utils*/
 import { isUndefined } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
-import { IAPIResponse } from '@mailjet/types/api/Response';
-import { IRequestConfig, IRequestOptions } from '../../lib/request/IRequest';
+import { IAPILocalResponse } from '@mailjet/types/api/Response';
+import {
+  IRequestConfig,
+  IRequestOptions,
+  TRequestData,
+  TRequestParams,
+} from '../../lib/request/IRequest';
 /*lib*/
 import Mailjet, { Request } from '../../lib/index';
 /*other*/
-
-type TUnknownRec = TObject.TUnknownRec
-type TResponse = IAPIResponse<TUnknownRec>;
 
 describe('API Basic Usage', () => {
   const API_KEY = process.env.MJ_APIKEY_PUBLIC;
@@ -41,7 +44,11 @@ describe('API Basic Usage', () => {
 
     it('creates an instance of the client with options', () => {
       const options: IRequestOptions = {
-        proxyUrl: 'http://localhost:3128',
+        proxy: {
+          protocol: 'http',
+          host: 'localhost',
+          port: 3128,
+        },
         timeout: 10000,
       };
 
@@ -51,8 +58,11 @@ describe('API Basic Usage', () => {
       ].forEach((connection) => {
         expect(connection).to.have.property('apiKey', API_KEY);
         expect(connection).to.have.property('apiSecret', API_SECRET);
-        expect(connection.getOptions()).to.have.property('proxyUrl', options.proxyUrl);
         expect(connection.getOptions()).to.have.property('timeout', 10000);
+        expect(connection.getOptions())
+          .to.have.property('proxy')
+          .that.eql(options.proxy)
+          .but.is.not.equal(options.proxy);
       });
     });
   });
@@ -68,10 +78,10 @@ describe('API Basic Usage', () => {
 
       it('calls the contact resource instance with no parameters', async () => {
         try {
-          const result = await contact.request() as TResponse;
+          const result = await contact.request();
 
           expect(result.body).to.be.a('object');
-          expect(result.response.statusCode).to.equal(200);
+          expect(result.response.status).to.equal(200);
         } catch (err) {
           // We want it to raise an error if it gets here
           expect(err).to.equal(undefined);
@@ -80,10 +90,14 @@ describe('API Basic Usage', () => {
 
       it('calls the contact resource instance with parameters', async () => {
         try {
-          const result = await contact.request<{ a: string }>({ Name: 'Guillaume Badi' }) as TResponse;
+          const result = await contact.request(
+            {
+              Name: 'Guillaume Badi',
+            },
+          );
 
           expect(result.body).to.be.a('object');
-          expect(result.response.statusCode).to.be.within(200, 201);
+          expect(result.response.status).to.be.within(200, 201);
         } catch (err) {
           // We want it to raise an error if it gets here
           expect(err).to.equal(undefined);
@@ -92,10 +106,10 @@ describe('API Basic Usage', () => {
 
       it('calls the contact resource instance with empty parameters', async () => {
         try {
-          const result = await contact.request({}) as TResponse;
+          const result = await contact.request({});
 
           expect(result.body).to.be.a('object');
-          expect(result.response.statusCode).to.be.within(200, 201);
+          expect(result.response.status).to.be.within(200, 201);
         } catch (err) {
           // We want it to raise an error if it gets here
           expect(err).to.equal(undefined);
@@ -116,9 +130,13 @@ describe('API Basic Usage', () => {
 
       it('calls the sender resource instance with valid parameters', async () => {
         try {
-          const result = await sender.request({ email: 'gbadi@mailjet.com' }) as TResponse;
+          const result = await sender.request(
+            {
+              email: 'gbadi@mailjet.com',
+            },
+          );
 
-          expect(result.response.statusCode).to.equal(201);
+          expect(result.response.status).to.equal(201);
         } catch (err) {
           // if it fails because the sender already exist. should be 400
           expect(err.ErrorMessage).to.equal(INACTIVE_ERROR_MESSAGE);
@@ -136,7 +154,11 @@ describe('API Basic Usage', () => {
 
       it('calls the sender resource instance with invalid parameters', async () => {
         try {
-          await sender.request({ Name: 'Guillaume Badi' });
+          await sender.request(
+            {
+              Name: 'Guillaume Badi',
+            },
+          );
         } catch (err) {
           expect(err.statusCode).to.equal(400);
         }
@@ -165,25 +187,30 @@ describe('API Basic Usage', () => {
     const RECIPIENTS_NAME = [{ email: EMAIL, name: NAME }, { email: EMAIL2, name: NAME }];
     const RECIPIENTS_VARS = [{ email: EMAIL, vars: VAR }];
 
+    type TResult = IAPILocalResponse<string | TObject.TUnknownRec, TObject.TUnknownRec>;
     class Example {
       private fn: Request;
-      private payload?: string | TUnknownRec;
+      private payload?: { data?: TRequestData; params?: TRequestParams; };
 
-      constructor(fn: Request, payload?: string | TUnknownRec) {
+      constructor(fn: Request, payload?: { data?: TRequestData; params?: TRequestParams; }) {
         this.fn = fn;
         this.payload = payload;
       }
 
-      private format(obj: string | TUnknownRec) {
-        return JSON.stringify(obj).match(/\S+/g)?.join('');
+      private buildUrl(result: TResult) {
+        const url = result.url.replace(/\\/g, '/');
+        const params = result.params && Object.keys(result.params).length > 0 ? `?${qs.stringify(result.params)}` : '';
+        const body = JSON.stringify(result.body).match(/\S+/g)?.join('');
+
+        return `${url}${params} ${body}`;
       }
 
       public async call() {
         const result = await this
           .fn
-          .request(this.payload, false);
+          .request(this.payload?.data, this.payload?.params, false);
 
-        return `${result.url.replace(/\\/g, '/')} ${this.format(result.body)}`;
+        return this.buildUrl(result);
       }
     }
 
@@ -221,42 +248,50 @@ describe('API Basic Usage', () => {
           new Example(apiClient.get('contact').id(2)),
           new Example(apiClient.get('contact/2')),
           new Example(apiClient.get('contact').id(3).action('getcontactslist')),
-          new Example(apiClient.get('contact'), { countOnly: 1 }),
-          new Example(apiClient.get('contact'), { limit: 2 }),
-          new Example(apiClient.get('contact'), { offset: 233 }),
-          new Example(apiClient.get('contact'), { contatctList: 34 }),
-          new Example(apiClient.post('contactslist').id(34).action('managecontact'), { email: EMAIL }),
-          new Example(apiClient.post('contactslist').id(34).action('csvdata'), FILE),
-          new Example(apiClient.get('newsletter'), { filters: { CountOnly: 1 } }),
+          new Example(apiClient.get('contact'), { params: { countOnly: 1 } }),
+          new Example(apiClient.get('contact'), { params: { limit: 2 } }),
+          new Example(apiClient.get('contact'), { params: { offset: 233 } }),
+          new Example(apiClient.get('contact'), { params: { contatctList: 34 } }),
+          new Example(apiClient.post('contactslist').id(34).action('managecontact'), { data: { email: EMAIL } }),
+          new Example(apiClient.post('contactslist').id(34).action('csvdata'), { data: FILE }),
+          new Example(apiClient.get('newsletter'), { params: { CountOnly: 1 } }),
           new Example(apiClient.get('batchjob').action('csverror')),
-          new Example(apiClient.post('contact'), { email: EMAIL }),
+          new Example(apiClient.post('contact'), { data: { email: EMAIL } }),
           new Example(apiClient.post('send'), {
-            FromName: NAME,
-            FromEmail: EMAIL,
-            Subject: SUBJECT,
-            'Text-Part': TEXT_PART,
-            Recipients: UNIQUE_RECIPIENT,
+            data: {
+              FromName: NAME,
+              FromEmail: EMAIL,
+              Subject: SUBJECT,
+              'Text-Part': TEXT_PART,
+              Recipients: UNIQUE_RECIPIENT,
+            },
           }),
           new Example(apiClient.post('send'), {
-            FromName: NAME,
-            FromEmail: EMAIL,
-            Subject: SUBJECT,
-            'Text-Part': TEXT_PART,
-            Recipients: SIMPLE_RECIPIENTS,
+            data: {
+              FromName: NAME,
+              FromEmail: EMAIL,
+              Subject: SUBJECT,
+              'Text-Part': TEXT_PART,
+              Recipients: SIMPLE_RECIPIENTS,
+            },
           }),
           new Example(apiClient.post('send'), {
-            FromName: NAME,
-            FromEmail: EMAIL,
-            Subject: SUBJECT,
-            'Text-Part': TEXT_PART,
-            Recipients: RECIPIENTS_NAME,
+            data: {
+              FromName: NAME,
+              FromEmail: EMAIL,
+              Subject: SUBJECT,
+              'Text-Part': TEXT_PART,
+              Recipients: RECIPIENTS_NAME,
+            },
           }),
           new Example(apiClient.post('send'), {
-            FromName: NAME,
-            FromEmail: EMAIL,
-            Subject: SUBJECT,
-            'Text-Part': TEXT_PART,
-            Recipients: RECIPIENTS_VARS,
+            data: {
+              FromName: NAME,
+              FromEmail: EMAIL,
+              Subject: SUBJECT,
+              'Text-Part': TEXT_PART,
+              Recipients: RECIPIENTS_VARS,
+            },
           }),
         ],
       );

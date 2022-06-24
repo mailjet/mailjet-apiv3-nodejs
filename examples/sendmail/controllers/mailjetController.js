@@ -4,7 +4,7 @@ const mailjet = require('node-mailjet')
 exports.contactList = function() {
 	return mailjet
 		.get('contact')
-		.request({ Limit: 20 });
+		.request({}, { Limit: 20 });
 }
 
 exports.sendMail = function (mail) {

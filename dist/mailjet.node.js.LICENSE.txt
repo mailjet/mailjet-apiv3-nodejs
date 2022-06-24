@@ -1,11 +1,4 @@
 /*!
- * methods
- * Copyright(c) 2013-2014 TJ Holowaychuk
- * Copyright(c) 2015-2016 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
  * Copyright(c) 2015-2022 Douglas Christopher Wilson
@@ -19,4 +12,4 @@
  * MIT Licensed
  */
 
-/*! node-mailjet v4.0.0 */
+/*! node-mailjet v4.0.1 */

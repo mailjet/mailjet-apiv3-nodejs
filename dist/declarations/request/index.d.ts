@@ -1,10 +1,9 @@
 import { TObject } from "../types";
 import { IAPILocalResponse, IAPIResponse } from "../types/api/Response";
 import HttpMethods from './HttpMethods';
-import { IRequestConfig, TRequestData } from './IRequest';
+import { TRequestData, TRequestParams, TRequestConstructorConfig } from './IRequest';
 import Client from '../client';
 declare type TUnknownRec = TObject.TUnknownRec;
-export declare type TRequestConstructorConfig = null | Partial<IRequestConfig>;
 declare class Request {
     private readonly client;
     private readonly method;
@@ -13,7 +12,7 @@ declare class Request {
     private url;
     private subPath;
     private actionPath;
-    constructor(client: Client, method: HttpMethods, resource: string, config?: null | Partial<IRequestConfig>);
+    constructor(client: Client, method: HttpMethods, resource: string, config?: TRequestConstructorConfig);
     getUserAgent(): string;
     getCredentials(): {
         apiToken: string | undefined;
@@ -21,15 +20,17 @@ declare class Request {
         apiSecret: string | undefined;
     };
     private getContentType;
-    private getParams;
-    private getRequest;
-    private buildPath;
+    private getRequestBody;
+    private buildFullUrl;
     private buildSubPath;
-    private parseToJSONb;
+    private makeRequest;
+    private setBaseURL;
     id(value: string | number): this;
     action(name: string): this;
-    request<TBody extends TUnknownRec>(data?: TRequestData, performAPICall?: true): Promise<IAPIResponse<TBody>>;
-    request<TBody extends TRequestData>(data?: TBody, performAPICall?: false): Promise<IAPILocalResponse<TBody>>;
+    request<TBody extends TRequestData>(data?: TRequestData, params?: TRequestParams, performAPICall?: true): Promise<IAPIResponse<TBody>>;
+    request<TBody extends TRequestData, TParams extends TUnknownRec>(data?: TBody, params?: TParams, performAPICall?: false): Promise<IAPILocalResponse<TBody, TParams>>;
     static protocol: "https://";
+    static parseToJSONb(text: string): any;
+    static isBrowser(): boolean;
 }
 export default Request;

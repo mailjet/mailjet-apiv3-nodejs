@@ -1,4 +1,10 @@
 /*external modules*/
+import {
+  AxiosProxyConfig,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  ResponseType,
+} from 'axios';
 /*types*/
 import { TObject } from '@custom/types';
 /*utils*/
@@ -8,18 +14,31 @@ import { TObject } from '@custom/types';
 export interface IRequestConfig {
   host: string;
   version: string;
-  output: string;
+  output: ResponseType;
 }
 
 export interface IRequestOptions {
-  requestHeaders?: TObject.TUnknownRec;
   timeout?: number;
-  proxyUrl?: string;
+  proxy?: AxiosProxyConfig;
+  headers?: AxiosRequestHeaders;
+  maxBodyLength?: number;
+  maxContentLength?: number;
 }
 
-export interface IRequestData {
-  filters?: TObject.TUnknownRec
-  [key: string]: unknown;
-}
+export type TSubPath = 'REST' | 'DATA' | '';
 
-export type TRequestData = string | IRequestData;
+export type TRequestData = string | TObject.TUnknownRec;
+export type TRequestParams = TObject.TUnknownRec;
+export type TRequestConstructorConfig = null | Partial<IRequestConfig>;
+
+export type TRequestAxiosConfig = Required<Pick<
+    AxiosRequestConfig,
+    | 'url'
+    | 'data'
+    | 'params'
+    | 'method'
+    | 'headers'
+    | 'responseType'
+    | 'transformResponse'
+  >
+> & Pick<AxiosRequestConfig, 'auth' | 'timeout' | 'proxy' | 'maxBodyLength' | 'maxContentLength'>

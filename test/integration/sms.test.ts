@@ -64,7 +64,13 @@ describe('SMS Basic Usage', () => {
 
         try {
           const response = await countRequest
-            .request({ FromTS: +new Date(), ToTS: +new Date() });
+            .request<{ count: number }>(
+              {},
+              {
+                FromTS: +new Date(),
+                ToTS: +new Date(),
+              },
+            );
 
           expect(response.body).to.be.a('object');
           expect(response.body.count).to.equal(0);
@@ -76,7 +82,13 @@ describe('SMS Basic Usage', () => {
       it('retirieve list of messages', async () => {
         try {
           const response = await smsGet
-            .request<{ Data: unknown[] }>({ FromTS: +new Date(), ToTS: +new Date() });
+            .request<{ Data: unknown[] }>(
+              {},
+              {
+                FromTS: +new Date(),
+                ToTS: +new Date(),
+              },
+            );
 
           expect(response.body).to.be.a('object');
           expect(response.body.Data.length).to.equal(0);
@@ -94,10 +106,13 @@ describe('SMS Basic Usage', () => {
           const response = await client
             .post('sms')
             .action('export')
-            .request({
-              FromTS: 1033552800,
-              ToTS: 1033574400,
-            });
+            .request(
+              {},
+              {
+                FromTS: 1033552800,
+                ToTS: 1033574400,
+              },
+            );
 
           expect(response.body).to.be.a('object');
         } catch (err) {

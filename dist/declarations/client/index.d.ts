@@ -1,6 +1,6 @@
 import { IClientParams } from './IClient';
-import { IRequestConfig } from '../request/IRequest';
-import Request, { TRequestConstructorConfig } from '../request';
+import { IRequestConfig, TRequestConstructorConfig } from '../request/IRequest';
+import Request from '../request';
 export declare type TClientConnectParams = Pick<IClientParams, 'config' | 'options'>;
 declare class Client {
     private version;
@@ -17,12 +17,14 @@ declare class Client {
     getConfig(): {
         host: string;
         version: string;
-        output: string;
+        output: import("axios").ResponseType;
     };
     getOptions(): {
-        requestHeaders?: import("../types").TObject.TUnknownRec | undefined;
         timeout?: number | undefined;
-        proxyUrl?: string | undefined;
+        proxy?: import("axios").AxiosProxyConfig | undefined;
+        headers?: import("axios").AxiosRequestHeaders | undefined;
+        maxBodyLength?: number | undefined;
+        maxContentLength?: number | undefined;
     };
     get(resource: string, config?: TRequestConstructorConfig): Request;
     post(resource: string, config?: TRequestConstructorConfig): Request;
@@ -94,12 +96,12 @@ declare class Client {
             docs: string;
         };
         readonly dependencies: {
-            "json-bigint": string;
-            qs: string;
-            superagent: string;
+            axios: string;
             "url-join": string;
+            "json-bigint": string;
         };
         readonly devDependencies: {
+            qs: string;
             "@babel/core": string;
             "@babel/preset-env": string;
             "@commitlint/cli": string;

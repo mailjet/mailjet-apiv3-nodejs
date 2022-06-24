@@ -1,10 +1,10 @@
-import { Response } from 'superagent';
-import { TObject } from "..";
-export interface IAPIResponse<TBody extends TObject.TUnknownRec> {
-    response: Response;
+import { AxiosResponse } from 'axios';
+export interface IAPIResponse<TBody> {
+    response: AxiosResponse<TBody>;
     body: TBody;
 }
-export interface IAPILocalResponse<TData> {
+export interface IAPILocalResponse<TData, TParams> {
     body: TData;
+    params: TParams;
     url: string;
 }

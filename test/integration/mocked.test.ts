@@ -46,17 +46,20 @@ describe('Mocked API calls', () => {
           .reply(200, {});
 
         try {
-          const result = await contact.request({});
+          const result = await contact.request();
 
           // We want it to raise an error if it gets here
           expect(result).to.equal(undefined);
         } catch (err) {
-          expect(err.ErrorMessage).to.equal('Response timeout of 10ms exceeded');
           expect(err.code).to.equal('ECONNABORTED');
-          expect(err.errno).to.equal('ETIMEDOUT');
-          expect(err.timeout).to.equal(REQUEST_TIMEOUT);
-          expect(err.statusCode).to.equal(null);
+          expect(err.config).to.be.a('object');
+
+          expect(err.originalMessage).to.equal(`timeout of ${REQUEST_TIMEOUT}ms exceeded`);
+          expect(err.message).to.equal(`Unsuccessful: Error Code: "${err.code}" Message: "${err.originalMessage}"`);
+
           expect(err.response).to.equal(null);
+          expect(err.statusCode).to.equal(null);
+          expect(err.statusText).to.equal(null);
         } finally {
           nock.cleanAll();
         }

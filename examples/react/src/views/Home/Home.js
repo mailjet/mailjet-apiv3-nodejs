@@ -7,6 +7,17 @@ import Example from '../../components/Example/Example';
 /*styles*/
 import './Home.css';
 
+// // TODO: hack for the proxy
+// const proxyUrl = 'http://localhost:3100'
+// const originalBuildFullUrl = Mailjet.Request.prototype.buildFullUrl;
+// Mailjet.Request.prototype.buildFullUrl = function () {
+//   const url = originalBuildFullUrl.call(this);
+//   return url.replace(
+//       `${Mailjet.Request.protocol}${Mailjet.config.host}`,
+//       proxyUrl
+//   )
+// }
+
 const examples = [
   {
     title: '1. Get detailed information on all processed messages',
@@ -91,7 +102,7 @@ function Home() {
                   <Example
                     {...exampleData}
                     key={exampleData.title}
-                    request={(data) => mailjet.get(exampleData.requestResource).request(data)}
+                    request={(data, params) => mailjet.get(exampleData.requestResource).request(data, params)}
                   />
                 )
               })

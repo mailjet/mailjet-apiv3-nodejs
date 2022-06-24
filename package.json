@@ -42,7 +42,7 @@
     "build": "npm run build:release && npm run build:prepublish",
     "build:dev": "webpack --config ./webpack/webpack.dev.config.js --progress --color",
     "build:release": "webpack --config ./webpack/webpack.release.config.js --progress --color",
-    "build:prepublish": "node ./PreparePackage.js",
+    "build:prepublish": "node ./scripts/PreparePackage.js",
     "build:watch": "webpack --watch --config ./webpack/webpack.dev.config.js --progress --color",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -64,12 +64,12 @@
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "json-bigint": "^1.0.0",
-    "qs": "^6.5.0",
-    "superagent": "^7.1.1",
-    "url-join": "^4.0.0"
+    "axios": "^0.27.2",
+    "url-join": "^4.0.0",
+    "json-bigint": "^1.0.0"
   },
   "devDependencies": {
+    "qs": "^6.5.0",
     "@babel/core": "^7.18.0",
     "@babel/preset-env": "^7.18.0",
     "@commitlint/cli": "^17.0.2",

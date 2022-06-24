@@ -4,7 +4,8 @@
 This app provides basic simple `ReactJS` application.
 
 > **NOTE:**
-> For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+> - For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.
+> - In the `src/views/Home/Home.js` you can find commented snippet for using the proxy.
 
 ## 2. Start using 
 

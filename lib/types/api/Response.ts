@@ -1,17 +1,17 @@
 /*external modules*/
-import { Response } from 'superagent';
+import { AxiosResponse } from 'axios';
 /*types*/
-import { TObject } from '@custom/types';
 /*utils*/
 /*lib*/
 /*other*/
 
-export interface IAPIResponse<TBody extends TObject.TUnknownRec> {
-  response: Response,
+export interface IAPIResponse<TBody> {
+  response: AxiosResponse<TBody>,
   body: TBody;
 }
 
-export interface IAPILocalResponse<TData> {
+export interface IAPILocalResponse<TData, TParams> {
   body: TData;
+  params: TParams;
   url: string;
 }
