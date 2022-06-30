@@ -17,7 +17,6 @@ function changePackageData(packageData) {
   delete packageData.scripts;
   delete packageData.directories;
   delete packageData.devDependencies;
-  delete packageData['standard-version'];
 
   packageData.private = false;
   packageData.files = ['*'];
