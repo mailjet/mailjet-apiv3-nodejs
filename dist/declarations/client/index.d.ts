@@ -150,24 +150,6 @@ declare class Client {
             url: string;
         };
         readonly contributors: string[];
-        readonly "standard-version": {
-            commitUrlFormat: string;
-            compareUrlFormat: string;
-            types: ({
-                type: string;
-                section: string;
-                hidden?: undefined;
-            } | {
-                type: string;
-                hidden: boolean;
-                section?: undefined;
-            })[];
-            scripts: {
-                prerelease: string;
-                postchangelog: string;
-                posttag: string;
-            };
-        };
     }>;
 }
 export default Client;

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.0.0...v5.0.1) (2022-06-30)
+
+
+### Build changes
+
+* Add standard-version updater for README ([e615ff7](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/e615ff7cf7a07f224a4f542422b1c3bbd20179f7))
+* Add VersionBump script ([f2ed676](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/f2ed676134cd1dcf091fe766b7c76b2c12e625a4))
+* Move standard-version config from package.json to .versionrc.js ([122e4a5](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/122e4a5c7975773e891591cf4f3431a0e7cd77e1))
+
 ## [5.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v4.0.1...v5.0.0) (2022-06-24)
 
 
