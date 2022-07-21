@@ -6,7 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { setValueIfNotNil } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
-import { IAPILocalResponse, IAPIResponse } from '@mailjet/types/api/Response';
+import { ILibraryResponse, ILibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
 import HttpMethods from './HttpMethods';
 import {
   IRequestConfig,
@@ -245,19 +245,19 @@ class Request {
     data?: TRequestData,
     params?: TRequestParams,
     performAPICall?: true,
-  ): Promise<IAPIResponse<TBody>>
+  ): Promise<ILibraryResponse<TBody>>
 
   public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
     data?: TBody,
     params?: TParams,
     performAPICall?: false,
-  ): Promise<IAPILocalResponse<TBody, TParams>>
+  ): Promise<ILibraryLocalResponse<TBody, TParams>>
 
   public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
     data: TRequestData | TBody = {},
     params: TRequestParams | TParams = {},
     performAPICall = true,
-  ): Promise<IAPIResponse<TBody> | IAPILocalResponse<TBody, TParams>> {
+  ): Promise<ILibraryResponse<TBody> | ILibraryLocalResponse<TBody, TParams>> {
     const url = this.buildFullUrl();
     this.setBaseURL(this.resource);
 
@@ -268,7 +268,7 @@ class Request {
         body,
         params,
         url,
-      } as IAPILocalResponse<TBody, TParams>;
+      } as ILibraryLocalResponse<TBody, TParams>;
     }
 
     try {
