@@ -20,7 +20,7 @@
       }
     }
   },
-  "ignorePatterns": ["dist/**", "docs/**", "examples/**"],
+  "ignorePatterns": ["dist/**", "docs/**", "examples/**", "webpack/**"],
   "rules": {
     "tsdoc/syntax": "warn",
     "indent": ["error", 2, { "SwitchCase": 1 }],
@@ -33,7 +33,10 @@
     "class-methods-use-this": "off",
     "dot-notation": "off",
     "no-param-reassign": ["error", { "props": false }],
-    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "camelcase": ["error", {
+      "allow": ["SendEmailV3_1"]
+    }]
   },
   "overrides": [
     {
@@ -45,7 +48,6 @@
       "parser": "@typescript-eslint/parser",
       "rules": {
         "import/extensions": 0,
-        "@typescript-eslint/no-shadow": ["error"],
         "@typescript-eslint/ban-types": [
           "error",
           {
@@ -54,7 +56,10 @@
               "{}": false
             }
           }
-        ]
+        ],
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-shadow": "off",
+        "@typescript-eslint/no-empty-interface": "off"
       },
       "plugins": [
         "eslint-plugin-tsdoc",
