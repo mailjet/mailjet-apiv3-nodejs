@@ -1,5 +1,5 @@
 import { TObject } from "../types";
-import { IAPILocalResponse, IAPIResponse } from "../types/api/Response";
+import { ILibraryResponse, ILibraryLocalResponse } from "../types/api/LibraryResponse";
 import HttpMethods from './HttpMethods';
 import { TRequestData, TRequestParams, TRequestConstructorConfig } from './IRequest';
 import Client from '../client';
@@ -27,8 +27,8 @@ declare class Request {
     private setBaseURL;
     id(value: string | number): this;
     action(name: string): this;
-    request<TBody extends TRequestData>(data?: TRequestData, params?: TRequestParams, performAPICall?: true): Promise<IAPIResponse<TBody>>;
-    request<TBody extends TRequestData, TParams extends TUnknownRec>(data?: TBody, params?: TParams, performAPICall?: false): Promise<IAPILocalResponse<TBody, TParams>>;
+    request<TBody extends TRequestData>(data?: TRequestData, params?: TRequestParams, performAPICall?: true): Promise<ILibraryResponse<TBody>>;
+    request<TBody extends TRequestData, TParams extends TUnknownRec>(data?: TBody, params?: TParams, performAPICall?: false): Promise<ILibraryLocalResponse<TBody, TParams>>;
     static protocol: "https://";
     static parseToJSONb(text: string): any;
     static isBrowser(): boolean;

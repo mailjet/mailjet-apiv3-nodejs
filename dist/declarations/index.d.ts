@@ -5,5 +5,6 @@ declare class Mailjet extends Client {
     static Request: typeof Request;
     static HttpMethods: typeof HttpMethods;
 }
+export * from './types/api';
 export { Client, Request, HttpMethods };
 export default Mailjet;

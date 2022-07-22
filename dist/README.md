@@ -10,7 +10,7 @@
 # Mailjet JS
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-5.0.1-green.svg)
+![Current Version](https://img.shields.io/badge/version-5.1.0-green.svg)
 
 ## Overview
 
@@ -46,6 +46,8 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
       - [Response output](#response-output)
     - [Disable API call](#disable-api-call)
   - [TypeScript](#typescript)
+    - [Send Email example](#send-email-example)
+    - [Get Contact example](#get-contact-example)
     - [Our external Typings](#our-external-typings)
   - [Browser Demo](#browser-demo)
   - [App examples](#app-examples)
@@ -459,31 +461,62 @@ const request = mailjet
 
 ## TypeScript
 
-At the moment library based on `TypeScript` and provide **generic** method `Request.request<TResult>(options)`:
+Current library based on `TypeScript` and provide **full cover** for **Mailjet types**. \
+All **types** can be exported from main entrypoint `'node-mailjet'`:
 ```typescript
-import Mailjet from 'node-mailjet'
+import { 
+  Contact,
+  SendEmailV3, 
+  SendEmailV3_1,
+  Message,
+  Segmentation,
+  Template,
+  SendMessage,
+  Webhook
+} from 'node-mailjet';
+```
+
+As well library has a **generic** method `Request.request<TResult>(data, params, performAPICall)` that could use with these **types**.
+
+### Send Email example
+
+```typescript
+import Mailjet, { SendEmailV3_1 } from 'node-mailjet'
+
 const mailjet = new Mailjet({
     apiKey: process.env.MJ_APIKEY_PUBLIC,
     apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
 
-interface IContact {
-    IsExcludedFromCampaigns: boolean;
-    Name: string;
-    CreatedAt: string;
-    DeliveredCount: number;
-    Email: string;
-}
+(async () => {
+  const data: SendEmailV3_1.IBody = {
+    Messages: [
+      {
+        From: {
+          Email: 'pilot@test.com',
+        },
+        To: [
+          {
+            Email: 'passenger@test.com',
+          },
+        ],
+        TemplateErrorReporting: {
+          Email: 'reporter@test.com',
+          Name: 'Reporter',
+        },
+        Subject: 'Your email flight plan!',
+        HTMLPart: '<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+        TextPart: 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
+      },
+    ],
+  };
 
-type TResponse<TEntity> = {
-    Count: number;
-    Total: number;
-    Data: Array<TEntity>
-}
+  const result = await mailjet
+    .post('send', { version: 'v3.1' })
+    .request<SendEmailV3_1.IResponse>(data);
 
-const request = mailjet
-	.get('contact')
-	.request<TResponse<IContact>>()
+  const { Status } = result.body.Messages[0];
+})();
 ```
 
 And `response` will have this shape:
@@ -491,25 +524,62 @@ And `response` will have this shape:
 {
     response: Response;
     body: {
-        Count: number;
-        Total: number;
-        Data: Array<{
-            IsExcludedFromCampaigns: boolean;
-            Name: string;
-            CreatedAt: string;
-            DeliveredCount: number;
-            Email: string;
-        }>;
+      Messages: Array<{
+        Status: string;
+        Errors: Array<Record<string, string>>;
+        CustomID: string;
+        ...
+      }>;
     }
 }
 ```
 
-> At the moment library provide a types for Mailjet API only for _library level_.\
-> But we work to cover all Mailjet types.
+### Get Contact Example
+
+```typescript
+import Mailjet, { Contact } from 'node-mailjet'
+
+const mailjet = new Mailjet({
+    apiKey: process.env.MJ_APIKEY_PUBLIC,
+    apiSecret: process.env.MJ_APIKEY_PRIVATE
+});
+
+(async () => {
+  const queryData: Contact.IGetContactQueryParams = {
+    IsExcludedFromCampaigns: false,
+    Campaign: 2234234,
+  };
+
+  const result = await mailjet
+    .get('contact', { version: 'v3' })
+    .request<Contact.TGetContactResponse>({}, queryData);
+
+  const ContactID = result.body.Data[0].ID;
+})();
+```
+
+And `response` will have this shape:
+```typescript
+{
+    response: Response;
+    body: {
+      Count: number;
+      Total: number;
+      Data: Array<{
+        IsExcludedFromCampaigns: boolean;
+        Name: string;
+        CreatedAt: string;
+        DeliveredCount: number;
+        Email: string;
+        ...
+      }>;
+    }
+}
+```
 
 ### Our external Typings
 
-For new or for earlier versions of library you can use `@types/node-mailjet` dependency.
+For earlier versions _(`3.*.*` and low)_ of library you can use `@types/node-mailjet` dependency.
 
 The `types` are published in `npm` and ready for use. \
 [Here](https://www.npmjs.com/package/@types/node-mailjet) is the `npm` page.

@@ -1,1 +1,1 @@
-/*! node-mailjet v5.0.1 */
+/*! node-mailjet v5.1.0 */

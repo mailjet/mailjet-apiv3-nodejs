@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.0.1...v5.1.0) (2022-07-22)
+
+
+### Added features
+
+* Add full TypeScript cover for Mailjet types ([784c4cd](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/784c4cd79c5531aaeacbdde5547e2793b57d1427))
+
+
+### Other changes
+
+* Change global and TypeScript rules ([fa4fb60](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/fa4fb606f4e380886734468ac18c2c90e05ebd17))
+
+
+### Docs changes
+
+* Update TypeScript documentation part; Add example of using Mailjet types ([15f2d11](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/15f2d11dae63fe54fdb350864b99129fcc26afb0))
+
+
+### Dependency changes for security
+
+* Change webpack dependency terser package 5.0.0 - 5.14.1 ([959018a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/959018a77ff36a70769f36e22f57bdc89cba2157))
+
 ### [5.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.0.0...v5.0.1) (2022-06-30)
 
 
