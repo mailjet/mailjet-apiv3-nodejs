@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { isUndefined } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
-import { IAPILocalResponse } from '@mailjet/types/api/Response';
+import { ILibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
 import {
   IRequestConfig,
   IRequestOptions,
@@ -187,7 +187,7 @@ describe('API Basic Usage', () => {
     const RECIPIENTS_NAME = [{ email: EMAIL, name: NAME }, { email: EMAIL2, name: NAME }];
     const RECIPIENTS_VARS = [{ email: EMAIL, vars: VAR }];
 
-    type TResult = IAPILocalResponse<string | TObject.TUnknownRec, TObject.TUnknownRec>;
+    type TResult = ILibraryLocalResponse<string | TObject.TUnknownRec, TObject.TUnknownRec>;
     class Example {
       private fn: Request;
       private payload?: { data?: TRequestData; params?: TRequestParams; };

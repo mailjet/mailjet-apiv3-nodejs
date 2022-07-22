@@ -5,12 +5,12 @@ import { AxiosResponse } from 'axios';
 /*lib*/
 /*other*/
 
-export interface IAPIResponse<TBody> {
+export interface ILibraryResponse<TBody> {
   response: AxiosResponse<TBody>,
   body: TBody;
 }
 
-export interface IAPILocalResponse<TData, TParams> {
+export interface ILibraryLocalResponse<TData, TParams> {
   body: TData;
   params: TParams;
   url: string;
