@@ -10,7 +10,7 @@
 # Mailjet JS
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-5.1.0-green.svg)
+![Current Version](https://img.shields.io/badge/version-5.1.1-green.svg)
 
 ## Overview
 
@@ -616,6 +616,7 @@ List of basic applications that was built in different environments:
 2. [Node](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/node) - Basic app that contain simple scripts with some requests
 3. [Sendmail](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/sendmail) - `ExpressJS` based app that allows to retrieve list of **contacts** and send email to some person
 4. [ReactJS](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/react) - `ReactJS` based app that provides page where you can make some requests
+5. [Firebase](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/firebase) - `Firebase` based app that provides `Firebase Functions` for sending _hello world email_ and sending _email_ based on dynamic query string data
 
 > **NOTE:**
 > For `browser` side examples at the moment a **proxy is required** to communicate with the Mailjet API due to **CORS** limitations.

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.1.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.1.0...v5.1.1) (2022-07-27)
+
+
+### Other changes
+
+* Add application example with using Firebase Functions and Mailjet lib ([690ff1e](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/690ff1e0a609c0e31b13f3b79c5b0ddaf0a934ad))
+
+
+### Docs changes
+
+* Add mention about Firebase application example to README ([0154a0a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/0154a0ae0de63a3d4ebdd5e1c3a38be0408c6cb9))
+
 ## [5.1.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.0.1...v5.1.0) (2022-07-22)
 
 
