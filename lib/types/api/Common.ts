@@ -14,7 +14,7 @@ export namespace Common {
     ToTS: string | number;
   }
 
-  export interface IResponse<TEntity> {
+  export type TResponse<TEntity> = {
     Count: number;
     Total: number;
     Data: TEntity;

@@ -172,7 +172,7 @@ export namespace Statistic {
   }
 
   // REQUEST PART
-  export interface IGetCampaignOverViewQueryParams extends Partial<Common.IPagination> {
+  export type GetCampaignOverViewQueryParams = Partial<Common.IPagination> & {
     All?: boolean;
     Archived?: boolean;
     Drafts?: boolean;
@@ -184,7 +184,7 @@ export namespace Statistic {
     Subject?: string;
   }
 
-  export interface IGetContactStatisticsQueryParams extends Partial<Common.IPagination> {
+  export type GetContactStatisticsQueryParams = Partial<Common.IPagination> & {
     Blocked?: boolean;
     Bounced?: boolean;
     Click?: boolean;
@@ -201,9 +201,8 @@ export namespace Statistic {
     Unsubscribed?: boolean;
   }
 
-  export interface IGetGEOStatisticsQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetGEOStatisticsQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -219,7 +218,7 @@ export namespace Statistic {
     Period?: Common.Period;
   }
 
-  export interface IGetListRecipientStatisticsQueryParams extends Partial<Common.IPagination> {
+  export type GetListRecipientStatisticsQueryParams = Partial<Common.IPagination> & {
     Blocked?: boolean;
     Bounced?: boolean;
     Click?: boolean;
@@ -241,9 +240,8 @@ export namespace Statistic {
     Unsubscribed?: boolean;
   }
 
-  export interface IGetStatCountersQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetStatCountersQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     CounterSource: CounterSource;
     CounterResolution: CounterResolution;
@@ -251,19 +249,17 @@ export namespace Statistic {
     SourceID?: number;
   }
 
-  export interface IGetLinkClickStatisticsQueryParams extends Partial<Common.IPagination> {
+  export type GetLinkClickStatisticsQueryParams = Partial<Common.IPagination> & {
     CampaignID: number;
   }
 
-  export interface IGetRecipientESPStatisticsQueryParams extends
-    IGetLinkClickStatisticsQueryParams
+  export type GetRecipientESPStatisticsQueryParams = GetLinkClickStatisticsQueryParams &
   {
     ESP_Name?: number;
   }
 
-  export interface IGetTopLinkClickedQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetTopLinkClickedQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     ActualClicks?: boolean;
     CampaignID?: number;
@@ -281,9 +277,8 @@ export namespace Statistic {
     Period?: Common.Period;
   }
 
-  export interface IGetUserAgentStatisticsQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetUserAgentStatisticsQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -302,22 +297,22 @@ export namespace Statistic {
   }
 
   // RESPONSE PART
-  export type TGetCampaignOverViewResponse = Common.IResponse<ICampaignOverView[]>;
+  export type GetCampaignOverViewResponse = Common.TResponse<ICampaignOverView[]>;
 
-  export type TGetContactStatisticsResponse = Common.IResponse<IContactStatistic[]>;
+  export type GetContactStatisticsResponse = Common.TResponse<IContactStatistic[]>;
 
-  export type TGetGEOStatisticsResponse = Common.IResponse<IGEOStatistic[]>;
+  export type GetGEOStatisticsResponse = Common.TResponse<IGEOStatistic[]>;
 
-  export type TGetListRecipientStatisticsResponse<TData = Array<unknown>> =
-    Common.IResponse<Array<IListRecipientStatistic<TData>>>;
+  export type GetListRecipientStatisticsResponse<TData = Array<unknown>> =
+    Common.TResponse<Array<IListRecipientStatistic<TData>>>;
 
-  export type TGetStatCountersResponse = Common.IResponse<IStatCounter[]>;
+  export type GetStatCountersResponse = Common.TResponse<IStatCounter[]>;
 
-  export type TGetLinkClickStatisticsResponse = Common.IResponse<ILinkClickStatistic[]>;
+  export type GetLinkClickStatisticsResponse = Common.TResponse<ILinkClickStatistic[]>;
 
-  export type TGetRecipientESPStatisticsResponse = Common.IResponse<IRecipientESPStatistic[]>;
+  export type GetRecipientESPStatisticsResponse = Common.TResponse<IRecipientESPStatistic[]>;
 
-  export type TGetTopLinkClickedResponse = Common.IResponse<ITopLinkClicked[]>;
+  export type GetTopLinkClickedResponse = Common.TResponse<ITopLinkClicked[]>;
 
-  export type TGetUserAgentStatisticsResponse = Common.IResponse<IUserAgentStatistic[]>;
+  export type GetUserAgentStatisticsResponse = Common.TResponse<IUserAgentStatistic[]>;
 }

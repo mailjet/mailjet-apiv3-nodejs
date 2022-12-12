@@ -10,7 +10,15 @@ export namespace SendMessage {
     Description: string;
   }
 
-  export interface ISMS {
+  // REQUEST PART
+  export type Body = {
+    From: string;
+    To: string;
+    Text: string;
+  }
+
+  // RESPONSE PART
+  export type Response = {
     From: string;
     To: string;
     Text: string;
@@ -20,15 +28,5 @@ export namespace SendMessage {
     SentTS: number;
     Cost: ICost;
     Status: ISendStatus;
-  }
-
-  // REQUEST PART
-  export interface IBody {
-    From: string;
-    To: string;
-    Text: string;
-  }
-
-  // RESPONSE PART
-  export type TResponse = ISMS;
+  };
 }

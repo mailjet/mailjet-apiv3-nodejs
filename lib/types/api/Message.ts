@@ -126,9 +126,8 @@ export namespace Message {
   }
 
   // REQUEST PART
-  export interface IGetMessageQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetMessageQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     Campaign?: number;
     Contact?: number;
@@ -144,9 +143,8 @@ export namespace Message {
     ShowSubject?: boolean;
   }
 
-  export interface IGetMessageInformationQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Common.IPagination>
+  export type GetMessageInformationQueryParams = Partial<Common.ITimestampPeriod> &
+    Partial<Common.IPagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -163,9 +161,8 @@ export namespace Message {
   }
 
   // RESPONSE PART
-  export type TGetMessagesResponse = Common.IResponse<IMessage[]>
-  export type TGetMessageHistoryResponse = Common.IResponse<IMessageHistory[]>
-  export type TGetMessageInformationResponse<TRules = Common.TUnknownRec> = Common.IResponse<
-    Array<IMessageInformation<TRules>>
-    >
+  export type GetMessagesResponse = Common.TResponse<IMessage[]>
+  export type GetMessageHistoryResponse = Common.TResponse<IMessageHistory[]>
+  export type GetMessageInformationResponse<TRules = Common.TUnknownRec> =
+      Common.TResponse<Array<IMessageInformation<TRules>>>
 }

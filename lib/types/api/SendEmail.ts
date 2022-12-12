@@ -17,7 +17,7 @@ export namespace SendEmailV3 {
     'Content-type': string;
   }
 
-  export interface IBodyMj {
+  export type BodyMj = {
     'Mj-TemplateID'?: number;
     'Mj-TemplateLanguage'?: boolean;
     'Mj-TemplateErrorReporting'?: string;
@@ -31,10 +31,10 @@ export namespace SendEmailV3 {
   }
 
   // REQUEST PART
-  export interface IBody<
+  export type Body<
     THeaders = Common.TUnknownRec,
     TVars = Common.TUnknownRec
-    > extends IBodyMj {
+    > = BodyMj & {
     FromEmail?: string;
     FromName?: string;
     Recipients?: IRecipient[];
@@ -58,7 +58,7 @@ export namespace SendEmailV3 {
     MessageUUID: string;
   }
 
-  export interface IResponse {
+  export type Response = {
     Sent: IResponseSent[];
   }
 }
@@ -140,11 +140,11 @@ export namespace SendEmailV3_1 {
   }
 
   // REQUEST PART
-  export interface IBody<
+  export type Body<
     THeaders = Common.TUnknownRec,
     TVariables = Common.TUnknownRec,
     TGlobals = Common.TUnknownRec,
-    > {
+    > = {
     Messages: Array<IMessage<THeaders, TVariables>>;
     SandboxMode?: boolean;
     AdvanceErrorHandling?: boolean;
@@ -161,7 +161,7 @@ export namespace SendEmailV3_1 {
     Bcc: IResponseEmailAddressTo[];
   }
 
-  export interface IResponse {
+  export type Response = {
     Messages: IResponseMessage[];
   }
 }

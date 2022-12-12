@@ -23,15 +23,15 @@ export namespace APIKeyConfiguration {
   }
 
   // REQUEST PART
-  export interface IPostApiKeyBody {
+  export type PostApiKeyBody = {
     Name: string;
     ACL?: string;
     IsActive?: boolean;
   }
 
-  export interface IPutApiKeyBody extends Partial<IPostApiKeyBody> {}
+  export type PutApiKeyBody = Partial<PostApiKeyBody>
 
-  export interface IGetApiKeyQueryParams extends Partial<Common.IPagination> {
+  export type GetApiKeyQueryParams = Partial<Common.IPagination> & {
     APIKey?: string;
     IsActive?: boolean;
     IsMaster?: boolean;
@@ -39,11 +39,11 @@ export namespace APIKeyConfiguration {
   }
 
   // RESPONSE PART
-  type TApiKeyResponse = Common.IResponse<IApiKey[]>;
+  type ApiKeyResponse = Common.TResponse<IApiKey[]>;
 
-  export type TPostApiKeyResponse = TApiKeyResponse
-  export type TPutApiKeyResponse = TApiKeyResponse
-  export type TGetApiKeyResponse = TApiKeyResponse
+  export type PostApiKeyResponse = ApiKeyResponse
+  export type PutApiKeyResponse = ApiKeyResponse
+  export type GetApiKeyResponse =ApiKeyResponse
 }
 
 export namespace AccountSetting {
@@ -87,21 +87,18 @@ export namespace AccountSetting {
   }
 
   // REQUEST PART
-  export interface IPutMyProfileBody extends
-    Partial<Omit<IMyProfile, 'ID' | 'VAT' | 'UserID'>>
-  {}
+  export type PutMyProfileBody = Partial<Omit<IMyProfile, 'ID' | 'VAT' | 'UserID'>>
 
-  export interface IPutUserBody extends
+  export type PutUserBody =
     Partial<Omit<IUser, 'ID' | 'CreatedAt' | 'FirstIp' | 'MaxAllowedAPIKeys' | 'WarnedRatelimitAt'>>
-  {}
 
   // RESPONSE PART
-  type TMyProfileResponse = Common.IResponse<IMyProfile[]>;
-  type TUserResponse = Common.IResponse<IUser[]>;
+  type MyProfileResponse = Common.TResponse<IMyProfile[]>;
+  type UserResponse = Common.TResponse<IUser[]>;
 
-  export type TPutMyProfileResponse = TMyProfileResponse
-  export type TGetMyProfileResponse = TMyProfileResponse
+  export type PutMyProfileResponse = MyProfileResponse
+  export type GetMyProfileResponse = MyProfileResponse
 
-  export type TPutUserResponse = TUserResponse
-  export type TGetUserResponse = TUserResponse
+  export type PutUserResponse = UserResponse
+  export type GetUserResponse = UserResponse
 }

@@ -16,25 +16,25 @@ export namespace Segmentation {
   }
 
   // REQUEST PART
-  export interface IPostContactFilterBody {
+  export type PostContactFilterBody = {
     Name: string;
     Expression: string;
     Description?: string;
   }
 
-  export interface IPutContactFilterBody extends Partial<IPostContactFilterBody> {
+  export type PutContactFilterBody = Partial<PostContactFilterBody> & {
     Status?: SegmentStatus;
   }
 
-  export interface IGetContactFilterQueryParams extends Partial<Common.IPagination> {
+  export type GetContactFilterQueryParams = Partial<Common.IPagination> & {
     ShowDeleted?: boolean;
     Status?: SegmentStatus;
   }
 
   // RESPONSE PART
-  type TContactFilterResponse = Common.IResponse<IContactFilter[]>;
+  type ContactFilterResponse = Common.TResponse<IContactFilter[]>;
 
-  export type TPostContactFilterResponse = TContactFilterResponse;
-  export type TPutContactFilterResponse = TContactFilterResponse;
-  export type TGetContactFilterResponse = TContactFilterResponse;
+  export type PostContactFilterResponse = ContactFilterResponse;
+  export type PutContactFilterResponse = ContactFilterResponse;
+  export type GetContactFilterResponse = ContactFilterResponse;
 }
