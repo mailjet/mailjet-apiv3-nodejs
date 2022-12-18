@@ -154,7 +154,7 @@ export declare namespace Statistic {
         Platform: string;
         UserAgent: string;
     }
-    interface IGetCampaignOverViewQueryParams extends Partial<Common.IPagination> {
+    type GetCampaignOverViewQueryParams = Partial<Common.IPagination> & {
         All?: boolean;
         Archived?: boolean;
         Drafts?: boolean;
@@ -164,8 +164,8 @@ export declare namespace Statistic {
         Sent?: boolean;
         Starred?: boolean;
         Subject?: string;
-    }
-    interface IGetContactStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetContactStatisticsQueryParams = Partial<Common.IPagination> & {
         Blocked?: boolean;
         Bounced?: boolean;
         Click?: boolean;
@@ -180,8 +180,8 @@ export declare namespace Statistic {
         Spam?: boolean;
         Softbounced?: boolean;
         Unsubscribed?: boolean;
-    }
-    interface IGetGEOStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetGEOStatisticsQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -194,8 +194,8 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    interface IGetListRecipientStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetListRecipientStatisticsQueryParams = Partial<Common.IPagination> & {
         Blocked?: boolean;
         Bounced?: boolean;
         Click?: boolean;
@@ -215,20 +215,20 @@ export declare namespace Statistic {
         Spam?: boolean;
         TimeZone?: string;
         Unsubscribed?: boolean;
-    }
-    interface IGetStatCountersQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetStatCountersQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CounterSource: CounterSource;
         CounterResolution: CounterResolution;
         CounterTiming: CounterTiming;
         SourceID?: number;
-    }
-    interface IGetLinkClickStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetLinkClickStatisticsQueryParams = Partial<Common.IPagination> & {
         CampaignID: number;
-    }
-    interface IGetRecipientESPStatisticsQueryParams extends IGetLinkClickStatisticsQueryParams {
+    };
+    type GetRecipientESPStatisticsQueryParams = GetLinkClickStatisticsQueryParams & {
         ESP_Name?: number;
-    }
-    interface IGetTopLinkClickedQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetTopLinkClickedQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         ActualClicks?: boolean;
         CampaignID?: number;
         Contact?: number;
@@ -243,8 +243,8 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         Message?: number;
         Period?: Common.Period;
-    }
-    interface IGetUserAgentStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetUserAgentStatisticsQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -259,14 +259,14 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         Period?: Common.Period;
         Platform?: string;
-    }
-    type TGetCampaignOverViewResponse = Common.IResponse<ICampaignOverView[]>;
-    type TGetContactStatisticsResponse = Common.IResponse<IContactStatistic[]>;
-    type TGetGEOStatisticsResponse = Common.IResponse<IGEOStatistic[]>;
-    type TGetListRecipientStatisticsResponse<TData = Array<unknown>> = Common.IResponse<Array<IListRecipientStatistic<TData>>>;
-    type TGetStatCountersResponse = Common.IResponse<IStatCounter[]>;
-    type TGetLinkClickStatisticsResponse = Common.IResponse<ILinkClickStatistic[]>;
-    type TGetRecipientESPStatisticsResponse = Common.IResponse<IRecipientESPStatistic[]>;
-    type TGetTopLinkClickedResponse = Common.IResponse<ITopLinkClicked[]>;
-    type TGetUserAgentStatisticsResponse = Common.IResponse<IUserAgentStatistic[]>;
+    };
+    type GetCampaignOverViewResponse = Common.TResponse<ICampaignOverView[]>;
+    type GetContactStatisticsResponse = Common.TResponse<IContactStatistic[]>;
+    type GetGEOStatisticsResponse = Common.TResponse<IGEOStatistic[]>;
+    type GetListRecipientStatisticsResponse<TData = Array<unknown>> = Common.TResponse<Array<IListRecipientStatistic<TData>>>;
+    type GetStatCountersResponse = Common.TResponse<IStatCounter[]>;
+    type GetLinkClickStatisticsResponse = Common.TResponse<ILinkClickStatistic[]>;
+    type GetRecipientESPStatisticsResponse = Common.TResponse<IRecipientESPStatistic[]>;
+    type GetTopLinkClickedResponse = Common.TResponse<ITopLinkClicked[]>;
+    type GetUserAgentStatisticsResponse = Common.TResponse<IUserAgentStatistic[]>;
 }

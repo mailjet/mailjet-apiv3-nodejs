@@ -19,23 +19,22 @@ export declare namespace APIKeyConfiguration {
         TrackHost: string;
         UserID: number;
     }
-    export interface IPostApiKeyBody {
+    export type PostApiKeyBody = {
         Name: string;
         ACL?: string;
         IsActive?: boolean;
-    }
-    export interface IPutApiKeyBody extends Partial<IPostApiKeyBody> {
-    }
-    export interface IGetApiKeyQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutApiKeyBody = Partial<PostApiKeyBody>;
+    export type GetApiKeyQueryParams = Partial<Common.IPagination> & {
         APIKey?: string;
         IsActive?: boolean;
         IsMaster?: boolean;
         Name?: string;
-    }
-    type TApiKeyResponse = Common.IResponse<IApiKey[]>;
-    export type TPostApiKeyResponse = TApiKeyResponse;
-    export type TPutApiKeyResponse = TApiKeyResponse;
-    export type TGetApiKeyResponse = TApiKeyResponse;
+    };
+    type ApiKeyResponse = Common.TResponse<IApiKey[]>;
+    export type PostApiKeyResponse = ApiKeyResponse;
+    export type PutApiKeyResponse = ApiKeyResponse;
+    export type GetApiKeyResponse = ApiKeyResponse;
     export {};
 }
 export declare namespace AccountSetting {
@@ -76,15 +75,13 @@ export declare namespace AccountSetting {
         Username: string;
         WarnedRatelimitAt: string;
     }
-    export interface IPutMyProfileBody extends Partial<Omit<IMyProfile, 'ID' | 'VAT' | 'UserID'>> {
-    }
-    export interface IPutUserBody extends Partial<Omit<IUser, 'ID' | 'CreatedAt' | 'FirstIp' | 'MaxAllowedAPIKeys' | 'WarnedRatelimitAt'>> {
-    }
-    type TMyProfileResponse = Common.IResponse<IMyProfile[]>;
-    type TUserResponse = Common.IResponse<IUser[]>;
-    export type TPutMyProfileResponse = TMyProfileResponse;
-    export type TGetMyProfileResponse = TMyProfileResponse;
-    export type TPutUserResponse = TUserResponse;
-    export type TGetUserResponse = TUserResponse;
+    export type PutMyProfileBody = Partial<Omit<IMyProfile, 'ID' | 'VAT' | 'UserID'>>;
+    export type PutUserBody = Partial<Omit<IUser, 'ID' | 'CreatedAt' | 'FirstIp' | 'MaxAllowedAPIKeys' | 'WarnedRatelimitAt'>>;
+    type MyProfileResponse = Common.TResponse<IMyProfile[]>;
+    type UserResponse = Common.TResponse<IUser[]>;
+    export type PutMyProfileResponse = MyProfileResponse;
+    export type GetMyProfileResponse = MyProfileResponse;
+    export type PutUserResponse = UserResponse;
+    export type GetUserResponse = UserResponse;
     export {};
 }

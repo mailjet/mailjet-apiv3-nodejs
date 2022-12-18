@@ -26,15 +26,14 @@ export declare namespace Sender {
         Errors: string;
         GlobalError: string;
     }
-    export interface IPostSenderBody {
+    export type PostSenderBody = {
         Email: string;
         EmailType?: EmailType;
         IsDefaultSender?: boolean;
         Name?: string;
-    }
-    export interface IPutSenderBody extends Omit<IPostSenderBody, 'Email'> {
-    }
-    export interface IGetSenderQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutSenderBody = Omit<PostSenderBody, 'Email'>;
+    export type GetSenderQueryParams = Partial<Common.IPagination> & {
         DnsID?: number;
         Domain?: string;
         Email?: string;
@@ -42,12 +41,12 @@ export declare namespace Sender {
         LocalPart?: string;
         ShowDeleted?: boolean;
         Status?: SenderStatus;
-    }
-    type TSenderResponse = Common.IResponse<ISender[]>;
-    export type TPostSenderResponse = TSenderResponse;
-    export type TPutSenderResponse = TSenderResponse;
-    export type TGetSenderResponse = TSenderResponse;
-    export type TPostSenderValidateResponse = Common.IResponse<ISenderValidate[]>;
+    };
+    type SenderResponse = Common.TResponse<ISender[]>;
+    export type PostSenderResponse = SenderResponse;
+    export type PutSenderResponse = SenderResponse;
+    export type GetSenderResponse = SenderResponse;
+    export type PostSenderValidateResponse = Common.TResponse<ISenderValidate[]>;
     export {};
 }
 export declare namespace Metasender {
@@ -59,19 +58,18 @@ export declare namespace Metasender {
         Filename: string;
         IsEnabled: boolean;
     }
-    export interface IPostMetaSenderBody {
+    export type PostMetaSenderBody = {
         Email: string;
         Description?: string;
-    }
-    export interface IPutMetaSenderBody extends Omit<IPostMetaSenderBody, 'Email'> {
-    }
-    export interface IGetMetaSenderQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutMetaSenderBody = Omit<PostMetaSenderBody, 'Email'>;
+    export type GetMetaSenderQueryParams = Partial<Common.IPagination> & {
         DNS?: number;
-    }
-    type TMetaSenderResponse = Common.IResponse<IMetaSender[]>;
-    export type TPostMetaSenderResponse = TMetaSenderResponse;
-    export type TPutMetaSenderResponse = TMetaSenderResponse;
-    export type TGetMetaSenderResponse = TMetaSenderResponse;
+    };
+    type MetaSenderResponse = Common.TResponse<IMetaSender[]>;
+    export type PostMetaSenderResponse = MetaSenderResponse;
+    export type PutMetaSenderResponse = MetaSenderResponse;
+    export type GetMetaSenderResponse = MetaSenderResponse;
     export {};
 }
 export declare namespace DNS {
@@ -115,14 +113,14 @@ export declare namespace DNS {
         SPFRecordCurrentValue: string;
         SPFStatus: SPFConfigurationStatus;
     }
-    interface IGetDNSQueryParams extends Partial<Common.IPagination> {
+    type IGetDNSQueryParams = Partial<Common.IPagination> & {
         IsCheckInProgress?: boolean;
         IsSenderIdentified?: boolean;
         IsYahooFBL?: boolean;
         MaxLastCheckAt?: string;
         MinLastCheckAt?: string;
         SPFStatus?: SPFConfigurationCheckStatus;
-    }
-    type TGetDNSResponse = Common.IResponse<IDNS[]>;
-    type TPostDNSCheckResponse = Common.IResponse<IDNSCheck[]>;
+    };
+    type GetDNSResponse = Common.TResponse<IDNS[]>;
+    type PostDNSCheckResponse = Common.TResponse<IDNSCheck[]>;
 }

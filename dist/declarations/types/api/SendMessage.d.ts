@@ -8,7 +8,12 @@ export declare namespace SendMessage {
         Name: string;
         Description: string;
     }
-    interface ISMS {
+    type Body = {
+        From: string;
+        To: string;
+        Text: string;
+    };
+    type Response = {
         From: string;
         To: string;
         Text: string;
@@ -18,11 +23,5 @@ export declare namespace SendMessage {
         SentTS: number;
         Cost: ICost;
         Status: ISendStatus;
-    }
-    interface IBody {
-        From: string;
-        To: string;
-        Text: string;
-    }
-    type TResponse = ISMS;
+    };
 }

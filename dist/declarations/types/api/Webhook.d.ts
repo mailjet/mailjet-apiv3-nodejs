@@ -32,23 +32,26 @@ export declare namespace Webhook {
         Version: TVersion;
         Url: string;
     }
-    export interface IPostEventCallbackUrlBody {
+    export type PostEventCallbackUrlBody = {
         Url: string;
         EventType?: EventType;
         IsBackup?: boolean;
         Status?: Status;
-    }
-    export interface IPutEventCallbackUrlBody extends Partial<IPostEventCallbackUrlBody> {
-    }
-    export interface IGetEventCallbackUrlQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutEventCallbackUrlBody = Partial<PostEventCallbackUrlBody>;
+    export type GetEventCallbackUrlQueryParams = Partial<Common.IPagination> & {
         Backup?: boolean;
         EventType?: EventTypeValue;
         Status?: string;
         Version?: TVersion;
-    }
-    type TEventCallbackUrlResponse = Common.IResponse<IEventCallbackUrl[]>;
-    export type TPostEventCallbackUrlResponse = TEventCallbackUrlResponse;
-    export type TPutEventCallbackUrlResponse = TEventCallbackUrlResponse;
-    export type TGetEventCallbackUrlResponse = TEventCallbackUrlResponse;
+    };
+    type EventCallbackUrlResponse = {
+        Count: number;
+        Total: number;
+        Data: IEventCallbackUrl[];
+    };
+    export type PostEventCallbackUrlResponse = EventCallbackUrlResponse;
+    export type PutEventCallbackUrlResponse = EventCallbackUrlResponse;
+    export type GetEventCallbackUrlResponse = EventCallbackUrlResponse;
     export {};
 }

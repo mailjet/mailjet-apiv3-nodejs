@@ -10,11 +10,11 @@ export declare namespace Common {
         FromTS: string | number;
         ToTS: string | number;
     }
-    interface IResponse<TEntity> {
+    type TResponse<TEntity> = {
         Count: number;
         Total: number;
         Data: TEntity;
-    }
+    };
     enum Period {
         Day = "Day",
         Week = "Week",

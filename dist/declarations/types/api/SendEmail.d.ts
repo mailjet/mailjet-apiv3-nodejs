@@ -13,7 +13,7 @@ export declare namespace SendEmailV3 {
         Content: string;
         'Content-type': string;
     }
-    interface IBodyMj {
+    type BodyMj = {
         'Mj-TemplateID'?: number;
         'Mj-TemplateLanguage'?: boolean;
         'Mj-TemplateErrorReporting'?: string;
@@ -24,8 +24,8 @@ export declare namespace SendEmailV3 {
         'Mj-trackopen'?: TMjTrackOpen;
         'Mj-CustomID'?: string;
         'Mj-EventPayload'?: string;
-    }
-    interface IBody<THeaders = Common.TUnknownRec, TVars = Common.TUnknownRec> extends IBodyMj {
+    };
+    type Body<THeaders = Common.TUnknownRec, TVars = Common.TUnknownRec> = BodyMj & {
         FromEmail?: string;
         FromName?: string;
         Recipients?: IRecipient[];
@@ -40,15 +40,15 @@ export declare namespace SendEmailV3 {
         Inline_attachments?: IAttachment[];
         Headers?: THeaders;
         Vars?: TVars;
-    }
+    };
     interface IResponseSent {
         Email: string;
         MessageID: number;
         MessageUUID: string;
     }
-    interface IResponse {
+    type Response = {
         Sent: IResponseSent[];
-    }
+    };
 }
 export declare namespace SendEmailV3_1 {
     enum TrackOpens {
@@ -117,12 +117,12 @@ export declare namespace SendEmailV3_1 {
         MessageID: number;
         MessageHref: string;
     }
-    interface IBody<THeaders = Common.TUnknownRec, TVariables = Common.TUnknownRec, TGlobals = Common.TUnknownRec> {
+    type Body<THeaders = Common.TUnknownRec, TVariables = Common.TUnknownRec, TGlobals = Common.TUnknownRec> = {
         Messages: Array<IMessage<THeaders, TVariables>>;
         SandboxMode?: boolean;
         AdvanceErrorHandling?: boolean;
         Globals?: TGlobals;
-    }
+    };
     interface IResponseMessage {
         Status: ResponseStatus;
         Errors: IResponseError[];
@@ -131,7 +131,7 @@ export declare namespace SendEmailV3_1 {
         Cc: IResponseEmailAddressTo[];
         Bcc: IResponseEmailAddressTo[];
     }
-    interface IResponse {
+    type Response = {
         Messages: IResponseMessage[];
-    }
+    };
 }

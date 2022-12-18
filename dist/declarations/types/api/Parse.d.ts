@@ -6,18 +6,16 @@ export declare namespace Parse {
         Email: string;
         Url: string;
     }
-    export interface IPostParseRouteBody {
+    export type PostParseRouteBody = {
         Url: string;
         APIKeyID?: number;
         Email?: string;
-    }
-    export interface IPutParseRouteBody extends Partial<IPostParseRouteBody> {
-    }
-    export interface IGetParseRouteQueryParams extends Partial<Common.IPagination> {
-    }
-    type TParseRouteResponse = Common.IResponse<IParseRoute[]>;
-    export type TPostParseRouteResponse = TParseRouteResponse;
-    export type TPutParseRouteResponse = TParseRouteResponse;
-    export type TGetParseRouteResponse = TParseRouteResponse;
+    };
+    export type PutParseRouteBody = Partial<PostParseRouteBody>;
+    export type GetParseRouteQueryParams = Partial<Common.IPagination>;
+    type ParseRouteResponse = Common.TResponse<IParseRoute[]>;
+    export type PostParseRouteResponse = ParseRouteResponse;
+    export type PutParseRouteResponse = ParseRouteResponse;
+    export type GetParseRouteResponse = ParseRouteResponse;
     export {};
 }

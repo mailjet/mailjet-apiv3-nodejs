@@ -115,7 +115,7 @@ export declare namespace Message {
         SpamAssassinRules: TRules;
         SpamAssassinScore: number;
     }
-    interface IGetMessageQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    type GetMessageQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         Campaign?: number;
         Contact?: number;
         CustomID?: string;
@@ -128,8 +128,8 @@ export declare namespace Message {
         ShowContactAlt?: boolean;
         ShowCustomID?: boolean;
         ShowSubject?: boolean;
-    }
-    interface IGetMessageInformationQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetMessageInformationQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -142,8 +142,8 @@ export declare namespace Message {
         IsStarred?: boolean;
         MessageStatus?: MessageStatus;
         Period?: Common.Period;
-    }
-    type TGetMessagesResponse = Common.IResponse<IMessage[]>;
-    type TGetMessageHistoryResponse = Common.IResponse<IMessageHistory[]>;
-    type TGetMessageInformationResponse<TRules = Common.TUnknownRec> = Common.IResponse<Array<IMessageInformation<TRules>>>;
+    };
+    type GetMessagesResponse = Common.TResponse<IMessage[]>;
+    type GetMessageHistoryResponse = Common.TResponse<IMessageHistory[]>;
+    type GetMessageInformationResponse<TRules = Common.TUnknownRec> = Common.TResponse<Array<IMessageInformation<TRules>>>;
 }

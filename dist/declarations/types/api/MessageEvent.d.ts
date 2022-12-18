@@ -28,14 +28,14 @@ export declare namespace MessageEvent {
         UserAgentFull: string;
         UserAgentID: number;
     }
-    interface IGetBounceStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    type GetBounceStatisticsQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         EventFromTs?: string;
         EventToTs?: string;
         Period?: Common.Period;
-    }
-    interface IGetClickStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetClickStatisticsQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -50,8 +50,8 @@ export declare namespace MessageEvent {
         MessageID?: number;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    interface IGetOpenInformationQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetOpenInformationQueryParams = Partial<Common.ITimestampPeriod> & Partial<Common.IPagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -64,8 +64,8 @@ export declare namespace MessageEvent {
         IsDeleted?: boolean;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    type TGetBounceStatisticsResponse = Common.IResponse<IBounceStatistic[]>;
-    type TGetClickStatisticsResponse = Common.IResponse<IClickStatistic[]>;
-    type TGetOpenInformationResponse = Common.IResponse<IOpenInformation[]>;
+    };
+    type GetBounceStatisticsResponse = Common.TResponse<IBounceStatistic[]>;
+    type GetClickStatisticsResponse = Common.TResponse<IClickStatistic[]>;
+    type GetOpenInformationResponse = Common.TResponse<IOpenInformation[]>;
 }
