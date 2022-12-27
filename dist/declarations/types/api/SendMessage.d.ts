@@ -1,9 +1,9 @@
 export declare namespace SendMessage {
-    interface ICost {
+    interface Cost {
         Value: number;
         Currency: string;
     }
-    interface ISendStatus {
+    interface SendStatus {
         Code: number;
         Name: string;
         Description: string;
@@ -21,7 +21,7 @@ export declare namespace SendMessage {
         SMSCount: number;
         CreationTS: number;
         SentTS: number;
-        Cost: ICost;
-        Status: ISendStatus;
+        Cost: Cost;
+        Status: SendStatus;
     };
 }

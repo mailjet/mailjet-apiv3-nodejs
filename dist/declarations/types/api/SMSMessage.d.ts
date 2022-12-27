@@ -8,23 +8,23 @@ export declare namespace SMSMessage {
         SMSCount: number;
         CreationTS: number;
         SentTS: number;
-        Cost: SendMessage.ICost;
-        Status: SendMessage.ISendStatus;
+        Cost: SendMessage.Cost;
+        Status: SendMessage.SendStatus;
     };
     type SMSExport = {
         ID: number;
         URL: string;
-        Status: SendMessage.ISendStatus;
+        Status: SendMessage.SendStatus;
         CreationTS: number;
         ExpirationTS: number;
     };
-    type PostSMSExportBody = Common.ITimestampPeriod;
-    type GetSMSQueryParams = Partial<Common.ITimestampPeriod> & Partial<Pick<Common.IPagination, 'Limit' | 'Offset'>> & {
+    type PostSMSExportBody = Common.TimestampPeriod;
+    type GetSMSQueryParams = Partial<Common.TimestampPeriod> & Partial<Pick<Common.Pagination, 'Limit' | 'Offset'>> & {
         StatusCode?: Array<string>;
         To?: string;
         IDs?: string;
     };
-    type GetSMSCountQueryParams = Partial<Common.ITimestampPeriod> & {
+    type GetSMSCountQueryParams = Partial<Common.TimestampPeriod> & {
         StatusCode?: Array<string>;
         To?: string;
     };

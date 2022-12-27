@@ -13,7 +13,7 @@ export namespace Sender {
     Deleted = 'Deleted',
   }
 
-  export interface ISender {
+  export interface Sender {
     ID: number;
     EmailType: EmailType;
     IsDefaultSender: boolean;
@@ -25,7 +25,7 @@ export namespace Sender {
     Status: SenderStatus;
   }
 
-  export interface ISenderValidate {
+  export interface SenderValidate {
     ValidationMethod: string;
     Errors: string;
     GlobalError: string;
@@ -41,7 +41,7 @@ export namespace Sender {
 
   export type PutSenderBody = Omit<PostSenderBody, 'Email'>
 
-  export type GetSenderQueryParams = Partial<Common.IPagination> & {
+  export type GetSenderQueryParams = Partial<Common.Pagination> & {
     DnsID?: number;
     Domain?: string;
     Email?: string;
@@ -52,17 +52,17 @@ export namespace Sender {
   }
 
   // RESPONSE PART
-  type SenderResponse = Common.TResponse<ISender[]>;
+  type SenderResponse = Common.Response<Sender[]>;
 
   export type PostSenderResponse = SenderResponse
   export type PutSenderResponse = SenderResponse
   export type GetSenderResponse = SenderResponse
 
-  export type PostSenderValidateResponse = Common.TResponse<ISenderValidate[]>;
+  export type PostSenderValidateResponse = Common.Response<SenderValidate[]>;
 }
 
 export namespace Metasender {
-  export interface IMetaSender {
+  export interface MetaSender {
     ID: number;
     Description: string;
     CreatedAt: string;
@@ -79,12 +79,12 @@ export namespace Metasender {
 
   export type PutMetaSenderBody = Omit<PostMetaSenderBody, 'Email'>
 
-  export type GetMetaSenderQueryParams = Partial<Common.IPagination> & {
+  export type GetMetaSenderQueryParams = Partial<Common.Pagination> & {
     DNS?: number;
   }
 
   // RESPONSE PART
-  type MetaSenderResponse = Common.TResponse<IMetaSender[]>;
+  type MetaSenderResponse = Common.Response<MetaSender[]>;
 
   export type PostMetaSenderResponse = MetaSenderResponse
   export type PutMetaSenderResponse = MetaSenderResponse
@@ -115,7 +115,7 @@ export namespace DNS {
     Error = 'Error'
   }
 
-  export interface IDNS {
+  export interface DNS {
     ID: number;
     DKIMRecordName: string;
     DKIMRecordValue: string;
@@ -129,7 +129,7 @@ export namespace DNS {
     SPFStatus: SPFConfigurationCheckStatus;
   }
 
-  export interface IDNSCheck {
+  export interface DNSCheck {
     DKIMErrors: string;
     DKIMRecordCurrentValue: string;
     DKIMStatus: DKIMConfigurationStatus;
@@ -139,7 +139,7 @@ export namespace DNS {
   }
 
   // REQUEST PART
-  export type IGetDNSQueryParams = Partial<Common.IPagination> & {
+  export type GetDNSQueryParams = Partial<Common.Pagination> & {
     IsCheckInProgress?: boolean;
     IsSenderIdentified?: boolean;
     IsYahooFBL?: boolean;
@@ -149,6 +149,6 @@ export namespace DNS {
   }
 
   // RESPONSE PART
-  export type GetDNSResponse = Common.TResponse<IDNS[]>;
-  export type PostDNSCheckResponse = Common.TResponse<IDNSCheck[]>;
+  export type GetDNSResponse = Common.Response<DNS[]>;
+  export type PostDNSCheckResponse = Common.Response<DNSCheck[]>;
 }

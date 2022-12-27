@@ -6,39 +6,39 @@ import axios, { AxiosError } from 'axios';
 import { setValueIfNotNil } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
-import { ILibraryResponse, ILibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
+import { LibraryResponse, LibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
 import HttpMethods from './HttpMethods';
 import {
-  IRequestConfig,
-  TRequestData,
-  TRequestParams,
-  TRequestConstructorConfig,
-  TRequestAxiosConfig,
-  TSubPath,
-} from './IRequest';
+  RequestConfig,
+  RequestData,
+  RequestParams,
+  RequestConstructorConfig,
+  RequestAxiosConfig,
+  SubPath,
+} from './Request';
 /*lib*/
 import Client from '../client';
 /*other*/
 
-type TUnknownRec = TObject.TUnknownRec
+type UnknownRec = TObject.UnknownRec
 
 const JSONb = JSONBigInt({ storeAsString: true });
 
 class Request {
   private readonly client: Client;
   private readonly method: HttpMethods;
-  private readonly config: Partial<IRequestConfig>;
+  private readonly config: Partial<RequestConfig>;
   private readonly resource: string;
 
   private url: string;
-  private subPath: TSubPath;
+  private subPath: SubPath;
   private actionPath: string | null;
 
   constructor(
     client: Client,
     method: HttpMethods,
     resource: string,
-    config?: TRequestConstructorConfig,
+    config?: RequestConstructorConfig,
   ) {
     if (!(client instanceof Client)) {
       throw new Error('Argument "client" must be instance of Client');
@@ -85,7 +85,7 @@ class Request {
       : 'application/json';
   }
 
-  private getRequestBody(data: TRequestData) {
+  private getRequestBody(data: RequestData) {
     return [
       HttpMethods.Put,
       HttpMethods.Post,
@@ -115,9 +115,9 @@ class Request {
     return (!isSendResource && !resourceContainSMS) ? 'REST' : '';
   }
 
-  private makeRequest(url: string, data: TRequestData, params: TRequestParams) {
+  private makeRequest(url: string, data: RequestData, params: RequestParams) {
     // https://github.com/axios/axios#request-config
-    const requestConfig: TRequestAxiosConfig = {
+    const requestConfig: RequestAxiosConfig = {
       url,
       params,
       data: this.getRequestBody(data),
@@ -241,23 +241,23 @@ class Request {
     return this;
   }
 
-  public async request<TBody extends TRequestData>(
-    data?: TRequestData,
-    params?: TRequestParams,
+  public async request<Body extends RequestData>(
+    data?: RequestData,
+    params?: RequestParams,
     performAPICall?: true,
-  ): Promise<ILibraryResponse<TBody>>
+  ): Promise<LibraryResponse<Body>>
 
-  public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
-    data?: TBody,
-    params?: TParams,
+  public async request<Body extends RequestData, Params extends UnknownRec>(
+    data?: Body,
+    params?: Params,
     performAPICall?: false,
-  ): Promise<ILibraryLocalResponse<TBody, TParams>>
+  ): Promise<LibraryLocalResponse<Body, Params>>
 
-  public async request<TBody extends TRequestData, TParams extends TUnknownRec>(
-    data: TRequestData | TBody = {},
-    params: TRequestParams | TParams = {},
+  public async request<Body extends RequestData, Params extends UnknownRec>(
+    data: RequestData | Body = {},
+    params: RequestParams | Params = {},
     performAPICall = true,
-  ): Promise<ILibraryResponse<TBody> | ILibraryLocalResponse<TBody, TParams>> {
+  ): Promise<LibraryResponse<Body> | LibraryLocalResponse<Body, Params>> {
     const url = this.buildFullUrl();
     this.setBaseURL(this.resource);
 
@@ -268,7 +268,7 @@ class Request {
         body,
         params,
         url,
-      } as ILibraryLocalResponse<TBody, TParams>;
+      } as LibraryLocalResponse<Body, Params>;
     }
 
     try {

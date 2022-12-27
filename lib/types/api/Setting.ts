@@ -7,7 +7,7 @@ export namespace APIKeyConfiguration {
     HardLock = 'Hardlock'
   }
 
-  export interface IApiKey {
+  export interface ApiKey {
     ID: number;
     ACL: string;
     IsActive: boolean;
@@ -31,7 +31,7 @@ export namespace APIKeyConfiguration {
 
   export type PutApiKeyBody = Partial<PostApiKeyBody>
 
-  export type GetApiKeyQueryParams = Partial<Common.IPagination> & {
+  export type GetApiKeyQueryParams = Partial<Common.Pagination> & {
     APIKey?: string;
     IsActive?: boolean;
     IsMaster?: boolean;
@@ -39,7 +39,7 @@ export namespace APIKeyConfiguration {
   }
 
   // RESPONSE PART
-  type ApiKeyResponse = Common.TResponse<IApiKey[]>;
+  type ApiKeyResponse = Common.Response<ApiKey[]>;
 
   export type PostApiKeyResponse = ApiKeyResponse
   export type PutApiKeyResponse = ApiKeyResponse
@@ -47,7 +47,7 @@ export namespace APIKeyConfiguration {
 }
 
 export namespace AccountSetting {
-  export interface IMyProfile {
+  export interface MyProfile {
     ID: number;
     AddressCity: string;
     AddressCountry: string;
@@ -71,7 +71,7 @@ export namespace AccountSetting {
     UserID: number;
   }
 
-  export interface IUser {
+  export interface User {
     ID: number;
     ACL: string;
     Email: string;
@@ -87,14 +87,14 @@ export namespace AccountSetting {
   }
 
   // REQUEST PART
-  export type PutMyProfileBody = Partial<Omit<IMyProfile, 'ID' | 'VAT' | 'UserID'>>
+  export type PutMyProfileBody = Partial<Omit<MyProfile, 'ID' | 'VAT' | 'UserID'>>
 
   export type PutUserBody =
-    Partial<Omit<IUser, 'ID' | 'CreatedAt' | 'FirstIp' | 'MaxAllowedAPIKeys' | 'WarnedRatelimitAt'>>
+    Partial<Omit<User, 'ID' | 'CreatedAt' | 'FirstIp' | 'MaxAllowedAPIKeys' | 'WarnedRatelimitAt'>>
 
   // RESPONSE PART
-  type MyProfileResponse = Common.TResponse<IMyProfile[]>;
-  type UserResponse = Common.TResponse<IUser[]>;
+  type MyProfileResponse = Common.Response<MyProfile[]>;
+  type UserResponse = Common.Response<User[]>;
 
   export type PutMyProfileResponse = MyProfileResponse
   export type GetMyProfileResponse = MyProfileResponse

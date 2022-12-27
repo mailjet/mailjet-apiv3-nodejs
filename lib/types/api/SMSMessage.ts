@@ -9,24 +9,24 @@ export namespace SMSMessage {
     SMSCount: number;
     CreationTS: number;
     SentTS: number;
-    Cost: SendMessage.ICost;
-    Status: SendMessage.ISendStatus;
+    Cost: SendMessage.Cost;
+    Status: SendMessage.SendStatus;
   }
 
   export type SMSExport = {
     ID: number;
     URL: string;
-    Status: SendMessage.ISendStatus;
+    Status: SendMessage.SendStatus;
     CreationTS: number;
     ExpirationTS: number;
   }
 
   // REQUEST PART
-  export type PostSMSExportBody = Common.ITimestampPeriod
+  export type PostSMSExportBody = Common.TimestampPeriod
 
   export type GetSMSQueryParams =
-    Partial<Common.ITimestampPeriod> &
-    Partial<Pick<Common.IPagination, 'Limit' | 'Offset'>> &
+    Partial<Common.TimestampPeriod> &
+    Partial<Pick<Common.Pagination, 'Limit' | 'Offset'>> &
   {
     StatusCode?: Array<string>;
     To?: string;
@@ -34,7 +34,7 @@ export namespace SMSMessage {
   }
 
   export type GetSMSCountQueryParams =
-    Partial<Common.ITimestampPeriod> &
+    Partial<Common.TimestampPeriod> &
   {
     StatusCode?: Array<string>;
     To?: string;

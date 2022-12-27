@@ -26,15 +26,15 @@ export namespace Webhook {
     Alive = 'alive'
   }
 
-  export type TVersion = 1 | 2;
+  export type Version = 1 | 2;
 
-  export interface IEventCallbackUrl {
+  export interface EventCallbackUrl {
     ID: number;
     EventType: EventType;
     IsBackup: boolean;
     Status: Status;
     APIKeyID: number;
-    Version: TVersion;
+    Version: Version;
     Url: string;
   }
 
@@ -48,18 +48,18 @@ export namespace Webhook {
 
   export type PutEventCallbackUrlBody = Partial<PostEventCallbackUrlBody>
 
-  export type GetEventCallbackUrlQueryParams = Partial<Common.IPagination> & {
+  export type GetEventCallbackUrlQueryParams = Partial<Common.Pagination> & {
     Backup?: boolean;
     EventType?: EventTypeValue;
     Status?: string;
-    Version?: TVersion;
+    Version?: Version;
   }
 
   // RESPONSE PART
   type EventCallbackUrlResponse = {
     Count: number;
     Total: number;
-    Data: IEventCallbackUrl[];
+    Data: EventCallbackUrl[];
   };
 
   export type PostEventCallbackUrlResponse = EventCallbackUrlResponse

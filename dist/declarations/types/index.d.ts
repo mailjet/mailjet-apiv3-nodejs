@@ -13,7 +13,7 @@ export declare namespace TObject {
     type MakeNilAll<T extends Record<string, unknown>> = {
         [TKey in keyof T]?: T[TKey] | null;
     };
-    type TUnknownRec = Record<string, unknown>;
+    type UnknownRec = Record<string, unknown>;
 }
 export declare namespace TArray {
     type TKeys<T extends Array<unknown>> = Array<Exclude<keyof T, keyof Array<unknown>>>;

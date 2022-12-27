@@ -1,4 +1,4 @@
-export { ILibraryResponse, ILibraryLocalResponse } from './LibraryResponse';
+export { LibraryResponse, LibraryLocalResponse } from './LibraryResponse';
 export { Common } from './Common';
 export { SendEmailV3, SendEmailV3_1, } from './SendEmail';
 export { Message } from './Message';

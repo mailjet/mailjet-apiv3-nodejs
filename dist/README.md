@@ -47,6 +47,7 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
     - [Disable API call](#disable-api-call)
   - [TypeScript](#typescript)
     - [Send Email example](#send-email-example)
+    - [Send Message example](#send-message-example)
     - [Get Contact example](#get-contact-example)
     - [Our external Typings](#our-external-typings)
   - [Browser Demo](#browser-demo)

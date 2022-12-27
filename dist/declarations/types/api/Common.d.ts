@@ -1,19 +1,19 @@
 export declare namespace Common {
-    type TUnknownRec = Record<string, unknown>;
-    interface IPagination {
+    type UnknownRec = Record<string, unknown>;
+    interface Pagination {
         countOnly: boolean;
         Limit: number;
         Offset: number;
         Sort: string;
     }
-    interface ITimestampPeriod {
+    interface TimestampPeriod {
         FromTS: string | number;
         ToTS: string | number;
     }
-    type TResponse<TEntity> = {
+    type Response<Entity> = {
         Count: number;
         Total: number;
-        Data: TEntity;
+        Data: Entity;
     };
     enum Period {
         Day = "Day",

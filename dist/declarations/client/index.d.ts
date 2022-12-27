@@ -1,7 +1,7 @@
-import { IClientParams } from './IClient';
-import { IRequestConfig, TRequestConstructorConfig } from '../request/IRequest';
+import { ClientParams } from './Client';
+import { RequestConfig, RequestConstructorConfig } from '../request/Request';
 import Request from '../request';
-export declare type TClientConnectParams = Pick<IClientParams, 'config' | 'options'>;
+export declare type ClientConnectParams = Pick<ClientParams, 'config' | 'options'>;
 declare class Client {
     private version;
     private config;
@@ -9,7 +9,7 @@ declare class Client {
     private apiKey?;
     private apiSecret?;
     private apiToken?;
-    constructor(params: IClientParams);
+    constructor(params: ClientParams);
     getPackageVersion(): string;
     getAPIKey(): string | undefined;
     getAPISecret(): string | undefined;
@@ -26,19 +26,19 @@ declare class Client {
         maxBodyLength?: number | undefined;
         maxContentLength?: number | undefined;
     };
-    get(resource: string, config?: TRequestConstructorConfig): Request;
-    post(resource: string, config?: TRequestConstructorConfig): Request;
-    put(resource: string, config?: TRequestConstructorConfig): Request;
-    delete(resource: string, config?: TRequestConstructorConfig): Request;
+    get(resource: string, config?: RequestConstructorConfig): Request;
+    post(resource: string, config?: RequestConstructorConfig): Request;
+    put(resource: string, config?: RequestConstructorConfig): Request;
+    delete(resource: string, config?: RequestConstructorConfig): Request;
     private init;
     private cloneParams;
     private setConfig;
     private setOptions;
     private tokenConnectStrategy;
     private basicConnectStrategy;
-    static apiConnect(apiKey: string, apiSecret: string, params?: TClientConnectParams): Client;
-    static smsConnect(apiToken: string, params?: TClientConnectParams): Client;
-    static config: Readonly<IRequestConfig>;
+    static apiConnect(apiKey: string, apiSecret: string, params?: ClientConnectParams): Client;
+    static smsConnect(apiToken: string, params?: ClientConnectParams): Client;
+    static config: Readonly<RequestConfig>;
     static packageJSON: Readonly<{
         readonly name: string;
         readonly version: string;

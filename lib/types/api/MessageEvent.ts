@@ -2,7 +2,7 @@ import { Message } from '@mailjet/types/api/Message';
 import { Common } from '@mailjet/types/api/Common';
 
 export namespace MessageEvent {
-  export interface IBounceStatistic {
+  export interface BounceStatistic {
     ID: number;
     BouncedAt: string;
     CampaignID: number;
@@ -12,7 +12,7 @@ export namespace MessageEvent {
     StateID: Message.MessageState
   }
 
-  export interface IClickStatistic {
+  export interface ClickStatistic {
     ID: number;
     ClickedAt: string;
     ClickedDelay: number;
@@ -22,7 +22,7 @@ export namespace MessageEvent {
     UserAgentID: number;
   }
 
-  export interface IOpenInformation {
+  export interface OpenInformation {
     ArrivedAt: string;
     CampaignID: number;
     ContactID: number;
@@ -33,8 +33,8 @@ export namespace MessageEvent {
   }
 
   // REQUEST PART
-  export type GetBounceStatisticsQueryParams = Partial<Common.ITimestampPeriod> &
-    Partial<Common.IPagination> &
+  export type GetBounceStatisticsQueryParams = Partial<Common.TimestampPeriod> &
+    Partial<Common.Pagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -43,8 +43,8 @@ export namespace MessageEvent {
     Period?: Common.Period;
   }
 
-  export type GetClickStatisticsQueryParams = Partial<Common.ITimestampPeriod> &
-    Partial<Common.IPagination> &
+  export type GetClickStatisticsQueryParams = Partial<Common.TimestampPeriod> &
+    Partial<Common.Pagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -62,8 +62,8 @@ export namespace MessageEvent {
     Period?: Common.Period;
   }
 
-  export type GetOpenInformationQueryParams = Partial<Common.ITimestampPeriod> &
-    Partial<Common.IPagination> &
+  export type GetOpenInformationQueryParams = Partial<Common.TimestampPeriod> &
+    Partial<Common.Pagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -80,9 +80,9 @@ export namespace MessageEvent {
   }
 
   // RESPONSE PART
-  export type GetBounceStatisticsResponse = Common.TResponse<IBounceStatistic[]>;
+  export type GetBounceStatisticsResponse = Common.Response<BounceStatistic[]>;
 
-  export type GetClickStatisticsResponse = Common.TResponse<IClickStatistic[]>;
+  export type GetClickStatisticsResponse = Common.Response<ClickStatistic[]>;
 
-  export type GetOpenInformationResponse = Common.TResponse<IOpenInformation[]>;
+  export type GetOpenInformationResponse = Common.Response<OpenInformation[]>;
 }

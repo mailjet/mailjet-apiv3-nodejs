@@ -7,7 +7,7 @@ export namespace Segmentation {
     Deleted = 'deleted'
   }
 
-  export interface IContactFilter {
+  export interface ContactFilter {
     ID: number;
     Description: string;
     Expression: string;
@@ -26,13 +26,13 @@ export namespace Segmentation {
     Status?: SegmentStatus;
   }
 
-  export type GetContactFilterQueryParams = Partial<Common.IPagination> & {
+  export type GetContactFilterQueryParams = Partial<Common.Pagination> & {
     ShowDeleted?: boolean;
     Status?: SegmentStatus;
   }
 
   // RESPONSE PART
-  type ContactFilterResponse = Common.TResponse<IContactFilter[]>;
+  type ContactFilterResponse = Common.Response<ContactFilter[]>;
 
   export type PostContactFilterResponse = ContactFilterResponse;
   export type PutContactFilterResponse = ContactFilterResponse;

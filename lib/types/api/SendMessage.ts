@@ -1,10 +1,10 @@
 export namespace SendMessage {
-  export interface ICost {
+  export interface Cost {
     Value: number;
     Currency: string;
   }
 
-  export interface ISendStatus {
+  export interface SendStatus {
     Code: number;
     Name: string;
     Description: string;
@@ -26,7 +26,7 @@ export namespace SendMessage {
     SMSCount: number;
     CreationTS: number;
     SentTS: number;
-    Cost: ICost;
-    Status: ISendStatus;
+    Cost: Cost;
+    Status: SendStatus;
   };
 }

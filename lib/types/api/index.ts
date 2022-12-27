@@ -1,5 +1,5 @@
 // COMMON
-export { ILibraryResponse, ILibraryLocalResponse } from './LibraryResponse';
+export { LibraryResponse, LibraryLocalResponse } from './LibraryResponse';
 export { Common } from './Common';
 
 // SEND

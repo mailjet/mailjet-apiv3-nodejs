@@ -1,7 +1,7 @@
 import { Common } from '@mailjet/types/api/Common';
 
 export namespace Parse {
-  export interface IParseRoute {
+  export interface ParseRoute {
     ID: number;
     APIKeyID: number;
     Email: string;
@@ -17,10 +17,10 @@ export namespace Parse {
 
   export type PutParseRouteBody = Partial<PostParseRouteBody>
 
-  export type GetParseRouteQueryParams = Partial<Common.IPagination>
+  export type GetParseRouteQueryParams = Partial<Common.Pagination>
 
   // RESPONSE PART
-  type ParseRouteResponse = Common.TResponse<IParseRoute[]>;
+  type ParseRouteResponse = Common.Response<ParseRoute[]>;
 
   export type PostParseRouteResponse = ParseRouteResponse
   export type PutParseRouteResponse = ParseRouteResponse

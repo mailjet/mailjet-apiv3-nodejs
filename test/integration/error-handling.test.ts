@@ -1,7 +1,7 @@
 /*external modules*/
 import { expect } from 'chai';
 /*types*/
-import { IRequestConfig } from '../../lib/request/IRequest';
+import { RequestConfig } from '../../lib/request/Request';
 /*utils*/
 /*lib*/
 import Mailjet, { Request } from '../../lib/index';
@@ -29,7 +29,7 @@ describe('Basic Error Handling', () => {
 
     it('no api secret provided', () => {
       try {
-        const config: Partial<IRequestConfig> = { host: 'api.mailjet.com' };
+        const config: Partial<RequestConfig> = { host: 'api.mailjet.com' };
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -51,7 +51,7 @@ describe('Basic Error Handling', () => {
   });
 
   describe('invalid token', () => {
-    const v4Config: IRequestConfig = {
+    const v4Config: RequestConfig = {
       host: 'api.mailjet.com',
       version: 'v4',
       output: 'json',
@@ -143,7 +143,7 @@ describe('Basic Error Handling', () => {
     });
 
     describe('invalid public/private keys', () => {
-      const v3Config: IRequestConfig = {
+      const v3Config: RequestConfig = {
         host: 'api.mailjet.com',
         version: 'v3',
         output: 'json',

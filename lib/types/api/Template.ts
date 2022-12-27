@@ -49,13 +49,13 @@ export namespace Template {
     IsSubSet = 'issubset'
   }
 
-  export interface IHeaders {
+  export interface Headers {
     From: string;
     Subject: string;
     'Reply-to': string;
   }
 
-  export interface ITemplate {
+  export interface Template {
     Author: string;
     Categories: Categories;
     Copyright: string;
@@ -76,7 +76,7 @@ export namespace Template {
   }
 
   export type TemplateDetailContent = {
-    Headers: IHeaders;
+    Headers: Headers;
     'Html-part': string;
     'Text-part': string;
     MJMLContent: string;
@@ -84,14 +84,14 @@ export namespace Template {
 
   // REQUEST PART
   export type PostTemplateBody =
-    Partial<Omit<ITemplate, 'Name' | 'ID' | 'OwnerId' | 'Previews' | 'CreatedAt' | 'LastUpdatedAt'>> &
+    Partial<Omit<Template, 'Name' | 'ID' | 'OwnerId' | 'Previews' | 'CreatedAt' | 'LastUpdatedAt'>> &
   {
     Name: string;
   }
 
   export type PutTemplateBody = Partial<PostTemplateBody>
 
-  export type GetTemplateQueryParams = Partial<Common.IPagination> & {
+  export type GetTemplateQueryParams = Partial<Common.Pagination> & {
     Categories?: string;
     CategoriesSelectionMethod?: CategoriesSelectionMethod;
     EditMode?: EditMode;
@@ -104,14 +104,14 @@ export namespace Template {
   export type PostTemplateDetailContentBody =
     Partial<Omit<TemplateDetailContent, 'Headers'>> &
   {
-    Headers?: Partial<IHeaders>;
+    Headers?: Partial<Headers>;
   }
 
   export type PutTemplateDetailContentBody = PostTemplateDetailContentBody
 
   // RESPONSE PART
-  type TemplateResponse = Common.TResponse<ITemplate[]>;
-  type TemplateDetailContentResponse = Common.TResponse<TemplateDetailContent[]>;
+  type TemplateResponse = Common.Response<Template[]>;
+  type TemplateDetailContentResponse = Common.Response<TemplateDetailContent[]>;
 
   export type PostTemplateResponse = TemplateResponse
   export type PutTemplateResponse = TemplateResponse

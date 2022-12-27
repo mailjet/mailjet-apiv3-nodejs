@@ -71,7 +71,7 @@ export namespace Message {
     Spam = 'spam'
   }
 
-  export interface IMessageTracked {
+  export interface MessageTracked {
     IsClickTracked: boolean;
     IsHTMLPartIncluded: boolean;
     IsOpenTracked: boolean;
@@ -79,7 +79,7 @@ export namespace Message {
     IsUnsubTracked: boolean;
   }
 
-  export interface IMessage extends IMessageTracked {
+  export interface Message extends MessageTracked {
     ID: number;
     ArrivedAt: string;
     AttachmentCount: number;
@@ -101,7 +101,7 @@ export namespace Message {
     UUID: string;
   }
 
-  export interface IMessageHistory {
+  export interface MessageHistory {
     Comment: string;
     EventAt: number;
     EventType: EventType;
@@ -110,7 +110,7 @@ export namespace Message {
     UseragentID: number;
   }
 
-  export interface IMessageInformation<TRules = Common.TUnknownRec> {
+  export interface MessageInformation<Rules = Common.UnknownRec> {
     ID: number;
     CampaignID: number;
     ClickTrackedCount: number;
@@ -121,13 +121,13 @@ export namespace Message {
     QueuedCount: number;
     SendEndAt: string;
     SentCount: number;
-    SpamAssassinRules: TRules;
+    SpamAssassinRules: Rules;
     SpamAssassinScore: number;
   }
 
   // REQUEST PART
-  export type GetMessageQueryParams = Partial<Common.ITimestampPeriod> &
-    Partial<Common.IPagination> &
+  export type GetMessageQueryParams = Partial<Common.TimestampPeriod> &
+    Partial<Common.Pagination> &
   {
     Campaign?: number;
     Contact?: number;
@@ -143,8 +143,8 @@ export namespace Message {
     ShowSubject?: boolean;
   }
 
-  export type GetMessageInformationQueryParams = Partial<Common.ITimestampPeriod> &
-    Partial<Common.IPagination> &
+  export type GetMessageInformationQueryParams = Partial<Common.TimestampPeriod> &
+    Partial<Common.Pagination> &
   {
     CampaignID?: number;
     ContactsList?: number;
@@ -161,8 +161,8 @@ export namespace Message {
   }
 
   // RESPONSE PART
-  export type GetMessagesResponse = Common.TResponse<IMessage[]>
-  export type GetMessageHistoryResponse = Common.TResponse<IMessageHistory[]>
-  export type GetMessageInformationResponse<TRules = Common.TUnknownRec> =
-      Common.TResponse<Array<IMessageInformation<TRules>>>
+  export type GetMessagesResponse = Common.Response<Message[]>
+  export type GetMessageHistoryResponse = Common.Response<MessageHistory[]>
+  export type GetMessageInformationResponse<Rules = Common.UnknownRec> =
+      Common.Response<Array<MessageInformation<Rules>>>
 }

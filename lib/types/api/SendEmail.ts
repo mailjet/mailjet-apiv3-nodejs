@@ -1,17 +1,17 @@
 import { Common } from '@mailjet/types/api/Common';
 
 export namespace SendEmailV3 {
-  export type TMjTemplateErrorDeliver = '0' | 'deliver'
-  export type TMjDeduplicateCampaign = 0 | 1;
-  export type TMjTrackOpen = 0 | 1 | 2;
+  export type MjTemplateErrorDeliver = '0' | 'deliver'
+  export type MjDeduplicateCampaign = 0 | 1;
+  export type MjTrackOpen = 0 | 1 | 2;
 
-  export interface IRecipient {
+  export interface Recipient {
     Email: string;
     Name?: string
     Vars?: string;
   }
 
-  export interface IAttachment {
+  export interface Attachment {
     Filename: string;
     Content: string;
     'Content-type': string;
@@ -21,23 +21,23 @@ export namespace SendEmailV3 {
     'Mj-TemplateID'?: number;
     'Mj-TemplateLanguage'?: boolean;
     'Mj-TemplateErrorReporting'?: string;
-    'Mj-TemplateErrorDeliver'?: TMjTemplateErrorDeliver;
+    'Mj-TemplateErrorDeliver'?: MjTemplateErrorDeliver;
     'Mj-prio'?: number;
     'Mj-campaign'?: string;
-    'Mj-deduplicatecampaign'?: TMjDeduplicateCampaign;
-    'Mj-trackopen'?: TMjTrackOpen;
+    'Mj-deduplicatecampaign'?: MjDeduplicateCampaign;
+    'Mj-trackopen'?: MjTrackOpen;
     'Mj-CustomID'?: string;
     'Mj-EventPayload'?: string;
   }
 
   // REQUEST PART
   export type Body<
-    THeaders = Common.TUnknownRec,
-    TVars = Common.TUnknownRec
+    Headers = Common.UnknownRec,
+    Vars = Common.UnknownRec
     > = BodyMj & {
     FromEmail?: string;
     FromName?: string;
-    Recipients?: IRecipient[];
+    Recipients?: Recipient[];
     Sender?: boolean;
     Subject?: string;
     'Text-part'?: string;
@@ -45,21 +45,21 @@ export namespace SendEmailV3 {
     To?: string;
     Cc?: string;
     Bcc?: string;
-    Attachments?: IAttachment[];
-    Inline_attachments?: IAttachment[];
-    Headers?: THeaders;
-    Vars?: TVars;
+    Attachments?: Attachment[];
+    Inline_attachments?: Attachment[];
+    Headers?: Headers;
+    Vars?: Vars;
   }
 
   // RESPONSE PART
-  export interface IResponseSent {
+  export interface ResponseSent {
     Email: string;
     MessageID: number;
     MessageUUID: string;
   }
 
   export type Response = {
-    Sent: IResponseSent[];
+    Sent: ResponseSent[];
   }
 }
 
@@ -76,37 +76,37 @@ export namespace SendEmailV3_1 {
     Enabled = 'enabled',
   }
 
-  export interface IEmailAddressTo {
+  export interface EmailAddressTo {
     Email: string;
     Name?: string;
   }
 
-  export interface IAttachment {
+  export interface Attachment {
     Filename: string;
     ContentType: string;
     Base64Content: string;
   }
 
-  export interface IInlinedAttachment extends IAttachment {
+  export interface InlinedAttachment extends Attachment {
     ContentID?: string;
   }
 
-  export interface IMessage<THeaders = Common.TUnknownRec, TVariables = Common.TUnknownRec> {
-    From: IEmailAddressTo;
-    Sender?: IEmailAddressTo;
-    To: IEmailAddressTo[];
-    Cc?: IEmailAddressTo[];
-    Bcc?: IEmailAddressTo[];
-    ReplyTo?: IEmailAddressTo;
+  export interface Message<Headers = Common.UnknownRec, Variables = Common.UnknownRec> {
+    From: EmailAddressTo;
+    Sender?: EmailAddressTo;
+    To: EmailAddressTo[];
+    Cc?: EmailAddressTo[];
+    Bcc?: EmailAddressTo[];
+    ReplyTo?: EmailAddressTo;
     Subject?: string;
     TextPart?: string;
     HTMLPart?: string;
     TemplateID?: number;
     TemplateLanguage?: boolean;
-    TemplateErrorReporting?: IEmailAddressTo;
+    TemplateErrorReporting?: EmailAddressTo;
     TemplateErrorDeliver?: boolean;
-    Attachments?: IAttachment[];
-    InlinedAttachments?: IInlinedAttachment[];
+    Attachments?: Attachment[];
+    InlinedAttachments?: InlinedAttachment[];
     Priority?: number;
     CustomCampaign?: string;
     DeduplicateCampaign?: boolean;
@@ -115,8 +115,8 @@ export namespace SendEmailV3_1 {
     CustomID?: string;
     EventPayload?: string;
     URLTags?: string;
-    Headers?: THeaders;
-    Variables?: TVariables;
+    Headers?: Headers;
+    Variables?: Variables;
   }
 
   export enum ResponseStatus {
@@ -124,7 +124,7 @@ export namespace SendEmailV3_1 {
     Error = 'error',
   }
 
-  export interface IResponseError {
+  export interface ResponseError {
     ErrorIdentifier: string;
     ErrorCode: string;
     StatusCode: number;
@@ -132,7 +132,7 @@ export namespace SendEmailV3_1 {
     ErrorRelatedTo: Array<string>;
   }
 
-  export interface IResponseEmailAddressTo {
+  export interface ResponseEmailAddressTo {
     Email: string;
     MessageUUID: string;
     MessageID: number;
@@ -141,27 +141,27 @@ export namespace SendEmailV3_1 {
 
   // REQUEST PART
   export type Body<
-    THeaders = Common.TUnknownRec,
-    TVariables = Common.TUnknownRec,
-    TGlobals = Common.TUnknownRec,
+    Headers = Common.UnknownRec,
+    Variables = Common.UnknownRec,
+    Globals = Common.UnknownRec,
     > = {
-    Messages: Array<IMessage<THeaders, TVariables>>;
+    Messages: Array<Message<Headers, Variables>>;
     SandboxMode?: boolean;
     AdvanceErrorHandling?: boolean;
-    Globals?: TGlobals;
+    Globals?: Globals;
   }
 
   // RESPONSE PART
-  export interface IResponseMessage {
+  export interface ResponseMessage {
     Status: ResponseStatus;
-    Errors: IResponseError[];
+    Errors: ResponseError[];
     CustomID: string;
-    To: IResponseEmailAddressTo[];
-    Cc: IResponseEmailAddressTo[];
-    Bcc: IResponseEmailAddressTo[];
+    To: ResponseEmailAddressTo[];
+    Cc: ResponseEmailAddressTo[];
+    Bcc: ResponseEmailAddressTo[];
   }
 
   export type Response = {
-    Messages: IResponseMessage[];
+    Messages: ResponseMessage[];
   }
 }
