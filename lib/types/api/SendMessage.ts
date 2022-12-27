@@ -1,16 +1,24 @@
 export namespace SendMessage {
-  export interface ICost {
+  export interface Cost {
     Value: number;
     Currency: string;
   }
 
-  export interface ISendStatus {
+  export interface SendStatus {
     Code: number;
     Name: string;
     Description: string;
   }
 
-  export interface ISMS {
+  // REQUEST PART
+  export type Body = {
+    From: string;
+    To: string;
+    Text: string;
+  }
+
+  // RESPONSE PART
+  export type Response = {
     From: string;
     To: string;
     Text: string;
@@ -18,17 +26,7 @@ export namespace SendMessage {
     SMSCount: number;
     CreationTS: number;
     SentTS: number;
-    Cost: ICost;
-    Status: ISendStatus;
-  }
-
-  // REQUEST PART
-  export interface IBody {
-    From: string;
-    To: string;
-    Text: string;
-  }
-
-  // RESPONSE PART
-  export type TResponse = ISMS;
+    Cost: Cost;
+    Status: SendStatus;
+  };
 }

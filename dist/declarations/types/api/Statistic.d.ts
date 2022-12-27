@@ -1,19 +1,19 @@
 import { Common } from "./Common";
 import { Message } from "./Message";
 export declare namespace Statistic {
-    enum CampaignOverViewIDType {
+    enum CampaignOverviewIDType {
         SentCampaign = "Campaign",
         ABTesting = "AX",
         Draft = "NL"
     }
-    enum CampaignOverViewEditMode {
+    enum CampaignOverviewEditMode {
         Tool = "tool",
         HTML = "html",
         Tool2 = "tool2",
         HTML2 = "html2",
         MJML = "mjml"
     }
-    enum CampaignOverViewEditType {
+    enum CampaignOverviewEditType {
         Full = "full",
         Unknown = "unknown"
     }
@@ -37,13 +37,13 @@ export declare namespace Statistic {
         Open = "open",
         Click = "click"
     }
-    interface ICampaignOverView {
+    interface CampaignOverview {
         ClickedCount: number;
         DeliveredCount: number;
-        EditMode: CampaignOverViewEditMode;
-        EditType: CampaignOverViewEditType;
+        EditMode: CampaignOverviewEditMode;
+        EditType: CampaignOverviewEditType;
         ID: number;
-        IDType: CampaignOverViewIDType;
+        IDType: CampaignOverviewIDType;
         OpenedCount: number;
         ProcessedCount: number;
         SendTimeStart: number;
@@ -51,7 +51,7 @@ export declare namespace Statistic {
         Subject: string;
         Title: string;
     }
-    interface IContactStatistic {
+    interface ContactStatistic {
         BlockedCount: number;
         BouncedCount: number;
         ClickedCount: number;
@@ -70,16 +70,16 @@ export declare namespace Statistic {
         UserMarketingContacts: number;
         WorkFlowExitedCount: number;
     }
-    interface IGEOStatistic {
+    interface GEOStatistic {
         ClickedCount: number;
         OpenedCount: number;
         Country: string;
     }
-    interface IListRecipientStatistic<TData = Array<unknown>> {
+    interface ListRecipientStatistic<Data = Array<unknown>> {
         BlockedCount: number;
         BouncedCount: number;
         ClickedCount: number;
-        Data: TData;
+        Data: Data;
         DeferredCount: number;
         DeliveredCount: number;
         HardbouncedCount: number;
@@ -94,7 +94,7 @@ export declare namespace Statistic {
         UnsubscribedCount: number;
         WorkFlowExitedCount: number;
     }
-    interface IStatCounter {
+    interface StatCounter {
         APIKeyID: number;
         EventClickDelay: number;
         EventClickedCount: number;
@@ -118,13 +118,13 @@ export declare namespace Statistic {
         Timeslice: string;
         Total: number;
     }
-    interface ILinkClickStatistic {
+    interface LinkClickStatistic {
         ClickedEventsCount: number;
         ClickedMessagesCount: number;
         PositionIndex: number;
         URL: string;
     }
-    interface IRecipientESPStatistic {
+    interface RecipientESPStatistic {
         AttemptedMessagesCount?: number;
         ClickedMessagesCount?: number;
         DeferredMessagesCount?: number;
@@ -143,29 +143,29 @@ export declare namespace Statistic {
         SpamReportsRate?: number;
         DeferredRate?: number;
     }
-    interface ITopLinkClicked {
+    interface TopLinkClicked {
         ClickedCount: number;
         LinkId: number;
         Url: string;
     }
-    interface IUserAgentStatistic {
+    interface UserAgentStatistic {
         Count: number;
         DistinctCount: number;
         Platform: string;
         UserAgent: string;
     }
-    interface IGetCampaignOverViewQueryParams extends Partial<Common.IPagination> {
+    type GetCampaignOverviewQueryParams = Partial<Common.Pagination> & {
         All?: boolean;
         Archived?: boolean;
         Drafts?: boolean;
         ID?: number;
-        IDType?: CampaignOverViewIDType;
+        IDType?: CampaignOverviewIDType;
         Programmed?: boolean;
         Sent?: boolean;
         Starred?: boolean;
         Subject?: string;
-    }
-    interface IGetContactStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetContactStatisticsQueryParams = Partial<Common.Pagination> & {
         Blocked?: boolean;
         Bounced?: boolean;
         Click?: boolean;
@@ -180,8 +180,8 @@ export declare namespace Statistic {
         Spam?: boolean;
         Softbounced?: boolean;
         Unsubscribed?: boolean;
-    }
-    interface IGetGEOStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetGEOStatisticsQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -194,8 +194,8 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    interface IGetListRecipientStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetListRecipientStatisticsQueryParams = Partial<Common.Pagination> & {
         Blocked?: boolean;
         Bounced?: boolean;
         Click?: boolean;
@@ -215,20 +215,20 @@ export declare namespace Statistic {
         Spam?: boolean;
         TimeZone?: string;
         Unsubscribed?: boolean;
-    }
-    interface IGetStatCountersQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetStatCountersQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CounterSource: CounterSource;
         CounterResolution: CounterResolution;
         CounterTiming: CounterTiming;
         SourceID?: number;
-    }
-    interface IGetLinkClickStatisticsQueryParams extends Partial<Common.IPagination> {
+    };
+    type GetLinkClickStatisticsQueryParams = Partial<Common.Pagination> & {
         CampaignID: number;
-    }
-    interface IGetRecipientESPStatisticsQueryParams extends IGetLinkClickStatisticsQueryParams {
+    };
+    type GetRecipientESPStatisticsQueryParams = GetLinkClickStatisticsQueryParams & {
         ESP_Name?: number;
-    }
-    interface IGetTopLinkClickedQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetTopLinkClickedQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         ActualClicks?: boolean;
         CampaignID?: number;
         Contact?: number;
@@ -243,8 +243,8 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         Message?: number;
         Period?: Common.Period;
-    }
-    interface IGetUserAgentStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetUserAgentStatisticsQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -259,14 +259,14 @@ export declare namespace Statistic {
         IsStarred?: boolean;
         Period?: Common.Period;
         Platform?: string;
-    }
-    type TGetCampaignOverViewResponse = Common.IResponse<ICampaignOverView[]>;
-    type TGetContactStatisticsResponse = Common.IResponse<IContactStatistic[]>;
-    type TGetGEOStatisticsResponse = Common.IResponse<IGEOStatistic[]>;
-    type TGetListRecipientStatisticsResponse<TData = Array<unknown>> = Common.IResponse<Array<IListRecipientStatistic<TData>>>;
-    type TGetStatCountersResponse = Common.IResponse<IStatCounter[]>;
-    type TGetLinkClickStatisticsResponse = Common.IResponse<ILinkClickStatistic[]>;
-    type TGetRecipientESPStatisticsResponse = Common.IResponse<IRecipientESPStatistic[]>;
-    type TGetTopLinkClickedResponse = Common.IResponse<ITopLinkClicked[]>;
-    type TGetUserAgentStatisticsResponse = Common.IResponse<IUserAgentStatistic[]>;
+    };
+    type GetCampaignOverviewResponse = Common.Response<CampaignOverview[]>;
+    type GetContactStatisticsResponse = Common.Response<ContactStatistic[]>;
+    type GetGEOStatisticsResponse = Common.Response<GEOStatistic[]>;
+    type GetListRecipientStatisticsResponse<Data = Array<unknown>> = Common.Response<Array<ListRecipientStatistic<Data>>>;
+    type GetStatCountersResponse = Common.Response<StatCounter[]>;
+    type GetLinkClickStatisticsResponse = Common.Response<LinkClickStatistic[]>;
+    type GetRecipientESPStatisticsResponse = Common.Response<RecipientESPStatistic[]>;
+    type GetTopLinkClickedResponse = Common.Response<TopLinkClicked[]>;
+    type GetUserAgentStatisticsResponse = Common.Response<UserAgentStatistic[]>;
 }

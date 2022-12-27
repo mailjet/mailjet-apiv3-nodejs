@@ -22,33 +22,36 @@ export declare namespace Webhook {
         Dead = "dead",
         Alive = "alive"
     }
-    export type TVersion = 1 | 2;
-    export interface IEventCallbackUrl {
+    export type Version = 1 | 2;
+    export interface EventCallbackUrl {
         ID: number;
         EventType: EventType;
         IsBackup: boolean;
         Status: Status;
         APIKeyID: number;
-        Version: TVersion;
+        Version: Version;
         Url: string;
     }
-    export interface IPostEventCallbackUrlBody {
+    export type PostEventCallbackUrlBody = {
         Url: string;
         EventType?: EventType;
         IsBackup?: boolean;
         Status?: Status;
-    }
-    export interface IPutEventCallbackUrlBody extends Partial<IPostEventCallbackUrlBody> {
-    }
-    export interface IGetEventCallbackUrlQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutEventCallbackUrlBody = Partial<PostEventCallbackUrlBody>;
+    export type GetEventCallbackUrlQueryParams = Partial<Common.Pagination> & {
         Backup?: boolean;
         EventType?: EventTypeValue;
         Status?: string;
-        Version?: TVersion;
-    }
-    type TEventCallbackUrlResponse = Common.IResponse<IEventCallbackUrl[]>;
-    export type TPostEventCallbackUrlResponse = TEventCallbackUrlResponse;
-    export type TPutEventCallbackUrlResponse = TEventCallbackUrlResponse;
-    export type TGetEventCallbackUrlResponse = TEventCallbackUrlResponse;
+        Version?: Version;
+    };
+    type EventCallbackUrlResponse = {
+        Count: number;
+        Total: number;
+        Data: EventCallbackUrl[];
+    };
+    export type PostEventCallbackUrlResponse = EventCallbackUrlResponse;
+    export type PutEventCallbackUrlResponse = EventCallbackUrlResponse;
+    export type GetEventCallbackUrlResponse = EventCallbackUrlResponse;
     export {};
 }

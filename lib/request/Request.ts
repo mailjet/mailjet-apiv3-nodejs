@@ -11,13 +11,13 @@ import { TObject } from '@custom/types';
 /*lib*/
 /*other*/
 
-export interface IRequestConfig {
+export interface RequestConfig {
   host: string;
   version: string;
   output: ResponseType;
 }
 
-export interface IRequestOptions {
+export interface RequestOptions {
   timeout?: number;
   proxy?: AxiosProxyConfig;
   headers?: AxiosRequestHeaders;
@@ -25,13 +25,13 @@ export interface IRequestOptions {
   maxContentLength?: number;
 }
 
-export type TSubPath = 'REST' | 'DATA' | '';
+export type SubPath = 'REST' | 'DATA' | '';
 
-export type TRequestData = string | TObject.TUnknownRec;
-export type TRequestParams = TObject.TUnknownRec;
-export type TRequestConstructorConfig = null | Partial<IRequestConfig>;
+export type RequestData = string | TObject.UnknownRec;
+export type RequestParams = TObject.UnknownRec;
+export type RequestConstructorConfig = null | Partial<RequestConfig>;
 
-export type TRequestAxiosConfig = Required<Pick<
+export type RequestAxiosConfig = Required<Pick<
     AxiosRequestConfig,
     | 'url'
     | 'data'

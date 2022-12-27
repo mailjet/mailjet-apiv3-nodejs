@@ -5,28 +5,28 @@ export declare namespace Segmentation {
         UnUsed = "unused",
         Deleted = "deleted"
     }
-    export interface IContactFilter {
+    export interface ContactFilter {
         ID: number;
         Description: string;
         Expression: string;
         Name: string;
         Status: SegmentStatus;
     }
-    export interface IPostContactFilterBody {
+    export type PostContactFilterBody = {
         Name: string;
         Expression: string;
         Description?: string;
-    }
-    export interface IPutContactFilterBody extends Partial<IPostContactFilterBody> {
+    };
+    export type PutContactFilterBody = Partial<PostContactFilterBody> & {
         Status?: SegmentStatus;
-    }
-    export interface IGetContactFilterQueryParams extends Partial<Common.IPagination> {
+    };
+    export type GetContactFilterQueryParams = Partial<Common.Pagination> & {
         ShowDeleted?: boolean;
         Status?: SegmentStatus;
-    }
-    type TContactFilterResponse = Common.IResponse<IContactFilter[]>;
-    export type TPostContactFilterResponse = TContactFilterResponse;
-    export type TPutContactFilterResponse = TContactFilterResponse;
-    export type TGetContactFilterResponse = TContactFilterResponse;
+    };
+    type ContactFilterResponse = Common.Response<ContactFilter[]>;
+    export type PostContactFilterResponse = ContactFilterResponse;
+    export type PutContactFilterResponse = ContactFilterResponse;
+    export type GetContactFilterResponse = ContactFilterResponse;
     export {};
 }

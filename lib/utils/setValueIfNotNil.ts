@@ -8,7 +8,7 @@ import isNull from './isNull';
 /*other*/
 
 function setValueIfNotNil(
-  targetObject: TObject.TUnknownRec,
+  targetObject: TObject.UnknownRec,
   path: string,
   value: unknown,
 ): void {

@@ -1,23 +1,21 @@
 import { Common } from "./Common";
 export declare namespace Parse {
-    export interface IParseRoute {
+    export interface ParseRoute {
         ID: number;
         APIKeyID: number;
         Email: string;
         Url: string;
     }
-    export interface IPostParseRouteBody {
+    export type PostParseRouteBody = {
         Url: string;
         APIKeyID?: number;
         Email?: string;
-    }
-    export interface IPutParseRouteBody extends Partial<IPostParseRouteBody> {
-    }
-    export interface IGetParseRouteQueryParams extends Partial<Common.IPagination> {
-    }
-    type TParseRouteResponse = Common.IResponse<IParseRoute[]>;
-    export type TPostParseRouteResponse = TParseRouteResponse;
-    export type TPutParseRouteResponse = TParseRouteResponse;
-    export type TGetParseRouteResponse = TParseRouteResponse;
+    };
+    export type PutParseRouteBody = Partial<PostParseRouteBody>;
+    export type GetParseRouteQueryParams = Partial<Common.Pagination>;
+    type ParseRouteResponse = Common.Response<ParseRoute[]>;
+    export type PostParseRouteResponse = ParseRouteResponse;
+    export type PutParseRouteResponse = ParseRouteResponse;
+    export type GetParseRouteResponse = ParseRouteResponse;
     export {};
 }

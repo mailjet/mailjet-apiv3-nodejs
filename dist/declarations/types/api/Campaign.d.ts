@@ -25,15 +25,15 @@ export declare namespace DraftCampaign {
         AXTested = "AXTested",
         AXSelected = "AXSelected"
     }
-    export interface IRecipient {
+    export interface Recipient {
         Email: string;
         Name?: string;
     }
-    export interface ICampaignDraft<TAXTesting = Common.TUnknownRec> {
+    export interface CampaignDraft<AXTesting = Common.UnknownRec> {
         ID: number;
         AXFraction: number;
         AXFractionName: string;
-        AXTesting: TAXTesting;
+        AXTesting: AXTesting;
         Current: number;
         EditMode: EditMode;
         IsStarred: boolean;
@@ -57,22 +57,22 @@ export declare namespace DraftCampaign {
         Url: string;
         Used: boolean;
     }
-    export interface ICampaignDraftDetailContent<THeaders = Common.TUnknownRec> {
-        Headers: THeaders;
+    export interface CampaignDraftDetailContent<Headers = Common.UnknownRec> {
+        Headers: Headers;
         'Html-part': string;
         'Text-part': string;
         MJMLContent: string;
     }
-    export interface ICampaignDraftSchedule {
+    export interface CampaignDraftSchedule {
         Date: string;
         Status: string;
     }
-    export interface IPostCampaignDraftBody<TAXTesting = Common.TUnknownRec> {
+    export type PostCampaignDraftBody<AXTesting = Common.UnknownRec> = {
         Locale: string;
         Subject: string;
         AXFraction?: number;
         AXFractionName?: string;
-        AXTesting?: TAXTesting;
+        AXTesting?: AXTesting;
         Current?: number;
         EditMode?: EditMode;
         IsStarred?: boolean;
@@ -87,11 +87,11 @@ export declare namespace DraftCampaign {
         SegmentationAlt?: string;
         Sender?: string;
         SenderEmail?: string;
-    }
-    export interface IPutCampaignDraftBody<TAXTesting = Common.TUnknownRec> extends Omit<Partial<IPostCampaignDraftBody<TAXTesting>>, 'ContactsListAlt'> {
+    };
+    export type PutCampaignDraftBody<AXTesting = Common.UnknownRec> = Omit<Partial<PostCampaignDraftBody<AXTesting>>, 'ContactsListAlt'> & {
         Status?: CampaignDraftStatus;
-    }
-    export interface IGetCampaignDraftQueryParams extends Partial<Common.IPagination> {
+    };
+    export type GetCampaignDraftQueryParams = Partial<Common.Pagination> & {
         AXTesting?: number;
         Campaign?: number;
         ContactsList?: number;
@@ -107,34 +107,32 @@ export declare namespace DraftCampaign {
         Status?: CampaignDraftStatus;
         Subject?: string;
         Template?: number;
-    }
-    export interface IPostCampaignDraftDetailContentBody<THeaders = Common.TUnknownRec> extends Partial<ICampaignDraftDetailContent<THeaders>> {
-    }
-    export interface IPostCampaignDraftScheduleBody {
+    };
+    export type PostCampaignDraftDetailContentBody<Headers = Common.UnknownRec> = Partial<CampaignDraftDetailContent<Headers>>;
+    export type PostCampaignDraftScheduleBody = {
         Date: string;
-    }
-    export interface IPutCampaignDraftScheduleBody extends Partial<IPostCampaignDraftScheduleBody> {
-    }
-    export interface IPostCampaignDraftTestBody {
-        Recipients: IRecipient[];
-    }
-    type TCampaignDraftResponse = Common.IResponse<ICampaignDraft[]>;
-    type TCampaignDraftScheduleResponse = Common.IResponse<ICampaignDraftSchedule[]>;
-    type TCampaignDraftDetailContentResponse<THeaders = Common.TUnknownRec> = Common.IResponse<Array<ICampaignDraftDetailContent<THeaders>>>;
-    type TCampaignDraftStatusResponse = Common.IResponse<Array<{
+    };
+    export type PutCampaignDraftScheduleBody = Partial<PostCampaignDraftScheduleBody>;
+    export type PostCampaignDraftTestBody = {
+        Recipients: Recipient[];
+    };
+    type CampaignDraftResponse = Common.Response<CampaignDraft[]>;
+    type CampaignDraftScheduleResponse = Common.Response<CampaignDraftSchedule[]>;
+    type CampaignDraftDetailContentResponse<Headers = Common.UnknownRec> = Common.Response<Array<CampaignDraftDetailContent<Headers>>>;
+    type CampaignDraftStatusResponse = Common.Response<Array<{
         Status: CampaignDraftSendingStatus;
     }>>;
-    export type TPostCampaignDraftResponse = TCampaignDraftResponse;
-    export type TPutCampaignDraftResponse = TCampaignDraftResponse;
-    export type TGetCampaignDraftResponse = TCampaignDraftResponse;
-    export type TPostCampaignDraftScheduleResponse = TCampaignDraftScheduleResponse;
-    export type TPutCampaignDraftScheduleResponse = TCampaignDraftScheduleResponse;
-    export type TGetCampaignDraftScheduleResponse = TCampaignDraftScheduleResponse;
-    export type TPostCampaignDraftDetailContentResponse<THeaders = Common.TUnknownRec> = TCampaignDraftDetailContentResponse<THeaders>;
-    export type TGetCampaignDraftDetailContentResponse<THeaders = Common.TUnknownRec> = TCampaignDraftDetailContentResponse<THeaders>;
-    export type TPostCampaignDraftSend = TCampaignDraftStatusResponse;
-    export type TPostCampaignDraftTest = TCampaignDraftStatusResponse;
-    export type TGetCampaignDraftStatus = TCampaignDraftStatusResponse;
+    export type PostCampaignDraftResponse = CampaignDraftResponse;
+    export type PutCampaignDraftResponse = CampaignDraftResponse;
+    export type GetCampaignDraftResponse = CampaignDraftResponse;
+    export type PostCampaignDraftScheduleResponse = CampaignDraftScheduleResponse;
+    export type PutCampaignDraftScheduleResponse = CampaignDraftScheduleResponse;
+    export type GetCampaignDraftScheduleResponse = CampaignDraftScheduleResponse;
+    export type PostCampaignDraftDetailContentResponse<Headers = Common.UnknownRec> = CampaignDraftDetailContentResponse<Headers>;
+    export type GetCampaignDraftDetailContentResponse<Headers = Common.UnknownRec> = CampaignDraftDetailContentResponse<Headers>;
+    export type PostCampaignDraftSend = CampaignDraftStatusResponse;
+    export type PostCampaignDraftTest = CampaignDraftStatusResponse;
+    export type GetCampaignDraftStatus = CampaignDraftStatusResponse;
     export {};
 }
 export declare namespace SentCampaign {
@@ -143,7 +141,7 @@ export declare namespace SentCampaign {
         Marketing = 2,
         Unknown = 3
     }
-    export interface ICampaign {
+    export interface Campaign {
         ID: number;
         IsDeleted: boolean;
         IsStarred: boolean;
@@ -165,11 +163,11 @@ export declare namespace SentCampaign {
         Subject: string;
         WorkflowID: number;
     }
-    export interface IPutCampaignBody {
+    export type PutCampaignBody = {
         IsDeleted?: boolean;
         IsStarred?: boolean;
-    }
-    export interface IGetCampaignQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    export type GetCampaignQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsListID?: number;
         CustomCampaign?: string;
@@ -182,9 +180,9 @@ export declare namespace SentCampaign {
         IsStarred?: boolean;
         Period?: Common.Period;
         WorkflowID?: number;
-    }
-    type TCampaignResponse = Common.IResponse<ICampaign[]>;
-    export type TPutCampaignResponse = TCampaignResponse;
-    export type TGetCampaignResponse = TCampaignResponse;
+    };
+    type CampaignResponse = Common.Response<Campaign[]>;
+    export type PutCampaignResponse = CampaignResponse;
+    export type GetCampaignResponse = CampaignResponse;
     export {};
 }

@@ -2,39 +2,48 @@ import { SendMessage } from '@mailjet/types/api/SendMessage';
 import { Common } from '@mailjet/types/api/Common';
 
 export namespace SMSMessage {
-  export interface ISMS extends Omit<SendMessage.ISMS, 'Text'> {}
+  export type SMS = {
+    From: string;
+    To: string;
+    MessageID: string | number;
+    SMSCount: number;
+    CreationTS: number;
+    SentTS: number;
+    Cost: SendMessage.Cost;
+    Status: SendMessage.SendStatus;
+  }
 
-  export interface ISMSExport {
+  export type SMSExport = {
     ID: number;
     URL: string;
-    Status: SendMessage.ISendStatus;
+    Status: SendMessage.SendStatus;
     CreationTS: number;
     ExpirationTS: number;
   }
 
   // REQUEST PART
-  export interface IPostSMSExportBody extends Common.ITimestampPeriod {}
+  export type PostSMSExportBody = Common.TimestampPeriod
 
-  export interface IGetSMSQueryParams extends
-    Partial<Common.ITimestampPeriod>,
-    Partial<Pick<Common.IPagination, 'Limit' | 'Offset'>>
+  export type GetSMSQueryParams =
+    Partial<Common.TimestampPeriod> &
+    Partial<Pick<Common.Pagination, 'Limit' | 'Offset'>> &
   {
     StatusCode?: Array<string>;
     To?: string;
     IDs?: string;
   }
 
-  export interface IGetSMSCountQueryParams extends
-    Partial<Common.ITimestampPeriod>
+  export type GetSMSCountQueryParams =
+    Partial<Common.TimestampPeriod> &
   {
     StatusCode?: Array<string>;
     To?: string;
   }
 
   // RESPONSE PART
-  export type TPostSMSExportResponse = ISMSExport;
-  export type TGetSMSExportResponse = ISMSExport;
+  export type PostSMSExportResponse = SMSExport;
+  export type GetSMSExportResponse = SMSExport;
 
-  export type TGetSMSResponse = { Data: ISMS[] }
-  export type TGetSMSCountResponse = { Count: number }
+  export type GetSMSResponse = { Data: SMS[] }
+  export type GetSMSCountResponse = { Count: number }
 }

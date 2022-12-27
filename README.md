@@ -47,6 +47,7 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
     - [Disable API call](#disable-api-call)
   - [TypeScript](#typescript)
     - [Send Email example](#send-email-example)
+    - [Send Message example](#send-message-example)
     - [Get Contact example](#get-contact-example)
     - [Our external Typings](#our-external-typings)
   - [Browser Demo](#browser-demo)
@@ -489,7 +490,7 @@ const mailjet = new Mailjet({
 });
 
 (async () => {
-  const data: SendEmailV3_1.IBody = {
+  const data: SendEmailV3_1.Body = {
     Messages: [
       {
         From: {
@@ -513,7 +514,7 @@ const mailjet = new Mailjet({
 
   const result = await mailjet
     .post('send', { version: 'v3.1' })
-    .request<SendEmailV3_1.IResponse>(data);
+    .request<SendEmailV3_1.Response>(data);
 
   const { Status } = result.body.Messages[0];
 })();
@@ -533,6 +534,55 @@ And `response` will have this shape:
     }
 }
 ```
+### Send Message Example
+```typescript
+import Mailjet, { SendMessage } from 'node-mailjet'
+
+const mailjet = new Mailjet({
+  apiKey: process.env.MJ_APIKEY_PUBLIC,
+  apiSecret: process.env.MJ_APIKEY_PRIVATE
+});
+
+(async () => {
+
+    const body: SendMessage.Body = {
+        From: 'some@email.com',
+        To: 'some2@email.com',
+        Text: 'Test'
+    };
+
+    const result = await mailjet
+        .post('contact', { version: 'v3' })
+        .request<SendMessage.Response>(body);
+    
+
+    const { Status } = result.body;
+})();
+```
+And `response` will have this shape:
+```typescript
+{
+    response: Response;
+    body: {
+      From: string;
+      To: string;
+      Text: string;
+      MessageID: string | number;
+      SMSCount: number;
+      CreationTS: number;
+      SentTS: number;
+      Cost: {
+        Value: number;
+        Currency: string;
+      };
+      Status: {
+        Code: number;
+        Name: string;
+        Description: string;
+      };
+    }
+}
+```
 
 ### Get Contact Example
 
@@ -545,14 +595,14 @@ const mailjet = new Mailjet({
 });
 
 (async () => {
-  const queryData: Contact.IGetContactQueryParams = {
+  const queryData: Contact.GetContactQueryParams = {
     IsExcludedFromCampaigns: false,
     Campaign: 2234234,
   };
 
   const result = await mailjet
     .get('contact', { version: 'v3' })
-    .request<Contact.TGetContactResponse>({}, queryData);
+    .request<Contact.GetContactResponse>({}, queryData);
 
   const ContactID = result.body.Data[0].ID;
 })();

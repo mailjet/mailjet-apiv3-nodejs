@@ -1,7 +1,7 @@
 export namespace Common {
-  export type TUnknownRec = Record<string, unknown>
+  export type UnknownRec = Record<string, unknown>
 
-  export interface IPagination {
+  export interface Pagination {
     countOnly: boolean;
 
     Limit: number;
@@ -9,15 +9,15 @@ export namespace Common {
     Sort: string;
   }
 
-  export interface ITimestampPeriod {
+  export interface TimestampPeriod {
     FromTS: string | number;
     ToTS: string | number;
   }
 
-  export interface IResponse<TEntity> {
+  export type Response<Entity> = {
     Count: number;
     Total: number;
-    Data: TEntity;
+    Data: Entity;
   }
 
   export enum Period {

@@ -21,7 +21,7 @@ export namespace TObject {
         [TKey in keyof T]?: T[TKey] | null;
     };
 
-    export type TUnknownRec = Record<string, unknown>
+    export type UnknownRec = Record<string, unknown>
 }
 
 export namespace TArray {

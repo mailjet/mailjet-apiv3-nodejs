@@ -65,14 +65,14 @@ export declare namespace Message {
         Unsub = "unsub",
         Spam = "spam"
     }
-    interface IMessageTracked {
+    interface MessageTracked {
         IsClickTracked: boolean;
         IsHTMLPartIncluded: boolean;
         IsOpenTracked: boolean;
         IsTextPartIncluded: boolean;
         IsUnsubTracked: boolean;
     }
-    interface IMessage extends IMessageTracked {
+    interface Message extends MessageTracked {
         ID: number;
         ArrivedAt: string;
         AttachmentCount: number;
@@ -93,7 +93,7 @@ export declare namespace Message {
         Subject: string;
         UUID: string;
     }
-    interface IMessageHistory {
+    interface MessageHistory {
         Comment: string;
         EventAt: number;
         EventType: EventType;
@@ -101,7 +101,7 @@ export declare namespace Message {
         Useragent: string;
         UseragentID: number;
     }
-    interface IMessageInformation<TRules = Common.TUnknownRec> {
+    interface MessageInformation<Rules = Common.UnknownRec> {
         ID: number;
         CampaignID: number;
         ClickTrackedCount: number;
@@ -112,10 +112,10 @@ export declare namespace Message {
         QueuedCount: number;
         SendEndAt: string;
         SentCount: number;
-        SpamAssassinRules: TRules;
+        SpamAssassinRules: Rules;
         SpamAssassinScore: number;
     }
-    interface IGetMessageQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    type GetMessageQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         Campaign?: number;
         Contact?: number;
         CustomID?: string;
@@ -128,8 +128,8 @@ export declare namespace Message {
         ShowContactAlt?: boolean;
         ShowCustomID?: boolean;
         ShowSubject?: boolean;
-    }
-    interface IGetMessageInformationQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetMessageInformationQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -142,8 +142,8 @@ export declare namespace Message {
         IsStarred?: boolean;
         MessageStatus?: MessageStatus;
         Period?: Common.Period;
-    }
-    type TGetMessagesResponse = Common.IResponse<IMessage[]>;
-    type TGetMessageHistoryResponse = Common.IResponse<IMessageHistory[]>;
-    type TGetMessageInformationResponse<TRules = Common.TUnknownRec> = Common.IResponse<Array<IMessageInformation<TRules>>>;
+    };
+    type GetMessagesResponse = Common.Response<Message[]>;
+    type GetMessageHistoryResponse = Common.Response<MessageHistory[]>;
+    type GetMessageInformationResponse<Rules = Common.UnknownRec> = Common.Response<Array<MessageInformation<Rules>>>;
 }

@@ -1,7 +1,7 @@
 import { Message } from "./Message";
 import { Common } from "./Common";
 export declare namespace MessageEvent {
-    interface IBounceStatistic {
+    interface BounceStatistic {
         ID: number;
         BouncedAt: string;
         CampaignID: number;
@@ -10,7 +10,7 @@ export declare namespace MessageEvent {
         IsStatePermanent: boolean;
         StateID: Message.MessageState;
     }
-    interface IClickStatistic {
+    interface ClickStatistic {
         ID: number;
         ClickedAt: string;
         ClickedDelay: number;
@@ -19,7 +19,7 @@ export declare namespace MessageEvent {
         Url: string;
         UserAgentID: number;
     }
-    interface IOpenInformation {
+    interface OpenInformation {
         ArrivedAt: string;
         CampaignID: number;
         ContactID: number;
@@ -28,14 +28,14 @@ export declare namespace MessageEvent {
         UserAgentFull: string;
         UserAgentID: number;
     }
-    interface IGetBounceStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    type GetBounceStatisticsQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         EventFromTs?: string;
         EventToTs?: string;
         Period?: Common.Period;
-    }
-    interface IGetClickStatisticsQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetClickStatisticsQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -50,8 +50,8 @@ export declare namespace MessageEvent {
         MessageID?: number;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    interface IGetOpenInformationQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Common.IPagination> {
+    };
+    type GetOpenInformationQueryParams = Partial<Common.TimestampPeriod> & Partial<Common.Pagination> & {
         CampaignID?: number;
         ContactsList?: number;
         CustomCampaign?: string;
@@ -64,8 +64,8 @@ export declare namespace MessageEvent {
         IsDeleted?: boolean;
         MessageStatus?: Message.MessageStatus;
         Period?: Common.Period;
-    }
-    type TGetBounceStatisticsResponse = Common.IResponse<IBounceStatistic[]>;
-    type TGetClickStatisticsResponse = Common.IResponse<IClickStatistic[]>;
-    type TGetOpenInformationResponse = Common.IResponse<IOpenInformation[]>;
+    };
+    type GetBounceStatisticsResponse = Common.Response<BounceStatistic[]>;
+    type GetClickStatisticsResponse = Common.Response<ClickStatistic[]>;
+    type GetOpenInformationResponse = Common.Response<OpenInformation[]>;
 }

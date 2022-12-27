@@ -49,13 +49,13 @@ export namespace Template {
     IsSubSet = 'issubset'
   }
 
-  export interface IHeaders {
+  export interface Headers {
     From: string;
     Subject: string;
     'Reply-to': string;
   }
 
-  export interface ITemplate {
+  export interface Template {
     Author: string;
     Categories: Categories;
     Copyright: string;
@@ -75,23 +75,23 @@ export namespace Template {
     LastUpdatedAt: string;
   }
 
-  export interface ITemplateDetailContent {
-    Headers: IHeaders;
+  export type TemplateDetailContent = {
+    Headers: Headers;
     'Html-part': string;
     'Text-part': string;
     MJMLContent: string;
   }
 
   // REQUEST PART
-  export interface IPostTemplateBody extends
-    Partial<Omit<ITemplate, 'Name' | 'ID' | 'OwnerId' | 'Previews' | 'CreatedAt' | 'LastUpdatedAt'>>
+  export type PostTemplateBody =
+    Partial<Omit<Template, 'Name' | 'ID' | 'OwnerId' | 'Previews' | 'CreatedAt' | 'LastUpdatedAt'>> &
   {
     Name: string;
   }
 
-  export interface IPutTemplateBody extends Partial<IPostTemplateBody> {}
+  export type PutTemplateBody = Partial<PostTemplateBody>
 
-  export interface IGetTemplateQueryParams extends Partial<Common.IPagination> {
+  export type GetTemplateQueryParams = Partial<Common.Pagination> & {
     Categories?: string;
     CategoriesSelectionMethod?: CategoriesSelectionMethod;
     EditMode?: EditMode;
@@ -101,23 +101,23 @@ export namespace Template {
     PurposesSelectionMethod?: PurposesSelectionMethod;
   }
 
-  export interface IPostTemplateDetailContentBody extends
-    Partial<Omit<ITemplateDetailContent, 'Headers'>>
+  export type PostTemplateDetailContentBody =
+    Partial<Omit<TemplateDetailContent, 'Headers'>> &
   {
-    Headers?: Partial<IHeaders>;
+    Headers?: Partial<Headers>;
   }
 
-  export interface IPutTemplateDetailContentBody extends IPostTemplateDetailContentBody {}
+  export type PutTemplateDetailContentBody = PostTemplateDetailContentBody
 
   // RESPONSE PART
-  type TTemplateResponse = Common.IResponse<ITemplate[]>;
-  type TTemplateDetailContentResponse = Common.IResponse<ITemplateDetailContent[]>;
+  type TemplateResponse = Common.Response<Template[]>;
+  type TemplateDetailContentResponse = Common.Response<TemplateDetailContent[]>;
 
-  export type TPostTemplateResponse = TTemplateResponse
-  export type TPutTemplateResponse = TTemplateResponse
-  export type TGetTemplateResponse = TTemplateResponse
+  export type PostTemplateResponse = TemplateResponse
+  export type PutTemplateResponse = TemplateResponse
+  export type GetTemplateResponse = TemplateResponse
 
-  export type TPostTemplateDetailContentResponse = TTemplateDetailContentResponse
-  export type TPutTemplateDetailContentResponse = TTemplateDetailContentResponse
-  export type TGetTemplateDetailContentResponse = TTemplateDetailContentResponse
+  export type PostTemplateDetailContentResponse = TemplateDetailContentResponse
+  export type PutTemplateDetailContentResponse = TemplateDetailContentResponse
+  export type GetTemplateDetailContentResponse = TemplateDetailContentResponse
 }

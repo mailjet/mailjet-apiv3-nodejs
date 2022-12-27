@@ -5,13 +5,13 @@ import { expect } from 'chai';
 import { isUndefined } from '@utils/index';
 /*types*/
 import { TObject } from '@custom/types';
-import { ILibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
+import { LibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
 import {
-  IRequestConfig,
-  IRequestOptions,
-  TRequestData,
-  TRequestParams,
-} from '../../lib/request/IRequest';
+  RequestConfig,
+  RequestOptions,
+  RequestData,
+  RequestParams,
+} from '../../lib/request/Request';
 /*lib*/
 import Mailjet, { Request } from '../../lib/index';
 /*other*/
@@ -25,7 +25,7 @@ describe('API Basic Usage', () => {
     if (isUndefined(API_KEY) || isUndefined(API_SECRET)) {
       this.skip();
     } else {
-      const emailConfig: Partial<IRequestConfig> = {
+      const emailConfig: Partial<RequestConfig> = {
         version: 'v3',
       };
       client = Mailjet.apiConnect(API_KEY, API_SECRET, { config: emailConfig });
@@ -43,7 +43,7 @@ describe('API Basic Usage', () => {
     });
 
     it('creates an instance of the client with options', () => {
-      const options: IRequestOptions = {
+      const options: RequestOptions = {
         proxy: {
           protocol: 'http',
           host: 'localhost',
@@ -187,12 +187,12 @@ describe('API Basic Usage', () => {
     const RECIPIENTS_NAME = [{ email: EMAIL, name: NAME }, { email: EMAIL2, name: NAME }];
     const RECIPIENTS_VARS = [{ email: EMAIL, vars: VAR }];
 
-    type TResult = ILibraryLocalResponse<string | TObject.TUnknownRec, TObject.TUnknownRec>;
+    type TResult = LibraryLocalResponse<string | TObject.UnknownRec, TObject.UnknownRec>;
     class Example {
       private fn: Request;
-      private payload?: { data?: TRequestData; params?: TRequestParams; };
+      private payload?: { data?: RequestData; params?: RequestParams; };
 
-      constructor(fn: Request, payload?: { data?: TRequestData; params?: TRequestParams; }) {
+      constructor(fn: Request, payload?: { data?: RequestData; params?: RequestParams; }) {
         this.fn = fn;
         this.payload = payload;
       }
@@ -237,7 +237,7 @@ describe('API Basic Usage', () => {
 
     let apiClient: Mailjet;
     before(() => {
-      const emailConfig: Partial<IRequestConfig> = {
+      const emailConfig: Partial<RequestConfig> = {
         version: 'v3',
       };
       apiClient = new Mailjet({ apiKey: API_KEY, apiSecret: API_SECRET, config: emailConfig });

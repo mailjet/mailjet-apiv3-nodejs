@@ -5,8 +5,8 @@ import { expect } from 'chai';
 import { AxiosProxyConfig, AxiosError } from 'axios';
 /*types*/
 import { TObject } from '@custom/types';
-import { IClientParams } from '../../lib/client/IClient';
-import { IRequestConfig } from '../../lib/request/IRequest';
+import { ClientParams } from '../../lib/client/Client';
+import { RequestConfig } from '../../lib/request/Request';
 /*utils*/
 /*lib*/
 import Client, { HttpMethods, Request } from '../../lib/index';
@@ -15,7 +15,7 @@ import packageJSON from '../../package.json';
 import expectOwnProperty from '../helpers';
 /*other*/
 
-type TMockRequestData = {
+type MockRequestData = {
   path?: string,
   protocol?: string;
   hostname?: string,
@@ -31,14 +31,14 @@ describe('Unit Request', () => {
         const resource = 'Contact';
         const method = HttpMethods.Get;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
             version: 'v4',
           },
         };
-        const customConfig: IRequestConfig = {
+        const customConfig: RequestConfig = {
           host: 'new.api.mailjet',
           version: 'v7',
           output: 'text',
@@ -66,7 +66,7 @@ describe('Unit Request', () => {
         const resource = 'send-sms';
         const method = HttpMethods.Post;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -107,7 +107,7 @@ describe('Unit Request', () => {
       it('should be throw error if passed argument "method" is not supported', () => {
         const resource = 'Contact';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -126,7 +126,7 @@ describe('Unit Request', () => {
       it('should be throw error if passed argument "resource" is not string', () => {
         const method = HttpMethods.Get;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -250,7 +250,7 @@ describe('Unit Request', () => {
       it('should be return user agent value', () => {
         const resource = 'Contact';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -273,7 +273,7 @@ describe('Unit Request', () => {
       it('should be return credentials based on Client instance', () => {
         const resource = 'Contact';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -333,7 +333,7 @@ describe('Unit Request', () => {
           Email: 'test@mailjet.com',
         };
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -362,7 +362,7 @@ describe('Unit Request', () => {
           Email: 'test@mailjet.com',
         };
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -390,7 +390,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const subPath = 'REST';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -398,7 +398,7 @@ describe('Unit Request', () => {
             version: 'v3',
           },
         };
-        const customConfig: Pick<IRequestConfig, 'host' | 'version'> = {
+        const customConfig: Pick<RequestConfig, 'host' | 'version'> = {
           host: 'request.api.mailjet',
           version: 'v7',
         };
@@ -416,7 +416,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const subPath = 'REST';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -443,7 +443,7 @@ describe('Unit Request', () => {
       it('should be build sub path', () => {
         const resource = 'contact';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -458,7 +458,7 @@ describe('Unit Request', () => {
       it('should be build sub path for resource /send', () => {
         const resource = 'send';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -473,7 +473,7 @@ describe('Unit Request', () => {
       it('should be build sub path for resource /sms-send', () => {
         const resource = 'sms-send';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -489,7 +489,7 @@ describe('Unit Request', () => {
         const resource = 'contactslist';
         const action = 'csvdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -505,7 +505,7 @@ describe('Unit Request', () => {
         const resource = 'batchjob';
         const action = 'csverror';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -527,7 +527,7 @@ describe('Unit Request', () => {
         const resourceFirst = 'Contact';
         const resourceSecond = 'Template';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           config: {
@@ -535,7 +535,7 @@ describe('Unit Request', () => {
             version: 'v3',
           },
         };
-        const customConfig: Pick<IRequestConfig, 'host' | 'version'> = {
+        const customConfig: Pick<RequestConfig, 'host' | 'version'> = {
           host: 'request.api.mailjet',
           version: 'v7',
         };
@@ -562,7 +562,7 @@ describe('Unit Request', () => {
         it(`should be change instance properties if passed ${typeof id}`, () => {
           const resource = 'contact';
 
-          const params: IClientParams = {
+          const params: ClientParams = {
             apiKey: 'key',
             apiSecret: 'secret',
           };
@@ -592,7 +592,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const action = 'Managecontactslists';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -614,7 +614,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const action = 'csvdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -636,7 +636,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const action = 'csverror';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -673,7 +673,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -683,7 +683,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -718,7 +718,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -728,7 +728,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -758,7 +758,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiToken: 'token',
         };
 
@@ -767,7 +767,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -799,7 +799,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -812,7 +812,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -854,7 +854,7 @@ describe('Unit Request', () => {
           port: 3100,
         };
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> & IClientParams = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> & ClientParams = {
           apiKey: '9d4aed954db9a66a9140122aa28abb87',
           apiSecret: 'd0c9979c517da1dba56a4564b5208b7c',
           options: {
@@ -867,7 +867,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(/(.*?)/g)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -912,7 +912,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> & IClientParams = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> & ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -928,7 +928,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -954,7 +954,7 @@ describe('Unit Request', () => {
         expect(requestData.headers).to.haveOwnProperty('accept').that.includes('application/json');
 
         Object
-          .entries(params.options?.headers as TObject.TUnknownRec)
+          .entries(params.options?.headers as TObject.UnknownRec)
           .forEach(([key, value]) => {
             expectOwnProperty(requestData.headers, key.toLowerCase(), value);
           });
@@ -964,7 +964,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> & IClientParams = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> & ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -974,7 +974,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1012,7 +1012,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -1025,7 +1025,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1063,7 +1063,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret' | 'options'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -1076,7 +1076,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1133,7 +1133,7 @@ describe('Unit Request', () => {
         };
 
         const performAPICall = false;
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1193,7 +1193,7 @@ describe('Unit Request', () => {
           Offset: 10,
         };
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1214,7 +1214,7 @@ describe('Unit Request', () => {
                 c: false,
               };
 
-              const requestData: TMockRequestData = {};
+              const requestData: MockRequestData = {};
               nock(API_MAILJET_URL)
                 .defaultReplyHeaders({
                   'Content-Type': 'application/json',
@@ -1263,7 +1263,7 @@ describe('Unit Request', () => {
           Offset: 10,
         };
 
-        const params: Required<Pick<IClientParams, 'apiKey' | 'apiSecret'>> = {
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1276,7 +1276,7 @@ describe('Unit Request', () => {
           b: 'text',
           c: false,
         };
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1314,7 +1314,7 @@ describe('Unit Request', () => {
         const apiVersion = Client.config.version;
         const resource = 'contactdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1367,7 +1367,7 @@ describe('Unit Request', () => {
         const apiVersion = Client.config.version;
         const resource = 'contactdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1417,7 +1417,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -1425,7 +1425,7 @@ describe('Unit Request', () => {
           },
         };
 
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1469,7 +1469,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -1477,7 +1477,7 @@ describe('Unit Request', () => {
           },
         };
 
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1521,7 +1521,7 @@ describe('Unit Request', () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -1529,7 +1529,7 @@ describe('Unit Request', () => {
           },
         };
 
-        const requestData: TMockRequestData = {};
+        const requestData: MockRequestData = {};
         nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
@@ -1573,7 +1573,7 @@ describe('Unit Request', () => {
         const apiVersion = Client.config.version;
         const resource = 'contactdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1640,7 +1640,7 @@ describe('Unit Request', () => {
         const apiVersion = Client.config.version;
         const resource = 'contactdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -1705,7 +1705,7 @@ describe('Unit Request', () => {
         const apiVersion = Client.config.version;
         const resource = 'contactdata';
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };

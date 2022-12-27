@@ -1,6 +1,6 @@
 import { Common } from "./Common";
 export declare namespace Contact {
-    export interface IContact {
+    export interface Contact {
         ID: number;
         IsExcludedFromCampaigns: boolean;
         Name: string;
@@ -13,26 +13,29 @@ export declare namespace Contact {
         LastActivityAt: string;
         LastUpdateAt: string;
     }
-    export interface IPostContactBody {
+    export type PostContactBody = {
         Email: string;
         IsExcludedFromCampaigns?: boolean;
         Name?: string;
-    }
-    export interface IPutContactBody extends Omit<IPostContactBody, 'Email'> {
-    }
-    export interface IGetContactQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutContactBody = Omit<PostContactBody, 'Email'>;
+    export type GetContactQueryParams = Partial<Common.Pagination> & {
         Campaign?: number;
         ContactsList?: number;
         IsExcludedFromCampaigns?: boolean;
-    }
-    type TContactResponse = Common.IResponse<IContact[]>;
-    export type TPostContactResponse = TContactResponse;
-    export type IPutContactResponse = TContactResponse;
-    export type TGetContactResponse = TContactResponse;
+    };
+    type ContactResponse = {
+        Count: number;
+        Total: number;
+        Data: Contact[];
+    };
+    export type PostContactResponse = ContactResponse;
+    export type PutContactResponse = ContactResponse;
+    export type GetContactResponse = ContactResponse;
     export {};
 }
 export declare namespace ContactList {
-    export interface IContactList {
+    export interface ContactList {
         ID: number;
         IsDeleted: boolean;
         Name: string;
@@ -40,22 +43,21 @@ export declare namespace ContactList {
         CreatedAt: string;
         SubscriberCount: number;
     }
-    export interface IPostContactListBody {
+    export type PostContactListBody = {
         Name: string;
         IsDeleted?: boolean;
-    }
-    export interface IPutContactListBody extends Partial<IPostContactListBody> {
-    }
-    export interface IGetContactListQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutContactListBody = Partial<PostContactListBody>;
+    export type GetContactListQueryParams = Partial<Common.Pagination> & {
         Address?: string;
         ExcludeID?: number;
         IsDeleted?: boolean;
         Name?: string;
-    }
-    type TContactListResponse = Common.IResponse<IContactList[]>;
-    export type TPostContactListResponse = TContactListResponse;
-    export type TPutContactListResponse = TContactListResponse;
-    export type TGetContactListResponse = TContactListResponse;
+    };
+    type ContactListResponse = Common.Response<ContactList[]>;
+    export type PostContactListResponse = ContactListResponse;
+    export type PutContactListResponse = ContactListResponse;
+    export type GetContactListResponse = ContactListResponse;
     export {};
 }
 export declare namespace BulkContactManagement {
@@ -90,10 +92,10 @@ export declare namespace BulkContactManagement {
         InProgress = "In Progress",
         Error = "Error"
     }
-    export interface IJob {
+    export interface Job {
         JobID: number;
     }
-    export interface ICSVImport {
+    export interface CSVImport {
         ID: number;
         ErrTreshold: number;
         ImportOptions: string;
@@ -109,12 +111,12 @@ export declare namespace BulkContactManagement {
         RequestAt: string;
         Status: CSVImportStatus;
     }
-    export interface IContactList {
+    export interface ContactList {
         ListID: number;
         Action: ManageContactsAction;
     }
-    export interface IContactManageManyContacts {
-        ContactsLists: IContactList[];
+    export interface ContactManageManyContacts {
+        ContactsLists: ContactList[];
         Count: number;
         Error: string;
         ErrorFile: string;
@@ -122,53 +124,52 @@ export declare namespace BulkContactManagement {
         JobStart: string;
         Status: JobStatus;
     }
-    export interface IContactsListImportList {
+    export interface ContactsListImportList {
         JobID: number;
         Action: ImportListAction;
         ListID: number;
     }
-    export interface IContactBody<TProperties = Common.TUnknownRec> {
+    export type ContactBody<Properties = Common.UnknownRec> = {
         Email: string;
         Name?: string;
         IsExcludedFromCampaigns?: boolean;
-        Properties?: TProperties;
-    }
-    export interface IPostContactManageManyContactsBody<TProperties = Common.TUnknownRec> {
-        Contacts: Array<IContactBody<TProperties>>;
-        ContactsLists?: IContactList[];
-    }
-    export interface IPostContactsListImportListBody {
+        Properties?: Properties;
+    };
+    export type PostContactManageManyContactsBody<Properties = Common.UnknownRec> = {
+        Contacts: Array<ContactBody<Properties>>;
+        ContactsLists?: ContactList[];
+    };
+    export type PostContactsListImportListBody = {
         Action: ImportListAction;
         ListID: number;
-    }
-    export interface IPostContactsListManageManyContactsBody<TProperties = Common.TUnknownRec> {
+    };
+    export type PostContactsListManageManyContactsBody<Properties = Common.UnknownRec> = {
         Action: ManageContactsAction;
-        Contacts: Array<IContactBody<TProperties>>;
-    }
-    export interface IPostCSVImportBody {
+        Contacts: Array<ContactBody<Properties>>;
+    };
+    export type PostCSVImportBody = {
         ContactsListID: number;
         DataID: number;
         ErrTreshold?: number;
         ImportOptions?: string;
         Method?: ImportCSVMethod;
-    }
-    export interface IPutCSVImportBody extends Partial<IPostCSVImportBody> {
+    };
+    export type PutCSVImportBody = Partial<PostCSVImportBody> & {
         Status?: CSVImportStatus;
-    }
-    export interface IGetCSVImportQueryParams extends Partial<Common.IPagination> {
-    }
-    type TJobResponse = Common.IResponse<IJob[]>;
-    type TCSVImportResponse = Common.IResponse<ICSVImport[]>;
-    type TContactManageManyContactsResponse = Common.IResponse<IContactManageManyContacts[]>;
-    export type TPostContactManageManyContactsResponse = TJobResponse;
-    export type TGetContactManageManyContactsResponse = TContactManageManyContactsResponse;
-    export type TPostContactsListImportListResponse = TJobResponse;
-    export type TGetContactsListImportListResponse = Common.IResponse<IContactsListImportList[]>;
-    export type TPostContactsListManageManyContactsResponse = TJobResponse;
-    export type TGetContactsListManageManyContactsResponse = TContactManageManyContactsResponse;
-    export type TPostCSVImportResponse = TCSVImportResponse;
-    export type TPutCSVImportResponse = TCSVImportResponse;
-    export type TGetCSVImportResponse = TCSVImportResponse;
+    };
+    export type GetCSVImportQueryParams = Partial<Common.Pagination>;
+    type JobResponse = Common.Response<Job[]>;
+    type CSVImportResponse = Common.Response<CSVImport[]>;
+    type ContactManageManyContactsResponse = Common.Response<ContactManageManyContacts[]>;
+    export type PostContactManageManyContactsResponse = JobResponse;
+    export type GetContactManageManyContactsResponse = ContactManageManyContactsResponse;
+    export type PostContactsListImportListResponse = JobResponse;
+    export type GetContactsListImportListResponse = Common.Response<ContactsListImportList[]>;
+    export type PostContactsListManageManyContactsResponse = JobResponse;
+    export type GetContactsListManageManyContactsResponse = ContactManageManyContactsResponse;
+    export type PostCSVImportResponse = CSVImportResponse;
+    export type PutCSVImportResponse = CSVImportResponse;
+    export type GetCSVImportResponse = CSVImportResponse;
     export {};
 }
 export declare namespace ContactProperties {
@@ -183,61 +184,61 @@ export declare namespace ContactProperties {
         Static = "static",
         Historic = "historic"
     }
-    export interface IContactProperty {
+    export interface ContactProperty {
         Name: string;
         Value: string;
     }
-    export interface IContactData {
+    export interface ContactData {
         ID: number;
         ContactID: number;
-        Data: IContactProperty[];
+        Data: ContactProperty[];
     }
-    export interface IContactMetaData {
+    export interface ContactMetaData {
         ID: number;
         Datatype: DataType;
         Name: string;
         NameSpace: NameSpace;
     }
-    export interface IPostContactMetaDataBody {
+    export type PostContactMetaDataBody = {
         Name: string;
         Datatype?: DataType;
         NameSpace?: NameSpace;
-    }
-    export interface IPutContactMetaDataBody {
+    };
+    export type PutContactMetaDataBody = {
         Name?: string;
         Datatype?: DataType;
-    }
-    export interface IGetContactMetaDataQueryParams extends Partial<Common.IPagination> {
+    };
+    export type GetContactMetaDataQueryParams = Partial<Common.Pagination> & {
         DataType?: DataType;
         Namespace?: NameSpace;
-    }
-    export interface IPutContactDataBody {
-        Data: IContactProperty[];
-    }
-    export interface IGetContactDataQueryParams extends Partial<Common.IPagination> {
+    };
+    export type PutContactDataBody = {
+        Data: ContactProperty[];
+    };
+    export type GetContactDataQueryParams = Partial<Common.Pagination> & {
         Campaign?: number;
         ContactEmail?: string;
         ContactsList?: number;
         Fields?: string;
         LastActivityAt?: string;
-    }
-    type TContactDataResponse = Common.IResponse<IContactData[]>;
-    type TContactMetaDataResponse = Common.IResponse<IContactMetaData[]>;
-    export type TPostContactMetaDataResponse = TContactMetaDataResponse;
-    export type TPutContactMetaDataResponse = TContactMetaDataResponse;
-    export type TGetContactMetaDataResponse = TContactMetaDataResponse;
-    export type TPutContactDataResponse = TContactDataResponse;
-    export type TGetContactDataResponse = TContactDataResponse;
+    };
+    type ContactDataResponse = Common.Response<ContactData[]>;
+    type ContactMetaDataResponse = Common.Response<ContactMetaData[]>;
+    export type PostContactMetaDataResponse = ContactMetaDataResponse;
+    export type PutContactMetaDataResponse = ContactMetaDataResponse;
+    export type GetContactMetaDataResponse = ContactMetaDataResponse;
+    export type PutContactDataResponse = ContactDataResponse;
+    export type GetContactDataResponse = ContactDataResponse;
     export {};
 }
 export declare namespace ContactSubscription {
-    export interface IManageContacts<TProperties = Common.TUnknownRec> {
+    export interface ManageContacts<Properties = Common.UnknownRec> {
         Email: string;
         Action: BulkContactManagement.ManageContactsAction;
         Name: string;
-        Properties: TProperties;
+        Properties: Properties;
     }
-    export interface IListRecipient {
+    export interface ListRecipient {
         ID: number;
         IsUnsubscribed: boolean;
         ContactID: number;
@@ -246,12 +247,12 @@ export declare namespace ContactSubscription {
         SubscribedAt: string;
         UnsubscribedAt: string;
     }
-    export interface IContactsList {
+    export interface ContactsList {
         ListID: number;
         IsUnsub: boolean;
         SubscribedAt: string;
     }
-    export interface IContactsListSignup {
+    export interface ContactsListSignup {
         ID: number;
         ConfirmAt: number;
         ConfirmIp: string;
@@ -264,26 +265,26 @@ export declare namespace ContactSubscription {
         SourceId: number;
         Source: string;
     }
-    export interface IPostContactManageContactsListsBody {
-        ContactsLists: BulkContactManagement.IContactList[];
-    }
-    export interface IPostContactsListManageContactBody<TProperties = Common.TUnknownRec> {
+    export type PostContactManageContactsListsBody = {
+        ContactsLists: BulkContactManagement.ContactList[];
+    };
+    export type PostContactsListManageContactBody<Properties = Common.UnknownRec> = {
         Email: string;
         Action: BulkContactManagement.ManageContactsAction;
         Name?: string;
-        Properties?: TProperties;
-    }
-    export interface IPostListRecipientBody {
+        Properties?: Properties;
+    };
+    export type PostListRecipientBody = {
         IsUnsubscribed?: boolean;
         ContactID: number;
         ContactAlt?: string;
         ListID: number;
         ListAlt?: string;
-    }
-    export interface IPutListRecipientBody {
+    };
+    export type PutListRecipientBody = {
         IsUnsubscribed?: boolean;
-    }
-    export interface IGetListRecipientQueryParams extends Partial<Common.IPagination> {
+    };
+    export type GetListRecipientQueryParams = Partial<Common.Pagination> & {
         Blocked?: boolean;
         Contact?: number;
         ContactEmail?: string;
@@ -294,8 +295,8 @@ export declare namespace ContactSubscription {
         ListName?: string;
         Opened?: boolean;
         Unsub?: boolean;
-    }
-    export interface IGetContactsListSignupQueryParams extends Partial<Common.IPagination> {
+    };
+    export type GetContactsListSignupQueryParams = Partial<Common.Pagination> & {
         Contact?: number;
         ContactsList?: number;
         Domain?: string;
@@ -308,25 +309,25 @@ export declare namespace ContactSubscription {
         SignupIp?: string;
         Source?: string;
         SourceID?: number;
-    }
-    type TListRecipientResponse = Common.IResponse<IListRecipient[]>;
-    export type TPostContactManageContactsListsResponse = Common.IResponse<Array<{
-        ContactsLists: BulkContactManagement.IContactList[];
+    };
+    type ListRecipientResponse = Common.Response<ListRecipient[]>;
+    export type PostContactManageContactsListsResponse = Common.Response<Array<{
+        ContactsLists: BulkContactManagement.ContactList[];
     }>>;
-    export type TPostContactsListManageContactResponse<TProperties = Common.TUnknownRec> = Common.IResponse<Array<IManageContacts<TProperties>>>;
-    export type TPostListRecipientResponse = TListRecipientResponse;
-    export type TPutListRecipientResponse = TListRecipientResponse;
-    export type TGetListRecipientResponse = TListRecipientResponse;
-    export type TGetContactGetContactsListsResponse = Common.IResponse<IContactsList[]>;
-    export type TGetContactsListSignupResponse = Common.IResponse<IContactsListSignup[]>;
+    export type PostContactsListManageContactResponse<Properties = Common.UnknownRec> = Common.Response<Array<ManageContacts<Properties>>>;
+    export type PostListRecipientResponse = ListRecipientResponse;
+    export type PutListRecipientResponse = ListRecipientResponse;
+    export type GetListRecipientResponse = ListRecipientResponse;
+    export type GetContactGetContactsListsResponse = Common.Response<ContactsList[]>;
+    export type GetContactsListSignupResponse = Common.Response<ContactsListSignup[]>;
     export {};
 }
 export declare namespace ContactVerification {
-    interface IVerificationSummary<TResult = Common.TUnknownRec, TRisk = Common.TUnknownRec> {
-        result: TResult;
-        risk: TRisk;
+    interface VerificationSummary<Result = Common.UnknownRec, Risk = Common.UnknownRec> {
+        result: Result;
+        risk: Risk;
     }
-    interface IContactsListVerification<TResult = Common.TUnknownRec, TRisk = Common.TUnknownRec> {
+    interface ContactsListVerification<Result = Common.UnknownRec, Risk = Common.UnknownRec> {
         Akid: number;
         ContactListID: number;
         Count: number;
@@ -337,7 +338,7 @@ export declare namespace ContactVerification {
         Method: string;
         ResponseURL: string;
         Status: string;
-        Summary: IVerificationSummary<TResult, TRisk>;
+        Summary: VerificationSummary<Result, Risk>;
     }
-    type TGetContactsListVerifyResponse<TResult = Common.TUnknownRec, TRisk = Common.TUnknownRec> = Common.IResponse<Array<IContactsListVerification<TResult, TRisk>>>;
+    type GetContactsListVerifyResponse<Result = Common.UnknownRec, Risk = Common.UnknownRec> = Common.Response<Array<ContactsListVerification<Result, Risk>>>;
 }

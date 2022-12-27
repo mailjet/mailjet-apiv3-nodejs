@@ -1,8 +1,8 @@
 /*external modules*/
 import { expect } from 'chai';
 /*types*/
-import { IClientParams } from '../../lib/client/IClient';
-import { IRequestConfig, IRequestOptions } from '../../lib/request/IRequest';
+import { ClientParams } from '../../lib/client/Client';
+import { RequestConfig, RequestOptions } from '../../lib/request/Request';
 /*utils*/
 /*lib*/
 import { Client, HttpMethods } from '../../lib/index';
@@ -11,8 +11,8 @@ import packageJSON from '../../package.json';
 import expectOwnProperty from '../helpers';
 /*other*/
 
-type TClientConnectParams = Omit<IClientParams, 'config' | 'options'> & {
-  params?: Pick<IClientParams, 'config' | 'options'>
+type ClientConnectParams = Omit<ClientParams, 'config' | 'options'> & {
+  params?: Pick<ClientParams, 'config' | 'options'>
 };
 
 describe('Unit Client', () => {
@@ -27,12 +27,12 @@ describe('Unit Client', () => {
       it('should be call the "init" method', () => {
         const originalInit = Client.prototype['init'];
 
-        let initParams: IClientParams = {};
-        (Client.prototype as any)['init'] = (params: IClientParams) => {
+        let initParams: ClientParams = {};
+        (Client.prototype as any)['init'] = (params: ClientParams) => {
           initParams = params;
         };
 
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -69,7 +69,7 @@ describe('Unit Client', () => {
       });
 
       it('should be call the method "constructor"', () => {
-        const connectArguments: TClientConnectParams = {};
+        const connectArguments: ClientConnectParams = {};
         const ProxyMailjetClient = new Proxy(Client, {
           construct(_, value) {
             const [
@@ -95,7 +95,7 @@ describe('Unit Client', () => {
 
         const API_KEY = 'key';
         const API_SECRET = 'secret';
-        const params: IClientParams = {
+        const params: ClientParams = {
           options: {
             timeout: 10,
           },
@@ -114,7 +114,7 @@ describe('Unit Client', () => {
       it('should be return Client', () => {
         const API_KEY = 'key';
         const API_SECRET = 'secret';
-        const params: IClientParams = {
+        const params: ClientParams = {
           options: {
             timeout: 10,
           },
@@ -156,7 +156,7 @@ describe('Unit Client', () => {
       });
 
       it('should be call the method "constructor"', () => {
-        const connectArguments: TClientConnectParams = {};
+        const connectArguments: ClientConnectParams = {};
         const ProxyMailjetClient = new Proxy(Client, {
           construct(_, value) {
             const [
@@ -179,7 +179,7 @@ describe('Unit Client', () => {
         });
 
         const API_TOKEN = 'token';
-        const params: IClientParams = {
+        const params: ClientParams = {
           options: {
             timeout: 10,
           },
@@ -196,7 +196,7 @@ describe('Unit Client', () => {
 
       it('should be return Client', () => {
         const API_TOKEN = 'token';
-        const params: IClientParams = {
+        const params: ClientParams = {
           options: {
             timeout: 10,
           },
@@ -260,7 +260,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return package version value', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -278,7 +278,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return api key', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -296,7 +296,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return api secret', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
         };
@@ -314,7 +314,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return api token', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiToken: 'token',
         };
 
@@ -331,7 +331,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return config', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiToken: 'token',
           config: {
             host: 'new.mailjet.com',
@@ -354,7 +354,7 @@ describe('Unit Client', () => {
       });
 
       it('should be return options', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -384,7 +384,7 @@ describe('Unit Client', () => {
       });
 
       it('should be init by basic connect strategy', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -414,7 +414,7 @@ describe('Unit Client', () => {
       });
 
       it('should be init by token connect strategy', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiToken: 'token',
           options: {
             timeout: 10,
@@ -444,7 +444,7 @@ describe('Unit Client', () => {
 
       it('should be be init with default options and config', () => {
         [null, undefined].forEach((value) => {
-          const params: IClientParams = {
+          const params: ClientParams = {
             apiKey: 'key',
             apiSecret: 'secret',
             options: value,
@@ -481,7 +481,7 @@ describe('Unit Client', () => {
       });
 
       it('should be clone params', () => {
-        const params: IClientParams = {
+        const params: ClientParams = {
           apiKey: 'key',
           apiSecret: 'secret',
           options: {
@@ -538,7 +538,7 @@ describe('Unit Client', () => {
       });
 
       it('should be set changed config', () => {
-        const customConfig: IRequestConfig = {
+        const customConfig: RequestConfig = {
           host: 'new.api.mailjet',
           version: 'v7',
           output: 'text',
@@ -567,7 +567,7 @@ describe('Unit Client', () => {
       });
 
       it('should be set options', () => {
-        const options: IRequestOptions = {
+        const options: RequestOptions = {
           headers: {
             Accept: 'application/json',
           },
@@ -670,7 +670,7 @@ describe('Unit Client', () => {
         it('should create an Request instance', () => {
           const resource = 'Contact';
 
-          const params: IClientParams = {
+          const params: ClientParams = {
             apiKey: 'key',
             apiSecret: 'secret',
             options: {

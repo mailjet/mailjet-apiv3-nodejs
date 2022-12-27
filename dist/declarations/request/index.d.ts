@@ -1,9 +1,9 @@
 import { TObject } from "../types";
-import { ILibraryResponse, ILibraryLocalResponse } from "../types/api/LibraryResponse";
+import { LibraryResponse, LibraryLocalResponse } from "../types/api/LibraryResponse";
 import HttpMethods from './HttpMethods';
-import { TRequestData, TRequestParams, TRequestConstructorConfig } from './IRequest';
+import { RequestData, RequestParams, RequestConstructorConfig } from './Request';
 import Client from '../client';
-declare type TUnknownRec = TObject.TUnknownRec;
+declare type UnknownRec = TObject.UnknownRec;
 declare class Request {
     private readonly client;
     private readonly method;
@@ -12,7 +12,7 @@ declare class Request {
     private url;
     private subPath;
     private actionPath;
-    constructor(client: Client, method: HttpMethods, resource: string, config?: TRequestConstructorConfig);
+    constructor(client: Client, method: HttpMethods, resource: string, config?: RequestConstructorConfig);
     getUserAgent(): string;
     getCredentials(): {
         apiToken: string | undefined;
@@ -27,8 +27,8 @@ declare class Request {
     private setBaseURL;
     id(value: string | number): this;
     action(name: string): this;
-    request<TBody extends TRequestData>(data?: TRequestData, params?: TRequestParams, performAPICall?: true): Promise<ILibraryResponse<TBody>>;
-    request<TBody extends TRequestData, TParams extends TUnknownRec>(data?: TBody, params?: TParams, performAPICall?: false): Promise<ILibraryLocalResponse<TBody, TParams>>;
+    request<Body extends RequestData>(data?: RequestData, params?: RequestParams, performAPICall?: true): Promise<LibraryResponse<Body>>;
+    request<Body extends RequestData, Params extends UnknownRec>(data?: Body, params?: Params, performAPICall?: false): Promise<LibraryLocalResponse<Body, Params>>;
     static protocol: "https://";
     static parseToJSONb(text: string): any;
     static isBrowser(): boolean;

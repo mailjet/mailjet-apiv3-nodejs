@@ -1,32 +1,39 @@
 import { SendMessage } from "./SendMessage";
 import { Common } from "./Common";
 export declare namespace SMSMessage {
-    interface ISMS extends Omit<SendMessage.ISMS, 'Text'> {
-    }
-    interface ISMSExport {
+    type SMS = {
+        From: string;
+        To: string;
+        MessageID: string | number;
+        SMSCount: number;
+        CreationTS: number;
+        SentTS: number;
+        Cost: SendMessage.Cost;
+        Status: SendMessage.SendStatus;
+    };
+    type SMSExport = {
         ID: number;
         URL: string;
-        Status: SendMessage.ISendStatus;
+        Status: SendMessage.SendStatus;
         CreationTS: number;
         ExpirationTS: number;
-    }
-    interface IPostSMSExportBody extends Common.ITimestampPeriod {
-    }
-    interface IGetSMSQueryParams extends Partial<Common.ITimestampPeriod>, Partial<Pick<Common.IPagination, 'Limit' | 'Offset'>> {
+    };
+    type PostSMSExportBody = Common.TimestampPeriod;
+    type GetSMSQueryParams = Partial<Common.TimestampPeriod> & Partial<Pick<Common.Pagination, 'Limit' | 'Offset'>> & {
         StatusCode?: Array<string>;
         To?: string;
         IDs?: string;
-    }
-    interface IGetSMSCountQueryParams extends Partial<Common.ITimestampPeriod> {
+    };
+    type GetSMSCountQueryParams = Partial<Common.TimestampPeriod> & {
         StatusCode?: Array<string>;
         To?: string;
-    }
-    type TPostSMSExportResponse = ISMSExport;
-    type TGetSMSExportResponse = ISMSExport;
-    type TGetSMSResponse = {
-        Data: ISMS[];
     };
-    type TGetSMSCountResponse = {
+    type PostSMSExportResponse = SMSExport;
+    type GetSMSExportResponse = SMSExport;
+    type GetSMSResponse = {
+        Data: SMS[];
+    };
+    type GetSMSCountResponse = {
         Count: number;
     };
 }

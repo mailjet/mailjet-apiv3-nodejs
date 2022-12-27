@@ -6,26 +6,26 @@ import {
 } from '@utils/index';
 /*types*/
 import HttpMethods from '../request/HttpMethods';
-import { IClientParams } from './IClient';
-import { IRequestConfig, IRequestOptions, TRequestConstructorConfig } from '../request/IRequest';
+import { ClientParams } from './Client';
+import { RequestConfig, RequestOptions, RequestConstructorConfig } from '../request/Request';
 /*lib*/
 import Request from '../request';
 import packageJSON from '../../package.json';
 /*other*/
 
-export type TClientConnectParams = Pick<IClientParams, 'config' | 'options'>;
+export type ClientConnectParams = Pick<ClientParams, 'config' | 'options'>;
 
 class Client {
   private version!: string;
 
-  private config!: IRequestConfig;
-  private options!: IRequestOptions;
+  private config!: RequestConfig;
+  private options!: RequestOptions;
 
   private apiKey?: string;
   private apiSecret?: string;
   private apiToken?: string;
 
-  constructor(params: IClientParams) {
+  constructor(params: ClientParams) {
     if (!isPureObject(params)) {
       throw new Error('Argument "params" must be object');
     }
@@ -57,23 +57,23 @@ class Client {
     return { ...this.options };
   }
 
-  public get(resource: string, config?: TRequestConstructorConfig) {
+  public get(resource: string, config?: RequestConstructorConfig) {
     return new Request(this, HttpMethods.Get, resource, config);
   }
 
-  public post(resource: string, config?: TRequestConstructorConfig) {
+  public post(resource: string, config?: RequestConstructorConfig) {
     return new Request(this, HttpMethods.Post, resource, config);
   }
 
-  public put(resource: string, config?: TRequestConstructorConfig) {
+  public put(resource: string, config?: RequestConstructorConfig) {
     return new Request(this, HttpMethods.Put, resource, config);
   }
 
-  public delete(resource: string, config?: TRequestConstructorConfig) {
+  public delete(resource: string, config?: RequestConstructorConfig) {
     return new Request(this, HttpMethods.Delete, resource, config);
   }
 
-  private init(params: IClientParams) {
+  private init(params: ClientParams) {
     if (!isPureObject(params)) {
       throw new Error('Argument "params" must be object');
     }
@@ -96,7 +96,7 @@ class Client {
       : this.basicConnectStrategy(apiKey, apiSecret);
   }
 
-  private cloneParams(params: IClientParams) {
+  private cloneParams(params: ClientParams) {
     if (!isPureObject(params)) {
       throw new Error('Argument "params" must be object');
     }
@@ -130,7 +130,7 @@ class Client {
     return clonedParams;
   }
 
-  private setConfig(customConfig: Partial<IRequestConfig> | null) {
+  private setConfig(customConfig: Partial<RequestConfig> | null) {
     if (typeof customConfig !== 'object') {
       throw new Error('Argument "customConfig" must be object or null');
     }
@@ -148,7 +148,7 @@ class Client {
     return this;
   }
 
-  private setOptions(options: IRequestOptions | null) {
+  private setOptions(options: RequestOptions | null) {
     if (typeof options !== 'object') {
       throw new Error('Argument "options" must be object or null');
     }
@@ -182,15 +182,15 @@ class Client {
     return this;
   }
 
-  public static apiConnect(apiKey: string, apiSecret: string, params?: TClientConnectParams) {
+  public static apiConnect(apiKey: string, apiSecret: string, params?: ClientConnectParams) {
     return new Client({ apiKey, apiSecret, ...params });
   }
 
-  public static smsConnect(apiToken: string, params?: TClientConnectParams) {
+  public static smsConnect(apiToken: string, params?: ClientConnectParams) {
     return new Client({ apiToken, ...params });
   }
 
-  public static config: Readonly<IRequestConfig> = Object.freeze({
+  public static config: Readonly<RequestConfig> = Object.freeze({
     host: 'api.mailjet.com',
     version: 'v3',
     output: 'json',

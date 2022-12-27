@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
-export interface ILibraryResponse<TBody> {
-    response: AxiosResponse<TBody>;
-    body: TBody;
+export interface LibraryResponse<Body> {
+    response: AxiosResponse<Body>;
+    body: Body;
 }
-export interface ILibraryLocalResponse<TData, TParams> {
-    body: TData;
-    params: TParams;
+export interface LibraryLocalResponse<Data, Params> {
+    body: Data;
+    params: Params;
     url: string;
 }
