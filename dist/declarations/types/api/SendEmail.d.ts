@@ -1,4 +1,4 @@
-import { Common } from "./Common";
+import { Common } from '@mailjet/types/api/Common';
 export declare namespace SendEmailV3 {
     type MjTemplateErrorDeliver = '0' | 'deliver';
     type MjDeduplicateCampaign = 0 | 1;

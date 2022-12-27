@@ -10,7 +10,7 @@
 # Mailjet JS
 
 [![Build Status](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs.svg?branch=master)](https://travis-ci.org/mailjet/mailjet-apiv3-nodejs)
-![Current Version](https://img.shields.io/badge/version-5.1.1-green.svg)
+![Current Version](https://img.shields.io/badge/version-6.0.0-green.svg)
 
 ## Overview
 

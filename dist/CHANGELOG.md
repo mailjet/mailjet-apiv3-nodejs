@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.1.1...v6.0.0) (2022-12-27)
+
+
+### Bug Fixes
+
+* **types:** Build Typescript changes ([f683f70](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/f683f708db0245f74568f1c4bf0e06cc5f0a86c7))
+* **types:** Typescript exported types ([0e19bab](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/0e19bab228ffc83d19b17c270e0156f58f60cfe1))
+
+
+### Docs changes
+
+* Update Readme ([29bb64f](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/29bb64f23092d72728c19208ac2367293433d62b))
+
+
+### Breaking changes
+
+* Update TypeScript namings in the code and tests ([904735d](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/904735db615480de2d1614f1b93a27a3de37d73d))
+
 ### [5.1.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.1.0...v5.1.1) (2022-07-27)
 
 

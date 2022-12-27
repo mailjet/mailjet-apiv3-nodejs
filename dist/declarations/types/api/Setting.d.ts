@@ -1,4 +1,4 @@
-import { Common } from "./Common";
+import { Common } from '@mailjet/types/api/Common';
 export declare namespace APIKeyConfiguration {
     export enum RunLevel {
         Normal = "Normal",

@@ -1,5 +1,5 @@
-import { Common } from "./Common";
-import { Message } from "./Message";
+import { Common } from '@mailjet/types/api/Common';
+import { Message } from '@mailjet/types/api/Message';
 export declare namespace Statistic {
     enum CampaignOverviewIDType {
         SentCampaign = "Campaign",

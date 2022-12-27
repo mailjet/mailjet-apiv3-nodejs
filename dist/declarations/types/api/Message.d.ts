@@ -1,4 +1,4 @@
-import { Common } from "./Common";
+import { Common } from '@mailjet/types/api/Common';
 export declare namespace Message {
     enum MessageState {
         UserUnknown = 1,

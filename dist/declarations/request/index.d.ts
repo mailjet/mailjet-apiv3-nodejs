@@ -1,5 +1,5 @@
-import { TObject } from "../types";
-import { LibraryResponse, LibraryLocalResponse } from "../types/api/LibraryResponse";
+import { TObject } from '@custom/types';
+import { LibraryResponse, LibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
 import HttpMethods from './HttpMethods';
 import { RequestData, RequestParams, RequestConstructorConfig } from './Request';
 import Client from '../client';
