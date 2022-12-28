@@ -482,11 +482,11 @@ As well library has a **generic** method `Request.request<TResult>(data, params,
 ### Send Email example
 
 ```typescript
-import Mailjet, { SendEmailV3_1 } from 'node-mailjet'
+import Mailjet, { SendEmailV3_1, LibraryResponse } from 'node-mailjet';
 
 const mailjet = new Mailjet({
-    apiKey: process.env.MJ_APIKEY_PUBLIC,
-    apiSecret: process.env.MJ_APIKEY_PRIVATE
+  apiKey: process.env.MJ_APIKEY_PUBLIC,
+  apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
 
 (async () => {
@@ -512,9 +512,9 @@ const mailjet = new Mailjet({
     ],
   };
 
-  const result = await mailjet
-    .post('send', { version: 'v3.1' })
-    .request<SendEmailV3_1.Response>(data);
+  const result: LibraryResponse<SendEmailV3_1.Response> = await mailjet
+          .post('send', { version: 'v3.1' })
+          .request(data);
 
   const { Status } = result.body.Messages[0];
 })();
@@ -536,7 +536,7 @@ And `response` will have this shape:
 ```
 ### Send Message Example
 ```typescript
-import Mailjet, { SendMessage } from 'node-mailjet'
+import Mailjet, { SendMessage, LibraryResponse } from 'node-mailjet'
 
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
@@ -551,9 +551,9 @@ const mailjet = new Mailjet({
         Text: 'Test'
     };
 
-    const result = await mailjet
+    const result: LibraryResponse<SendMessage.Response> = await mailjet
         .post('contact', { version: 'v3' })
-        .request<SendMessage.Response>(body);
+        .request(body);
     
 
     const { Status } = result.body;
@@ -587,7 +587,7 @@ And `response` will have this shape:
 ### Get Contact Example
 
 ```typescript
-import Mailjet, { Contact } from 'node-mailjet'
+import Mailjet, { Contact, LibraryResponse } from 'node-mailjet'
 
 const mailjet = new Mailjet({
     apiKey: process.env.MJ_APIKEY_PUBLIC,
@@ -600,9 +600,9 @@ const mailjet = new Mailjet({
     Campaign: 2234234,
   };
 
-  const result = await mailjet
+  const result: LibraryResponse<Contact.GetContactResponse> = await mailjet
     .get('contact', { version: 'v3' })
-    .request<Contact.GetContactResponse>({}, queryData);
+    .request({}, queryData);
 
   const ContactID = result.body.Data[0].ID;
 })();
@@ -616,6 +616,7 @@ And `response` will have this shape:
       Count: number;
       Total: number;
       Data: Array<{
+        ID: number;
         IsExcludedFromCampaigns: boolean;
         Name: string;
         CreatedAt: string;
