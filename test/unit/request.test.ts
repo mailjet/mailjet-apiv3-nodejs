@@ -4,7 +4,7 @@ import nock from 'nock';
 import { expect } from 'chai';
 import { AxiosProxyConfig, AxiosError } from 'axios';
 /*types*/
-import { TObject } from '@custom/types';
+import { TObject } from '../../lib/types';
 import { ClientParams } from '../../lib/client/Client';
 import { RequestConfig } from '../../lib/request/Request';
 /*utils*/

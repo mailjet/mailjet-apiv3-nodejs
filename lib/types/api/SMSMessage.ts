@@ -1,5 +1,5 @@
-import { SendMessage } from '@mailjet/types/api/SendMessage';
-import { Common } from '@mailjet/types/api/Common';
+import { SendMessage } from './SendMessage';
+import { Common } from './Common';
 
 export namespace SMSMessage {
   export type SMS = {

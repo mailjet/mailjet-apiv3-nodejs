@@ -1,4 +1,4 @@
-import { Common } from '@mailjet/types/api/Common';
+import { Common } from './Common';
 export declare namespace Sender {
     export enum EmailType {
         Transactional = "transactional",

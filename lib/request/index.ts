@@ -3,10 +3,10 @@ import urlJoin from 'url-join';
 import JSONBigInt from 'json-bigint';
 import axios, { AxiosError } from 'axios';
 /*utils*/
-import { setValueIfNotNil } from '@utils/index';
+import { setValueIfNotNil } from '../utils/index';
 /*types*/
-import { TObject } from '@custom/types';
-import { LibraryResponse, LibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
+import { TObject } from '../types';
+import { LibraryResponse, LibraryLocalResponse } from '../types/api';
 import HttpMethods from './HttpMethods';
 import {
   RequestConfig,

@@ -1,6 +1,6 @@
 /*external modules*/
 /*types*/
-import { TObject } from '@custom/types';
+import { TObject } from '../types';
 /*utils*/
 import isNil from './isNil';
 import isNull from './isNull';

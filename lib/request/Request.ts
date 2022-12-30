@@ -6,7 +6,7 @@ import {
   ResponseType,
 } from 'axios';
 /*types*/
-import { TObject } from '@custom/types';
+import { TObject } from '../types';
 /*utils*/
 /*lib*/
 /*other*/
