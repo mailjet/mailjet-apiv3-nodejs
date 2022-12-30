@@ -149,6 +149,14 @@ export namespace SendEmailV3_1 {
     SandboxMode?: boolean;
     AdvanceErrorHandling?: boolean;
     Globals?: Globals;
+  } | {
+    Messages: Array<Omit<Message<Headers, Variables>, 'From'> & { From?: string }>;
+    SandboxMode?: boolean;
+    AdvanceErrorHandling?: boolean;
+    Globals: {
+      From: EmailAddressTo;
+      [key: string]: unknown;
+    };
   }
 
   // RESPONSE PART
