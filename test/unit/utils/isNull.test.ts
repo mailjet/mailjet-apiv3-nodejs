@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 /*types*/
 /*utils*/
-import { isNull } from '@utils/index';
+import { isNull } from '../../../lib/utils';
 /*lib*/
 /*helpers*/
 /*other*/

@@ -1,5 +1,5 @@
 import { AxiosProxyConfig, AxiosRequestConfig, AxiosRequestHeaders, ResponseType } from 'axios';
-import { TObject } from '@custom/types';
+import { TObject } from '../types';
 export interface RequestConfig {
     host: string;
     version: string;

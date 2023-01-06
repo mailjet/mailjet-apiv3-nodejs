@@ -1,4 +1,4 @@
-import { Common } from '@mailjet/types/api/Common';
+import { Common } from './Common';
 
 export namespace SendEmailV3 {
   export type MjTemplateErrorDeliver = '0' | 'deliver'
@@ -149,6 +149,14 @@ export namespace SendEmailV3_1 {
     SandboxMode?: boolean;
     AdvanceErrorHandling?: boolean;
     Globals?: Globals;
+  } | {
+    Messages: Array<Omit<Message<Headers, Variables>, 'From'> & { From?: string }>;
+    SandboxMode?: boolean;
+    AdvanceErrorHandling?: boolean;
+    Globals: {
+      From: EmailAddressTo;
+      [key: string]: unknown;
+    };
   }
 
   // RESPONSE PART

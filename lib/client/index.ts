@@ -3,7 +3,7 @@
 import {
   isPureObject,
   setValueIfNotNil,
-} from '@utils/index';
+} from '../utils';
 /*types*/
 import HttpMethods from '../request/HttpMethods';
 import { ClientParams } from './Client';

@@ -3,7 +3,7 @@ import nock from 'nock';
 import { expect } from 'chai';
 /*types*/
 /*utils*/
-import { isUndefined } from '@utils/index';
+import { isUndefined } from '../../lib/utils';
 /*lib*/
 import Mailjet, { Request } from '../../lib/index';
 /*other*/

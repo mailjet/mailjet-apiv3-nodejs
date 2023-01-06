@@ -2,10 +2,9 @@
 import qs from 'qs';
 import { expect } from 'chai';
 /*utils*/
-import { isUndefined } from '@utils/index';
+import { isUndefined } from '../../lib/utils';
 /*types*/
-import { TObject } from '@custom/types';
-import { LibraryLocalResponse } from '@mailjet/types/api/LibraryResponse';
+import { TObject } from '../../lib/types';
 import {
   RequestConfig,
   RequestOptions,
@@ -13,8 +12,7 @@ import {
   RequestParams,
 } from '../../lib/request/Request';
 /*lib*/
-import Mailjet, { Request } from '../../lib/index';
-/*other*/
+import Mailjet, { Request, LibraryLocalResponse } from '../../lib';
 
 describe('API Basic Usage', () => {
   const API_KEY = process.env.MJ_APIKEY_PUBLIC;

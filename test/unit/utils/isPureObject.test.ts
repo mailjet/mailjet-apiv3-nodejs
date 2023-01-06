@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 /*types*/
 /*utils*/
-import { isPureObject } from '@utils/index';
+import { isPureObject } from '../../../lib/utils';
 /*lib*/
 /*helpers*/
 /*other*/

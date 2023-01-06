@@ -1,4 +1,4 @@
-import { Common } from '@mailjet/types/api/Common';
+import { Common } from './Common';
 export declare namespace Contact {
     export interface Contact {
         ID: number;

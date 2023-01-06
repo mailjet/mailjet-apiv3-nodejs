@@ -1,5 +1,5 @@
-import { Message } from '@mailjet/types/api/Message';
-import { Common } from '@mailjet/types/api/Common';
+import { Message } from './Message';
+import { Common } from './Common';
 export declare namespace MessageEvent {
     interface BounceStatistic {
         ID: number;
