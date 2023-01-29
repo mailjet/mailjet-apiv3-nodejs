@@ -482,9 +482,9 @@ As well library has a **generic** method `Request.request<TResult>(data, params,
 ### Send Email example
 
 ```typescript
-import Mailjet, { SendEmailV3_1, LibraryResponse } from 'node-mailjet';
+import { Client, SendEmailV3_1, LibraryResponse } from 'node-mailjet';
 
-const mailjet = new Mailjet({
+const mailjet = new Client({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
@@ -536,22 +536,22 @@ And `response` will have this shape:
 ```
 ### Send Message Example
 ```typescript
-import Mailjet, { SendMessage, LibraryResponse } from 'node-mailjet'
+import * as Mailjet from 'node-mailjet'; // another possible importing option
 
-const mailjet = new Mailjet({
+const mailjet = new Mailjet.Client({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
 
 (async () => {
 
-    const body: SendMessage.Body = {
+    const body: Mailjet.SendMessage.Body = {
         From: 'some@email.com',
         To: 'some2@email.com',
         Text: 'Test'
     };
 
-    const result: LibraryResponse<SendMessage.Response> = await mailjet
+    const result: Mailjet.LibraryResponse<Mailjet.SendMessage.Response> = await mailjet
         .post('contact', { version: 'v3' })
         .request(body);
     
@@ -587,9 +587,9 @@ And `response` will have this shape:
 ### Get Contact Example
 
 ```typescript
-import Mailjet, { Contact, LibraryResponse } from 'node-mailjet'
+import { Client, Contact, LibraryResponse } from 'node-mailjet'
 
-const mailjet = new Mailjet({
+const mailjet = new Client({
     apiKey: process.env.MJ_APIKEY_PUBLIC,
     apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
@@ -725,8 +725,8 @@ request
 Manage the **subscription status** of a **contact** to multiple **lists**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
-const mailjet = new Mailjet({
+const { Client } = require('node-mailjet') // another importing option using destructuring
+const mailjet = new Client({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
