@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.0...v6.0.1) (2023-01-09)
+
+
+### Bug Fixes
+
+* **types:** Fix TypeScript imports ([02fe5e9](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/02fe5e945d9cc9fb1361b9bc681be097f40fddd6))
+
+
+### Docs changes
+
+* Update TypeScript examples in Readme ([9c202d0](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/9c202d02de6c3af4271adb5e694bef7c6ab5b7de))
+
+
+### Other changes
+
+* Update TypeScript declaration for SendEmail Body type ([42f49d1](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/42f49d1baf8b2a9227e9b3d54141d9a50962c6c1))
+
 ## [6.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v5.1.1...v6.0.0) (2022-12-27)
 
 
