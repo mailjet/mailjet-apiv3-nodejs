@@ -10,6 +10,7 @@ import Client from './client/index';
 class Mailjet extends Client {
   static Request = Request;
   static HttpMethods = HttpMethods;
+  static Client = Client;
 }
 
 export * from './types/api';
