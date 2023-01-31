@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.2](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.1...v6.0.2) (2023-01-31)
+
+
+### Bug Fixes
+
+* named export missing parameter ([2f7b040](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/2f7b040097834f7b24c93bd933ef82fe9da5c6ed))
+
+
+### Docs changes
+
+* update Readme ([9a3471d](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/9a3471d8bdd246e16b3fcc18957bf7411502e00c))
+
+
+### Other changes
+
+* add new built files ([882349a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/882349ad9b2e65d9323c4426e0e38bb2b73f6f45))
+
 ### [6.0.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.0...v6.0.1) (2023-01-09)
 
 
