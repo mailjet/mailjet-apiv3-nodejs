@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.3](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.2...v6.0.3) (2023-07-12)
+
+
+### Build changes
+
+* **deps-dev:** bump webpack from 5.72.1 to 5.76.0 ([9b66c92](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/9b66c92138673f668ad7bcfac9d97c571e9cc10f))
+* **deps:** bump jose in /examples/firebase/functions ([4854e8d](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/4854e8d6dc183fd31218d5fd86a9eab829ef0773))
+* **deps:** bump json5 from 1.0.1 to 1.0.2 ([366f3c8](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/366f3c8326a5ae9411f38b8a5561503f5ca3373e))
+* **deps:** bump jsonwebtoken and firebase-admin ([6d58037](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/6d58037cea542b597b5cb9e363ab8e5d145f5a08))
+* **deps:** bump loader-utils from 2.0.2 to 2.0.4 ([d72014e](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/d72014e386c8588c7949135dfe5146ae26580e13))
+
 ### [6.0.2](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.1...v6.0.2) (2023-01-31)
 
 

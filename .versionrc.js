@@ -62,7 +62,6 @@ module.exports = {
     },
   ],
   scripts: {
-    prerelease: 'npm run pkg:precommit',
     prebump: 'node ./scripts/VersionBump.js',
     postchangelog: 'npm run build && npm run docs',
     precommit: 'git add -A',
