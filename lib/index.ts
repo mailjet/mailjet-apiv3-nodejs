@@ -14,5 +14,6 @@ class Mailjet extends Client {
 }
 
 export * from './types/api';
-export { Client, Request, HttpMethods };
-export default Mailjet;
+export {
+  Mailjet, Client, Request, HttpMethods,
+};

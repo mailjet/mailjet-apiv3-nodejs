@@ -107,7 +107,6 @@ const buildUsageConfig = (targetEnv, mode) => {
       library: {
         name: LIBRARY_NAME,
         type: 'umd',
-        export: 'default',
       },
     },
   };
