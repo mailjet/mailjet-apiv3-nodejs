@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { RequestConfig } from '../../lib/request/Request';
 /*utils*/
 /*lib*/
-import Mailjet, { Request } from '../../lib/index';
+import { Mailjet, Request } from '../../lib/index';
 /*other*/
 
 describe('Basic Error Handling', () => {

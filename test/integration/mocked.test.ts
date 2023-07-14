@@ -5,7 +5,7 @@ import { expect } from 'chai';
 /*utils*/
 import { isUndefined } from '../../lib/utils';
 /*lib*/
-import Mailjet, { Request } from '../../lib/index';
+import { Mailjet, Request } from '../../lib/index';
 /*other*/
 
 describe('Mocked API calls', () => {

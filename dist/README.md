@@ -113,7 +113,8 @@ export MJ_API_TOKEN='your API token'
 Next, require the module and initialize your [Mailjet][mailjet] client:
 
 ```javascript
-const Mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
 ```
 
 For `EMAIL API` and `SEND API`:
@@ -162,7 +163,8 @@ const mailjet = Mailjet.smsConnect(
 
 Here's an example on how to send an email:
 ```javascript
-const Mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
 const mailjet = Mailjet.apiConnect(
     process.env.MJ_APIKEY_PUBLIC,
     process.env.MJ_APIKEY_PRIVATE,
@@ -697,7 +699,9 @@ You need to define `.id` if you want to perform an action on a specific object a
 Create a new **contact**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -725,8 +729,10 @@ request
 Manage the **subscription status** of a **contact** to multiple **lists**:
 
 ```javascript
-const { Client } = require('node-mailjet') // another importing option using destructuring
-const mailjet = new Client({
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
+const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
 });
@@ -772,7 +778,9 @@ You need to define `.id` if you want to retrieve a specific object.
 Retrieve all **contacts**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -796,7 +804,9 @@ request
 Retrieve all **contacts** that are not in the **campaign exclusion list**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -820,7 +830,9 @@ request
 Retrieve a specific **contact** by `ID`:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -861,7 +873,9 @@ It also means that all non-mandatory properties can be omitted from your payload
 Update the **contact properties** for a **contact**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -907,7 +921,9 @@ Upon a successful `DELETE` request the response will not include a response body
 Delete an email **template**:
 
 ```javascript
-const Mailjet = require('node-mailjet')
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
+
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -935,7 +951,8 @@ Authentication for the `SMS API` endpoints is done using a `Bearer token`.
 The `Bearer token` is generated in the [SMS section](https://app.mailjet.com/sms) of your Mailjet account.
 
 ```javascript
-const Mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
 const mailjet = Mailjet.smsConnect(process.env.MJ_API_TOKEN);
 ```
 
@@ -944,7 +961,8 @@ const mailjet = Mailjet.smsConnect(process.env.MJ_API_TOKEN);
 Here's an example `SMS API` request:
 
 ```javascript
-const Mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet'); // for versions < 7
+const { Mailjet } = require('node-mailjet'); // for versions >= 7
 const mailjet = Mailjet.smsConnect(process.env.MJ_API_TOKEN, {
   config: {
     version: 'v4'

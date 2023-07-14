@@ -9,7 +9,7 @@ import { ClientParams } from '../../lib/client/Client';
 import { RequestConfig } from '../../lib/request/Request';
 /*utils*/
 /*lib*/
-import Client, { HttpMethods, Request } from '../../lib/index';
+import { Client, HttpMethods, Request } from '../../lib/index';
 import packageJSON from '../../package.json';
 /*helpers*/
 import expectOwnProperty from '../helpers';
