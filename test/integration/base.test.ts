@@ -12,7 +12,7 @@ import {
   RequestParams,
 } from '../../lib/request/Request';
 /*lib*/
-import Mailjet, { Request, LibraryLocalResponse } from '../../lib';
+import { Mailjet, Request, LibraryLocalResponse } from '../../lib';
 
 describe('API Basic Usage', () => {
   const API_KEY = process.env.MJ_APIKEY_PUBLIC;
