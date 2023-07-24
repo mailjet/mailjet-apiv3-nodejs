@@ -90,7 +90,7 @@ class Request {
       HttpMethods.Put,
       HttpMethods.Post,
       HttpMethods.Delete,
-    ].includes(this.method) ? data : {};
+    ].includes(this.method) ? data : undefined;
   }
 
   private buildFullUrl() {

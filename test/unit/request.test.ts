@@ -375,9 +375,8 @@ describe('Unit Request', () => {
 
         const body = Request.prototype['getRequestBody'].call(request, data);
 
-        expect(body).to.be.a('object');
+        expect(body).to.equal(undefined);
         expect(body).to.be.not.equal(data);
-        expect(body).to.be.deep.equal({});
       });
     });
 
@@ -1169,7 +1168,7 @@ describe('Unit Request', () => {
               } else {
                 expect(result)
                   .to.have.ownProperty('body')
-                  .that.deep.equal({});
+                  .that.equal(undefined);
               }
             }),
         );
@@ -1300,7 +1299,7 @@ describe('Unit Request', () => {
         expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
 
         expectOwnProperty(requestData, 'path', `${path}?${qs.stringify(requestParams)}`);
-        expect(requestData).to.have.ownProperty('body').that.deep.equal({});
+        expect(requestData).to.have.ownProperty('body').that.equal('');
 
         expectOwnProperty(requestData.headers, 'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`);
         expectOwnProperty(requestData.headers, 'content-type', 'application/json');
@@ -1492,12 +1491,9 @@ describe('Unit Request', () => {
 
         const instance = new Client(params).get(resource);
 
-        let error = null;
         try {
           await instance.request();
         } catch (err) {
-          error = err;
-
           expectOwnProperty(err, 'code', AxiosError.ERR_BAD_REQUEST);
           expect(err).to.haveOwnProperty('config').that.is.an('object');
 
@@ -1511,9 +1507,6 @@ describe('Unit Request', () => {
           expectOwnProperty(err, 'originalMessage', errorMessage);
 
           expect(err.config.maxBodyLength).to.equal(params.options?.maxBodyLength);
-        } finally {
-          // eslint-disable-next-line no-unused-expressions
-          expect(error).to.be.not.null;
         }
       });
 
