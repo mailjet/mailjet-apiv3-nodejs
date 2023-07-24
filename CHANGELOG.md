@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.4](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.3...v6.0.4) (2023-07-24)
+
+
+### Bug Fixes
+
+* content-length header for GET requests ([be51c9d](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/be51c9d94e20b35329a3331ddfe5ab80030fbf7c))
+
 ### [6.0.3](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.2...v6.0.3) (2023-07-12)
 
 
