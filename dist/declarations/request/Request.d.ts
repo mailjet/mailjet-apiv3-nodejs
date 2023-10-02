@@ -2,7 +2,7 @@ import { AxiosProxyConfig, AxiosRequestConfig, AxiosRequestHeaders, ResponseType
 import { TObject } from '../types';
 export interface RequestConfig {
     host: string;
-    version: string;
+    version: `v${number}` | `v${number}.${number}`;
     output: ResponseType;
 }
 export interface RequestOptions {

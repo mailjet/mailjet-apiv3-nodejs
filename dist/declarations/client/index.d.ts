@@ -16,7 +16,7 @@ declare class Client {
     getAPIToken(): string | undefined;
     getConfig(): {
         host: string;
-        version: string;
+        version: `v${number}` | `v${number}.${number}`;
         output: import("axios").ResponseType;
     };
     getOptions(): {

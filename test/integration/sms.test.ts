@@ -5,6 +5,7 @@ import { expect } from 'chai';
 import { isUndefined } from '../../lib/utils';
 /*lib*/
 import Mailjet, { Request } from '../../lib/index';
+import { RequestConfig } from '../../lib/request/Request';
 /*other*/
 
 describe('SMS Basic Usage', () => {
@@ -15,7 +16,7 @@ describe('SMS Basic Usage', () => {
     if (isUndefined(API_TOKEN)) {
       this.skip();
     } else {
-      const smsConfig = {
+      const smsConfig: Partial<RequestConfig> = {
         version: 'v4',
       };
       client = Mailjet.smsConnect(API_TOKEN, { config: smsConfig });
@@ -33,7 +34,7 @@ describe('SMS Basic Usage', () => {
     });
 
     it('creates an instance of the client wiht options', () => {
-      const smsConfig = {
+      const smsConfig: Partial<RequestConfig> = {
         version: 'v4',
       };
 
