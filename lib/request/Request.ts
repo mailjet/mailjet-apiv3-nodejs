@@ -2,7 +2,7 @@
 import {
   AxiosProxyConfig,
   AxiosRequestConfig,
-  AxiosRequestHeaders,
+  RawAxiosRequestHeaders,
   ResponseType,
 } from 'axios';
 /*types*/
@@ -20,7 +20,7 @@ export interface RequestConfig {
 export interface RequestOptions {
   timeout?: number;
   proxy?: AxiosProxyConfig;
-  headers?: AxiosRequestHeaders;
+  headers?: RawAxiosRequestHeaders;
   maxBodyLength?: number;
   maxContentLength?: number;
 }
