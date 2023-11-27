@@ -53,7 +53,7 @@ class Client {
     return { ...this.config };
   }
 
-  public getOptions() {
+  public getOptions(): RequestOptions {
     return { ...this.options };
   }
 
