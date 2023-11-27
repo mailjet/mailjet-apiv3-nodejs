@@ -1,4 +1,4 @@
-import { AxiosProxyConfig, AxiosRequestConfig, AxiosRequestHeaders, ResponseType } from 'axios';
+import { AxiosProxyConfig, AxiosRequestConfig, RawAxiosRequestHeaders, ResponseType } from 'axios';
 import { TObject } from '../types';
 export interface RequestConfig {
     host: string;
@@ -8,7 +8,7 @@ export interface RequestConfig {
 export interface RequestOptions {
     timeout?: number;
     proxy?: AxiosProxyConfig;
-    headers?: AxiosRequestHeaders;
+    headers?: RawAxiosRequestHeaders;
     maxBodyLength?: number;
     maxContentLength?: number;
 }
