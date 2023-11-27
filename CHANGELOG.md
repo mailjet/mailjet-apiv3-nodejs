@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.5](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.4...v6.0.5) (2023-11-27)
+
+
+### Bug Fixes
+
+* typescript returned type, use specific axios version ([c6329ea](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/c6329ea01c2fa0fc05f9838c8279d0b48a119cbb))
+
 ### [6.0.4](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.3...v6.0.4) (2023-07-24)
 
 
