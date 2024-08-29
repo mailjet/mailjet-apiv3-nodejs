@@ -64,7 +64,7 @@
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "axios": "1.6.7",
+    "axios": "1.7.4",
     "json-bigint": "^1.0.0",
     "url-join": "^4.0.0"
   },
