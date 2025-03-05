@@ -90,7 +90,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-tsdoc": "^0.2.16",
     "husky": "^8.0.1",
-    "mocha": "^9.0.0",
+    "mocha": "^11.1.0",
     "nock": "^13.2.4",
     "nyc": "^15.1.0",
     "qs": "^6.5.0",
