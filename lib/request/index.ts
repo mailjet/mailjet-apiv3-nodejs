@@ -3,7 +3,7 @@ import urlJoin from 'url-join';
 import JSONBigInt from 'json-bigint';
 import axios, { AxiosError } from 'axios';
 /*utils*/
-import { setValueIfNotNil } from '../utils/index';
+import { isNonEmptyObject, isNull, isPureObject, isValidJson, setValueIfNotNil } from '../utils/index';
 /*types*/
 import { TObject } from '../types';
 import { LibraryResponse, LibraryLocalResponse } from '../types/api';
@@ -216,7 +216,7 @@ class Request {
 
   public action(name: string) {
     if (typeof name !== 'string') {
-      throw new Error('Argument "name" must be string');
+      throw new Error('action method should be called with argument of type string');
     }
 
     this.actionPath = name.toLowerCase();
@@ -260,6 +260,10 @@ class Request {
   ): Promise<LibraryResponse<Body> | LibraryLocalResponse<Body, Params>> {
     const url = this.buildFullUrl();
     this.setBaseURL(this.resource);
+
+    if (this.actionPath) {
+      this.validateActionData(this.actionPath, data);
+    }
 
     if (!performAPICall) {
       const body = this.getRequestBody(data);
@@ -350,6 +354,33 @@ class Request {
 
   public static isBrowser() {
     return typeof window === 'object';
+  }
+
+  private validateActionData(actionPath: string, data: RequestData | Body) {
+    const validators = {
+      managecontact: (data: RequestData | Body) => {
+        if (typeof data === 'object') { // only if body is not JSON.stringified by user
+          if (!isNonEmptyObject(data as UnknownRec)) {
+            throw new Error('"managecontact" action expects request body to be not empty object');
+          }
+          if (!isValidJson(data)) {
+            throw new Error('"managecontact" action expects request body to be valid JSON object');
+          }
+          if ('Properties' in data) {
+            if (typeof data.Properties === 'string') {
+              throw new Error('"managecontact" action expects Properties value to be an object');
+            }
+            if (typeof data.Properties === 'object' && !isNull(data.Properties) && !isValidJson((data.Properties))) {
+              throw new Error('"managecontact" action expects Properties value to be valid JSON object');
+            }
+          }
+        }
+      },
+    };
+
+    if (actionPath in validators) {
+      validators[actionPath as keyof typeof validators](data);
+    }
   }
 }
 

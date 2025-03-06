@@ -32,5 +32,6 @@ declare class Request {
     static protocol: "https://";
     static parseToJSONb(text: string): any;
     static isBrowser(): boolean;
+    private validateActionData;
 }
 export default Request;
