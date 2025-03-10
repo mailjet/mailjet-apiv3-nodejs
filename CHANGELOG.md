@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.8](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.7...v6.0.8) (2025-03-10)
+
+
+### Bug Fixes
+
+* Add validation for managecontact action payload ([#290](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/290)) ([89ec4b2](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/89ec4b2e8f89ddb6672c9fa8e692951416b24009))
+
+
+### Other changes
+
+* update version type to be more precise than string ([#259](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/259)) ([124de7b](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/124de7bbdcd98e080529b46489ecf6818d0ef1f6))
+
 ### [6.0.7](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.6...v6.0.7) (2025-03-05)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "node-mailjet",
-  "version": "6.0.7",
+  "version": "6.0.8",
   "main": "./mailjet.node.js",
   "browser": "./mailjet.web.js",
   "types": "./declarations/index.d.ts",
