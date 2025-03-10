@@ -656,7 +656,7 @@ describe('Unit Request', () => {
       it('should be throw error if passed "name" is not string', () => {
         [5, true, undefined, null, Symbol(''), BigInt(5), {}].forEach((name) => {
           expect(() => Request.prototype.action.call(null, name as string))
-            .to.throw(Error, 'Argument "name" must be string');
+            .to.throw(Error, 'action method should be called with argument of type string');
         });
       });
     });
