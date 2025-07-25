@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.9](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.8...v6.0.9) (2025-07-25)
+
+
+### Bug Fixes
+
+* update dependencies ([#295](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/295)) ([4fdec4e](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/4fdec4ec1c54b423d3bf975d30a1faad68ce3dfa))
+* update template type ([#294](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/294)) ([957d51c](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/957d51cb47bc4fd67a4aed98ef40d0871fcefba6))
+
 ### [6.0.8](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.7...v6.0.8) (2025-03-10)
 
 
