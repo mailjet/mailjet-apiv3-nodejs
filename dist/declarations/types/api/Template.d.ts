@@ -49,7 +49,7 @@ export declare namespace Template {
     }
     export interface Template {
         Author: string;
-        Categories: Categories;
+        Categories: Categories[];
         Copyright: string;
         Description: string;
         EditMode: EditMode;
@@ -59,7 +59,7 @@ export declare namespace Template {
         Name: string;
         OwnerType: OwnerType;
         Presets: string;
-        Purposes: Purposes;
+        Purposes: Purposes[];
         ID: number;
         OwnerId: number;
         Previews: string;
@@ -89,7 +89,9 @@ export declare namespace Template {
         Headers?: Partial<Headers>;
     };
     export type PutTemplateDetailContentBody = PostTemplateDetailContentBody;
-    type TemplateResponse = Common.Response<Template[]>;
+    type TemplateResponse = Common.Response<Template & {
+        LocaleList: string[];
+    }[]>;
     type TemplateDetailContentResponse = Common.Response<TemplateDetailContent[]>;
     export type PostTemplateResponse = TemplateResponse;
     export type PutTemplateResponse = TemplateResponse;

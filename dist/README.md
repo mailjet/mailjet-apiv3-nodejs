@@ -141,7 +141,7 @@ const mailjet = Mailjet.apiConnect(
     {
       config: {},
       options: {}
-    } 
+    }
 );
 ```
 
@@ -154,7 +154,7 @@ const mailjet = Mailjet.smsConnect(
     {
       config: {},
       options: {}
-    } 
+    }
 );
 ```
 
@@ -223,7 +223,7 @@ const request = mailjet
 - `CONFIG`: associative array describing the connection config (see [Config](#config) bellow for full list)
 - `DATA`: is the data to be sent as the request body _(only for `post`, `put`, `delete` methods)_
 - `PARAMS`: are the URL parameters to be sent with the request
-- `PERFORM_API_CALL`: is the Boolean parameter that determine need make local or real request 
+- `PERFORM_API_CALL`: is the Boolean parameter that determine need make local or real request
 
 ### Options
 
@@ -288,7 +288,7 @@ const mailjet = new Mailjet({
     options: {
       headers: {
         Accept: 'application/json',
-        'API-Key': 'foobar', 
+        'API-Key': 'foobar',
         'Content-Type': 'application/json'
       }
     }
@@ -437,7 +437,7 @@ const request = mailjet
     .post('send', { version: 'v3.1', output: 'arraybuffer' })
 ```
 
-The `output` parameter allowing you to specify the type of response data: 
+The `output` parameter allowing you to specify the type of response data:
 - `arraybuffer`
 - `document`
 - `json` _(Default)_
@@ -465,9 +465,9 @@ const request = mailjet
 Current library based on `TypeScript` and provide **full cover** for **Mailjet types**. \
 All **types** can be exported from main entrypoint `'node-mailjet'`:
 ```typescript
-import { 
+import {
   Contact,
-  SendEmailV3, 
+  SendEmailV3,
   SendEmailV3_1,
   Message,
   Segmentation,
@@ -554,7 +554,6 @@ const mailjet = new Mailjet.Client({
     const result: Mailjet.LibraryResponse<Mailjet.SendMessage.Response> = await mailjet
         .post('contact', { version: 'v3' })
         .request(body);
-    
 
     const { Status } = result.body;
 })();
@@ -931,7 +930,7 @@ request
 
 #### Token authentication
 
-Authentication for the `SMS API` endpoints is done using a `Bearer token`.  
+Authentication for the `SMS API` endpoints is done using a `Bearer token`.
 The `Bearer token` is generated in the [SMS section](https://app.mailjet.com/sms) of your Mailjet account.
 
 ```javascript
