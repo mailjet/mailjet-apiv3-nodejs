@@ -89,9 +89,9 @@ export declare namespace Template {
         Headers?: Partial<Headers>;
     };
     export type PutTemplateDetailContentBody = PostTemplateDetailContentBody;
-    type TemplateResponse = Common.Response<Template & {
+    type TemplateResponse = Common.Response<(Template & {
         LocaleList: string[];
-    }[]>;
+    })[]>;
     type TemplateDetailContentResponse = Common.Response<TemplateDetailContent[]>;
     export type PostTemplateResponse = TemplateResponse;
     export type PutTemplateResponse = TemplateResponse;
