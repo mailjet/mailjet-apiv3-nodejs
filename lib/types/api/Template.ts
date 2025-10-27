@@ -110,7 +110,7 @@ export namespace Template {
   export type PutTemplateDetailContentBody = PostTemplateDetailContentBody
 
   // RESPONSE PART
-  type TemplateResponse = Common.Response<Template & {LocaleList: string[]}[]>;
+  type TemplateResponse = Common.Response<(Template & {LocaleList: string[]})[]>;
   type TemplateDetailContentResponse = Common.Response<TemplateDetailContent[]>;
 
   export type PostTemplateResponse = TemplateResponse
