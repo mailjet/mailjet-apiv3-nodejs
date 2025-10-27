@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.11](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.10...v6.0.11) (2025-10-27)
+
+
+### Bug Fixes
+
+* Update Axios version ([#298](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/298)) ([459cf3a](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/459cf3a3c64ac1fbe9859a22249f5e1f9a2764e0))
+
 ### [6.0.10](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.9...v6.0.10) (2025-10-27)
 
 
