@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.10](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.9...v6.0.10) (2025-10-27)
+
+
+### Bug Fixes
+
+* Update TemplateResponse type to be an array ([#297](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/297)) ([d3a74ee](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/d3a74ee70aa90eb08caf31dc4cdcfb7d7f0c2420))
+
 ### [6.0.9](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.8...v6.0.9) (2025-07-25)
 
 
