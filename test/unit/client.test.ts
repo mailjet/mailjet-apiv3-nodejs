@@ -28,7 +28,9 @@ describe('Unit Client', () => {
         const originalInit = Client.prototype['init'];
 
         let initParams: ClientParams = {};
-        (Client.prototype as any)['init'] = (params: ClientParams) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        (Client.prototype as never)['init'] = (params: ClientParams) => {
           initParams = params;
         };
 
@@ -57,7 +59,7 @@ describe('Unit Client', () => {
 
       it('should be throw error if passed argument "params" is not object', () => {
         ['', 5, true, undefined, null, Symbol(''), BigInt(5)].forEach((type) => {
-          expect(() => new Client(type as any))
+          expect(() => new Client(type as never))
             .to.throw(Error, 'Argument "params" must be object');
         });
       });
@@ -469,7 +471,7 @@ describe('Unit Client', () => {
 
       it('should be throw error if passed argument "params" is not object', () => {
         ['', 5, true, undefined, null, Symbol(''), BigInt(5)].forEach((type) => {
-          expect(() => Client.prototype['init'].call({}, type as any))
+          expect(() => Client.prototype['init'].call({}, type as never))
             .to.throw(Error, 'Argument "params" must be object');
         });
       });
@@ -518,7 +520,7 @@ describe('Unit Client', () => {
 
       it('should be throw error if passed argument "params" is not object', () => {
         ['', 5, true, undefined, null, Symbol(''), BigInt(5)].forEach((type) => {
-          expect(() => Client.prototype['cloneParams'].call(null, type as any))
+          expect(() => Client.prototype['cloneParams'].call(null, type as never))
             .to.throw(Error, 'Argument "params" must be object');
         });
       });
@@ -555,7 +557,7 @@ describe('Unit Client', () => {
 
       it('should be throw error if passed argument "customConfig" is not object', () => {
         ['', 5, true, undefined, Symbol(''), BigInt(5)].forEach((type) => {
-          expect(() => Client.prototype['setConfig'].call(null, type as any))
+          expect(() => Client.prototype['setConfig'].call(null, type as never))
             .to.throw(Error, 'Argument "customConfig" must be object or null');
         });
       });
@@ -602,7 +604,7 @@ describe('Unit Client', () => {
 
       it('should be throw error if passed argument "options" is not object', () => {
         ['', 5, true, undefined, Symbol(''), BigInt(5)].forEach((type) => {
-          expect(() => Client.prototype['setOptions'].call(null, type as any))
+          expect(() => Client.prototype['setOptions'].call(null, type as never))
             .to.throw(Error, 'Argument "options" must be object or null');
         });
       });
