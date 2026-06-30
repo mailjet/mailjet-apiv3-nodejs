@@ -226,6 +226,7 @@ describe('API Basic Usage', () => {
       'https://api.mailjet.com/v3/DATA/contactslist/34/csvdata/text:plain "FILE"',
       'https://api.mailjet.com/v3/REST/newsletter?CountOnly=1 {}',
       'https://api.mailjet.com/v3/DATA/batchjob/csverror/text:csv {}',
+      'https://api.mailjet.com/v3/REST/template/456/detailcontent {}',
       'https://api.mailjet.com/v3/REST/contact {"email":"test@mailjet.com"}',
       'https://api.mailjet.com/v3/send {"FromName":"name","FromEmail":"test@mailjet.com","Subject":"subject","Text-Part":"text","Recipients":[{"email":"test@mailjet.com"}]}',
       'https://api.mailjet.com/v3/send {"FromName":"name","FromEmail":"test@mailjet.com","Subject":"subject","Text-Part":"text","Recipients":[{"email":"test@mailjet.com"},{"email":"test2@mailjet.com"}]}',
@@ -254,6 +255,7 @@ describe('API Basic Usage', () => {
           new Example(apiClient.post('contactslist').id(34).action('csvdata'), { data: FILE }),
           new Example(apiClient.get('newsletter'), { params: { CountOnly: 1 } }),
           new Example(apiClient.get('batchjob').action('csverror')),
+          new Example(apiClient.put('template').id(456).action('detailcontent')),
           new Example(apiClient.post('contact'), { data: { email: EMAIL } }),
           new Example(apiClient.post('send'), {
             data: {
