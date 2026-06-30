@@ -23,6 +23,8 @@ export interface RequestOptions {
   headers?: RawAxiosRequestHeaders;
   maxBodyLength?: number;
   maxContentLength?: number;
+  maxRetries?: number;
+  retryDelay?: number;
 }
 
 export type SubPath = 'REST' | 'DATA' | '';

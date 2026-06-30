@@ -847,6 +847,27 @@ describe('Unit Request', () => {
         expect(requestData.headers).to.haveOwnProperty('accept').that.includes('application/json');
       });
 
+      it('should apply default timeout of 30000ms when no timeout is configured', async () => {
+        const resource = 'contact';
+        const path = `/${Client.config.version}/REST/${resource}`;
+
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const resultData = { Count: 1 };
+        nock(API_MAILJET_URL)
+          .defaultReplyHeaders({ 'Content-Type': 'application/json' })
+          .get(path)
+          .reply(200, JSON.stringify(resultData));
+
+        const instance = new Client(params).get(resource);
+        const result = await instance.request();
+
+        expect(result.response.config).to.have.ownProperty('timeout').that.equals(30000);
+      });
+
       it('should be request with proxy', async () => {
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
@@ -1447,6 +1468,124 @@ describe('Unit Request', () => {
 
           expect(err.config.timeout).to.equal(params.options?.timeout);
         } finally {
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          expect(error).to.be.not.null;
+        }
+      });
+
+      it('should succeed on retry after a transient ETIMEDOUT network error', async () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+          options: {
+            maxRetries: 1,
+            retryDelay: 0,
+          },
+        };
+
+        const resultData = { Count: 1, Data: [] };
+
+        let callCount = 0;
+        const originalMakeRequest = Request.prototype['makeRequest'];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Request.prototype['makeRequest'] = async function (): Promise<any> {
+          callCount += 1;
+          if (callCount === 1) {
+            throw new AxiosError('connect ETIMEDOUT 35.187.79.8:443', 'ETIMEDOUT');
+          }
+          return {
+            data: resultData,
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: {},
+            request: {},
+          };
+        };
+
+        try {
+          const instance = new Client(params).get('contact');
+          const result = await instance.request();
+
+          expect(callCount).to.equal(2);
+          expect(result).to.be.a('object');
+          expect(result).to.have.ownProperty('body').that.deep.equals(resultData);
+        } finally {
+          Request.prototype['makeRequest'] = originalMakeRequest;
+        }
+      });
+
+      it('should throw after exhausting all retries on persistent network errors', async () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+          options: {
+            maxRetries: 1,
+            retryDelay: 0,
+          },
+        };
+
+        let callCount = 0;
+        const originalMakeRequest = Request.prototype['makeRequest'];
+        Request.prototype['makeRequest'] = async function () {
+          callCount += 1;
+          throw new AxiosError('connect ETIMEDOUT 35.187.79.8:443', 'ETIMEDOUT');
+        };
+
+        let error = null;
+        try {
+          const instance = new Client(params).get('contact');
+          await instance.request();
+        } catch (err) {
+          error = err;
+
+          expectOwnProperty(err, 'code', 'ETIMEDOUT');
+          expectOwnProperty(err, 'response', null);
+          expectOwnProperty(err, 'statusCode', null);
+          expect(callCount).to.equal(2);
+        } finally {
+          Request.prototype['makeRequest'] = originalMakeRequest;
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          expect(error).to.be.not.null;
+        }
+      });
+
+      it('should not retry on HTTP error responses', async () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+          options: {
+            maxRetries: 2,
+            retryDelay: 0,
+          },
+        };
+
+        let callCount = 0;
+        const originalMakeRequest = Request.prototype['makeRequest'];
+        Request.prototype['makeRequest'] = async function () {
+          callCount += 1;
+          const axiosError = new AxiosError('Request failed with status code 500', 'ERR_BAD_RESPONSE');
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (axiosError as any).response = {
+            status: 500,
+            statusText: 'Internal Server Error',
+            data: { ErrorMessage: 'Internal Server Error' },
+          };
+          throw axiosError;
+        };
+
+        let error = null;
+        try {
+          const instance = new Client(params).get('contact');
+          await instance.request();
+        } catch (err) {
+          error = err;
+
+          expectOwnProperty(err, 'statusCode', 500);
+          expect(err).to.haveOwnProperty('response').that.is.an('object');
+          expect(callCount).to.equal(1);
+        } finally {
+          Request.prototype['makeRequest'] = originalMakeRequest;
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }

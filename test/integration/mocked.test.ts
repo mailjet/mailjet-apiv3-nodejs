@@ -64,6 +64,34 @@ describe('Mocked API calls', () => {
           nock.cleanAll();
         }
       });
+
+      it('succeeds on retry after a transient ETIMEDOUT error', async () => {
+        const resultData = { Count: 1, Data: [] };
+
+        /* First attempt: simulate ETIMEDOUT (the error from the ticket) */
+        nock('https://api.mailjet.com')
+          .get('/v3/REST/contact')
+          .replyWithError({ code: 'ETIMEDOUT', message: 'connect ETIMEDOUT 35.187.79.8:443' });
+
+        /* Second attempt (retry): succeeds */
+        nock('https://api.mailjet.com')
+          .defaultReplyHeaders({ 'Content-Type': 'application/json' })
+          .get('/v3/REST/contact')
+          .reply(200, resultData);
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const retryClient = Mailjet.apiConnect(API_KEY!, API_SECRET!, {
+          config: { version: 'v3' },
+          options: { timeout: REQUEST_TIMEOUT, maxRetries: 1, retryDelay: 0 },
+        });
+
+        const result = await retryClient.get('contact').request();
+
+        expect(result).to.be.a('object');
+        expect(result).to.have.ownProperty('body').that.deep.equals(resultData);
+
+        nock.cleanAll();
+      });
     });
   });
 });
