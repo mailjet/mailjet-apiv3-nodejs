@@ -163,9 +163,9 @@ class Request {
     const clientOptions = this.client.getOptions();
 
     // 1. Timeout
-    if (clientOptions.timeout) {
-      requestConfig.timeout = clientOptions.timeout;
-    }
+    requestConfig.timeout = clientOptions.timeout !== undefined
+      ? clientOptions.timeout
+      : Request.DEFAULT_TIMEOUT;
 
     // 2. Proxy
     if (clientOptions.proxy) {
@@ -277,68 +277,104 @@ class Request {
       } as LibraryLocalResponse<Body, Params>;
     }
 
-    try {
-      const response = await this.makeRequest(url, data, params);
-      return {
-        response,
-        body: response.data,
-      };
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const error = new Error() as any;
+    const clientOptions = this.client.getOptions();
+    const maxRetries = clientOptions.maxRetries ?? 0;
+    const retryDelay = clientOptions.retryDelay ?? 1000;
 
-        error.code = err.code;
-        error.config = err.config;
-
-        if (err.response) {
-          const {
-            status,
-            statusText,
-            data: body,
-          } = err.response;
-
-          error.response = err.response;
-
-          error.statusCode = status;
-          error.statusText = statusText;
-
-          const errorMessage = body?.ErrorMessage ?? err.message;
-          error.originalMessage = errorMessage;
-          error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${errorMessage}"`;
-
-          if (body) {
-            // https://dev.mailjet.com/email/guides/send-api-v31/#send-in-bulk
-            const fullMessage = body.Messages?.[0]?.Errors?.[0]?.ErrorMessage;
-            if (typeof fullMessage === 'string') {
-              error.message += `;\n${fullMessage}`;
-            }
-
-            // v3.1 case
-            // https://dev.mailjet.com/email/guides/send-api-v31/#sandbox-mode
-            setValueIfNotNil(error, 'ErrorMessage', body.ErrorMessage);
-            setValueIfNotNil(error, 'ErrorCode', body.ErrorCode);
-            setValueIfNotNil(error, 'ErrorIdentifier', body.ErrorIdentifier);
-            setValueIfNotNil(error, 'ErrorRelatedTo', body.ErrorRelatedTo);
-          }
-        } else {
-          error.response = null;
-
-          error.statusCode = null;
-          error.statusText = null;
-
-          error.originalMessage = err.message;
-          error.message = `Unsuccessful: Error Code: "${error.code}" Message: "${err.message}"`;
-        }
-
-        throw error;
+    // eslint-disable-next-line no-plusplus
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      if (attempt > 0) {
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise<void>((resolve) => {
+          setTimeout(resolve, retryDelay * (2 ** (attempt - 1)));
+        });
       }
 
-      throw err;
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const response = await this.makeRequest(url, data, params);
+        return {
+          response,
+          body: response.data,
+        };
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          const isNetworkError = !err.response;
+          const isRetryable = isNetworkError && Request.RETRYABLE_ERROR_CODES.has(err.code ?? '');
+
+          if (isRetryable && attempt < maxRetries) {
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const error = new Error() as any;
+
+          error.code = err.code;
+          error.config = err.config;
+
+          if (err.response) {
+            const {
+              status,
+              statusText,
+              data: body,
+            } = err.response;
+
+            error.response = err.response;
+
+            error.statusCode = status;
+            error.statusText = statusText;
+
+            const errorMessage = body?.ErrorMessage ?? err.message;
+            error.originalMessage = errorMessage;
+            error.message = `Unsuccessful: Status Code: "${error.statusCode}" Message: "${errorMessage}"`;
+
+            if (body) {
+              // https://dev.mailjet.com/email/guides/send-api-v31/#send-in-bulk
+              const fullMessage = body.Messages?.[0]?.Errors?.[0]?.ErrorMessage;
+              if (typeof fullMessage === 'string') {
+                error.message += `;\n${fullMessage}`;
+              }
+
+              // v3.1 case
+              // https://dev.mailjet.com/email/guides/send-api-v31/#sandbox-mode
+              setValueIfNotNil(error, 'ErrorMessage', body.ErrorMessage);
+              setValueIfNotNil(error, 'ErrorCode', body.ErrorCode);
+              setValueIfNotNil(error, 'ErrorIdentifier', body.ErrorIdentifier);
+              setValueIfNotNil(error, 'ErrorRelatedTo', body.ErrorRelatedTo);
+            }
+          } else {
+            error.response = null;
+
+            error.statusCode = null;
+            error.statusText = null;
+
+            error.originalMessage = err.message;
+            error.message = `Unsuccessful: Error Code: "${error.code}" Message: "${err.message}"`;
+          }
+
+          throw error;
+        }
+
+        throw err;
+      }
     }
+
+    // unreachable — loop always returns or throws
+    throw new Error('Unexpected end of retry loop');
   }
 
   public static protocol = 'https://' as const;
+
+  private static readonly DEFAULT_TIMEOUT = 30_000;
+
+  private static readonly RETRYABLE_ERROR_CODES = new Set([
+    'ETIMEDOUT',
+    'ECONNABORTED',
+    'ECONNRESET',
+    'ECONNREFUSED',
+    'ENOTFOUND',
+  ]);
 
   public static parseToJSONb(text: string) {
     if (typeof text !== 'string') {
