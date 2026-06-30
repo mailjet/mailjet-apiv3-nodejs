@@ -211,6 +211,10 @@ class Request {
       throw new Error('Argument "value" must be string or number');
     }
 
+    if (this.actionPath !== null) {
+      throw new Error('id() must be called before action()');
+    }
+
     this.url = urlJoin(this.url, value.toString());
 
     return this;

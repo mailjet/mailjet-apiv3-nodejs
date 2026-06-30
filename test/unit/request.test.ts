@@ -434,6 +434,18 @@ describe('Unit Request', () => {
         expect(path).to.be.a('string');
         expect(path).to.equal(url);
       });
+
+      it('should build correct URL for template detailcontent when id() precedes action()', () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const request = new Client(params).put('template').id(123).action('detailcontent');
+        const url = request['buildFullUrl']();
+
+        expect(url).to.equal(`${Request.protocol}${Client.config.host}/v3/REST/template/123/detailcontent`);
+      });
     });
 
     describe('Request.buildSubPath()', () => {
@@ -581,6 +593,17 @@ describe('Unit Request', () => {
           expect(() => Request.prototype.id.call(null, value as string))
             .to.throw(Error, 'Argument "value" must be string or number');
         });
+      });
+
+      it('should throw error if id() is called after action()', () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        expect(
+          () => new Client(params).put('template').action('detailcontent').id(123),
+        ).to.throw(Error, 'id() must be called before action()');
       });
     });
 
