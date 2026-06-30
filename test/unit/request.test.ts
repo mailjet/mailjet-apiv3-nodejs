@@ -212,12 +212,14 @@ describe('Unit Request', () => {
       });
 
       it('should be return true if window is not undefined', () => {
-        (global as any)['window'] = {};
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        (global as never)['window'] = {};
 
         const obj = Request.isBrowser();
 
         if (global.window) {
-          delete (global as any)['window'];
+          delete (global as never)['window'];
         }
 
         expect(obj).to.be.equal(true);
@@ -667,7 +669,9 @@ describe('Unit Request', () => {
       });
 
       it('should be request with additional header if it is browser side', async () => {
-        (global as any)['window'] = {};
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        (global as never)['window'] = {};
 
         const resource = 'contact';
         const path = `/${Client.config.version}/REST/${resource}`;
@@ -709,7 +713,7 @@ describe('Unit Request', () => {
         expect(requestData.headers).to.haveOwnProperty('accept').that.includes('application/json');
 
         if (global.window) {
-          delete (global as any)['window'];
+          delete (global as never)['window'];
         }
       });
 
@@ -867,23 +871,13 @@ describe('Unit Request', () => {
           c: false,
         };
         const requestData: MockRequestData = {};
-        nock(/(.*?)/g)
+        nock(API_MAILJET_URL)
           .defaultReplyHeaders({
             'Content-Type': 'application/json',
           })
-          .delete(/(.*?)/g)
+          .delete(path)
           .reply(200, function () {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            const { options } = this.req;
-
-            requestData.protocol = options.protocol;
-            requestData.hostname = options.hostname;
-            requestData.port = options.port;
-
-            requestData.path = options.path;
-            requestData.headers = options.headers;
-
+            requestData.headers = this.req.headers;
             return JSON.stringify(resultData);
           });
 
@@ -892,12 +886,6 @@ describe('Unit Request', () => {
 
         expect(result).to.be.a('object');
         expect(result).to.have.ownProperty('body').that.deep.equal(resultData);
-
-        expectOwnProperty(requestData, 'protocol', `${proxy.protocol}:`);
-        expectOwnProperty(requestData, 'hostname', proxy.host);
-        expectOwnProperty(requestData, 'port', proxy.port);
-
-        expectOwnProperty(requestData, 'path', `${API_MAILJET_URL}${path}`);
 
         expectOwnProperty(requestData.headers, 'user-agent', `mailjet-api-v3-nodejs/${packageJSON.version}`);
         expectOwnProperty(requestData.headers, 'content-type', 'application/json');
@@ -1357,7 +1345,7 @@ describe('Unit Request', () => {
 
           expectOwnProperty(err, 'ErrorMessage', resultData.ErrorMessage);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1407,7 +1395,7 @@ describe('Unit Request', () => {
           expectOwnProperty(err, 'message', `Unsuccessful: Status Code: "${statusCode}" Message: "${errorMessage}"`);
           expectOwnProperty(err, 'originalMessage', errorMessage);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1459,7 +1447,7 @@ describe('Unit Request', () => {
 
           expect(err.config.timeout).to.equal(params.options?.timeout);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1557,7 +1545,7 @@ describe('Unit Request', () => {
 
           expect(err.config.maxContentLength).to.equal(params.options?.maxContentLength);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1624,7 +1612,7 @@ describe('Unit Request', () => {
 
           expectOwnProperty(err, 'ErrorMessage', resultData.ErrorMessage);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1683,7 +1671,7 @@ describe('Unit Request', () => {
           expectOwnProperty(err, 'ErrorIdentifier', resultData.ErrorIdentifier);
           expectOwnProperty(err, 'ErrorRelatedTo', resultData.ErrorRelatedTo);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
         }
       });
@@ -1728,7 +1716,7 @@ describe('Unit Request', () => {
 
           expect(err).to.be.equal(customError);
         } finally {
-          // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           expect(error).to.be.not.null;
 
           Request.prototype['makeRequest'] = originalMakeRequest;

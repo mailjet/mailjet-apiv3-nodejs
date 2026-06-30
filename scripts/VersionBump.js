@@ -1,5 +1,5 @@
-const childProcess = require('child_process');
-const packageJSON = require('../package.json');
+import childProcess from 'child_process';
+import packageJSON from '../package.json';
 
 const VERSION_NUMBER = {
   MAJOR: 'major',

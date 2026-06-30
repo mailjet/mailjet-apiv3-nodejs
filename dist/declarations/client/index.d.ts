@@ -1,7 +1,7 @@
 import { ClientParams } from './Client';
 import { RequestConfig, RequestOptions, RequestConstructorConfig } from '../request/Request';
 import Request from '../request';
-export declare type ClientConnectParams = Pick<ClientParams, 'config' | 'options'>;
+export type ClientConnectParams = Pick<ClientParams, 'config' | 'options'>;
 declare class Client {
     private version;
     private config;
@@ -94,21 +94,27 @@ declare class Client {
             "json-bigint": string;
             "url-join": string;
         };
+        readonly overrides: {
+            diff: string;
+            "serialize-javascript": string;
+        };
         readonly devDependencies: {
             "@babel/core": string;
             "@babel/preset-env": string;
             "@commitlint/cli": string;
             "@commitlint/config-conventional": string;
+            "@eslint/eslintrc": string;
+            "@eslint/js": string;
             "@types/chai": string;
             "@types/json-bigint": string;
             "@types/mocha": string;
             "@types/node": string;
             "@types/qs": string;
-            "@types/superagent": string;
             "@types/url-join": string;
             "@typescript-eslint/eslint-plugin": string;
             "@typescript-eslint/parser": string;
             "babel-loader": string;
+            c8: string;
             chai: string;
             eslint: string;
             "eslint-config-airbnb-base": string;
@@ -118,7 +124,6 @@ declare class Client {
             husky: string;
             mocha: string;
             nock: string;
-            nyc: string;
             qs: string;
             "standard-version": string;
             "terser-webpack-plugin": string;

@@ -3,7 +3,9 @@ import urlJoin from 'url-join';
 import JSONBigInt from 'json-bigint';
 import axios, { AxiosError } from 'axios';
 /*utils*/
-import { isNonEmptyObject, isNull, isPureObject, isValidJson, setValueIfNotNil } from '../utils/index';
+import {
+  isNonEmptyObject, isNull, isValidJson, setValueIfNotNil,
+} from '../utils/index';
 /*types*/
 import { TObject } from '../types';
 import { LibraryResponse, LibraryLocalResponse } from '../types/api';
@@ -283,7 +285,8 @@ class Request {
       };
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
-        const error: any = new Error();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const error = new Error() as any;
 
         error.code = err.code;
         error.config = err.config;
@@ -345,6 +348,7 @@ class Request {
     let body;
     try {
       body = JSONb.parse(text);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       body = {};
     }

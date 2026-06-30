@@ -3,7 +3,7 @@ import { LibraryResponse, LibraryLocalResponse } from '../types/api';
 import HttpMethods from './HttpMethods';
 import { RequestData, RequestParams, RequestConstructorConfig } from './Request';
 import Client from '../client';
-declare type UnknownRec = TObject.UnknownRec;
+type UnknownRec = TObject.UnknownRec;
 declare class Request {
     private readonly client;
     private readonly method;

@@ -1,7 +1,7 @@
-import Mailjet, { Client, HttpMethods, Request } from '../../lib/index';
-import { ClientParams } from '../../lib/client/Client';
 import nock from 'nock';
 import { expect } from 'chai';
+import Mailjet, { Client, Request } from '../../lib/index';
+import { ClientParams } from '../../lib/client/Client';
 
 describe('Unit ManageContact action', () => {
   const API_MAILJET_URL = `${Request.protocol}${Client.config.host}`;
@@ -96,14 +96,16 @@ describe('Unit ManageContact action', () => {
       error = err;
       expect(error).to.have.ownProperty('message', '"managecontact" action expects request body to be not empty object');
     } finally {
-      // eslint-disable-next-line no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(error).to.be.not.null;
     }
   });
   it('should throw an error if body is not valid json', async () => {
     let error = null;
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const obj = { test: BigInt(12345678901234567890) };
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const obj = { test: BigInt(12345678901234567890n) };
 
     try {
       await mailjet
@@ -115,7 +117,7 @@ describe('Unit ManageContact action', () => {
       error = err;
       expect(error).to.have.ownProperty('message', '"managecontact" action expects request body to be valid JSON object');
     } finally {
-      // eslint-disable-next-line no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(error).to.be.not.null;
     }
   });
@@ -140,14 +142,15 @@ describe('Unit ManageContact action', () => {
       error = err;
       expect(error).to.have.ownProperty('message', '"managecontact" action expects Properties value to be an object');
     } finally {
-      // eslint-disable-next-line no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(error).to.be.not.null;
     }
   });
 
   it('should throw an error if Properties object is not valid json', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const obj = { test: BigInt(12345678901234567890) };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const obj = { test: BigInt(12345678901234567890n) };
 
     let error = null;
     try {
@@ -165,7 +168,7 @@ describe('Unit ManageContact action', () => {
       error = err;
       expect(error).to.have.ownProperty('message', '"managecontact" action expects request body to be valid JSON object');
     } finally {
-      // eslint-disable-next-line no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(error).to.be.not.null;
     }
   });

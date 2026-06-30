@@ -198,7 +198,7 @@ describe('API Basic Usage', () => {
       private buildUrl(result: TResult) {
         const url = result.url.replace(/\\/g, '/');
         const params = result.params && Object.keys(result.params).length > 0 ? `?${qs.stringify(result.params)}` : '';
-        const body = JSON.stringify(result.body).match(/\S+/g)?.join('');
+        const body = JSON.stringify(result.body ?? {}).match(/\S+/g)?.join('');
 
         return `${url}${params} ${body}`;
       }
