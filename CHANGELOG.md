@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.11...v7.0.0) (2026-07-12)
+
+
+### Bug Fixes
+
+* Add default timeout and opt-in retry support to prevent ETIMEDOUT hangs ([#266](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/266)) ([3fc5bc2](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/3fc5bc2de655eb086548367645254b54f5b0b5cc))
+* Guard against calling id() after action() to prevent wrong template URLs ([#276](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/276)) ([6cb7c76](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/6cb7c76193c4d65188e95e43b9a0345c9c5cfd36))
+* Validate contactdata PUT payload shape to prevent Invalid key name errors ([#293](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/293)) ([dd3e4f7](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/dd3e4f715dc59bac293f5fe481bc7f14d576beab))
+* id() no longer URL-encodes email addresses for contact/contactdata resources ([#300](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/300)) ([1e203b5](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/1e203b52f30c352c78b074ae032a605860e9a6e9))
+* Restore default export interop broken by UMD library.export: 'default' ([#287](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/287)) ([2db17e7](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/2db17e7dfea6700a40402160e0fad2e5f2bee856))
+* Add package.json exports map and ESM shim for named imports ([#281](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/281)) ([6adbd64](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/6adbd644a7ea894bfc69b8538685ebaa750f8a1f))
+
+
+### Dependency changes
+
+* Upgrade all dependencies to latest major versions and fix compatibility issues ([8241659](https://github.com/mailjet/mailjet-apiv3-nodejs/commits/824165974e2c1f50b7645c098fa67b3ab5367cb1))
+
+
+### Breaking changes
+
+* **package.json:** Added an `exports` map. Only `require('node-mailjet')` / `import ... from 'node-mailjet'` are
+  supported entry points now; deep imports such as `require('node-mailjet/dist/mailjet.node.js')` are no longer
+  resolvable.
+* **request:** `.id()` now throws if called after `.action()` instead of silently building an incorrect URL.
+  Swap the call order to `.id().action()`.
+* **request:** `PUT` requests to the `contactdata` resource now throw synchronously if `Data` is missing, not an
+  array, or contains entries without `Name`/`Value` keys, instead of only failing later with a server-side `400`.
+* **client:** Requests now time out after `30s` by default instead of hanging indefinitely. Pass `options.timeout`
+  to configure a different value.
+
 ### [6.0.11](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.10...v6.0.11) (2025-10-27)
 
 
