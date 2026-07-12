@@ -859,6 +859,11 @@ It also means that all non-mandatory properties can be omitted from your payload
 
 Update the **contact properties** for a **contact**:
 
+Each entry in `Data` must be an object with `Name` and `Value` keys, where `Name` matches
+a property already defined via [`/contactmetadata`](https://dev.mailjet.com/email/reference/contacts/contact-properties/#v3_post_contactmetadata).
+Sending the property name/value directly (e.g. `{ first_name: "John" }`) instead of
+`{ Name: "first_name", Value: "John" }` will make the API respond with an `Invalid key name` error.
+
 ```javascript
 const Mailjet = require('node-mailjet')
 const mailjet = new Mailjet({
@@ -872,8 +877,12 @@ const request = mailjet
         .request({
           Data: [
             {
-              first_name: "John",
-              last_name: "Smith"
+              Name: "first_name",
+              Value: "John"
+            },
+            {
+              Name: "last_name",
+              Value: "Smith"
             }
           ]
         })
