@@ -13,6 +13,20 @@ function readJSONFile(filePath) {
   return JSON.parse(source);
 }
 
+function rewriteDistPaths(value) {
+  if (typeof value === 'string') {
+    return value.startsWith('./dist/') ? value.replace('./dist/', './') : value;
+  }
+  if (value !== null && typeof value === 'object') {
+    Object
+      .entries(value)
+      .forEach(([key, nestedValue]) => {
+        value[key] = rewriteDistPaths(nestedValue);
+      });
+  }
+  return value;
+}
+
 function changePackageData(packageData) {
   delete packageData.scripts;
   delete packageData.directories;
@@ -24,11 +38,7 @@ function changePackageData(packageData) {
   Object
     .entries(packageData)
     .forEach(([key, value]) => {
-      if (key === 'typescript') {
-        packageData[key].definition = value.definition.replace('./dist/', './');
-      } else if (typeof value === 'string' && value.startsWith('./dist/')) {
-        packageData[key] = value.replace('./dist/', './');
-      }
+      packageData[key] = rewriteDistPaths(value);
     });
 }
 
@@ -54,6 +64,7 @@ function main() {
   fs.copyFileSync(path.join(ROOT_DIR, 'LICENSE'), path.join(DIST_PATH, './LICENSE'));
   fs.copyFileSync(path.join(ROOT_DIR, 'README.md'), path.join(DIST_PATH, './README.md'));
   fs.copyFileSync(path.join(ROOT_DIR, 'CHANGELOG.md'), path.join(DIST_PATH, './CHANGELOG.md'));
+  fs.copyFileSync(path.join(ROOT_DIR, 'esm/mailjet.mjs'), path.join(DIST_PATH, './mailjet.mjs'));
 
   // package-lock.json
   childProcess.execSync('npm i --prefix ./dist/ --package-lock-only');
