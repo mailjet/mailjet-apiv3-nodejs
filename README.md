@@ -27,6 +27,7 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
 
 - [Documentation](#documentation)
   - [Compatibility](#compatibility)
+  - [Upgrading to v7](#upgrading-to-v7)
   - [Install](#install)
   - [Setup Client](#setup-client)
     - [Authentication](#authentication)
@@ -78,6 +79,22 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
 
 This library officially supports the following `Node.JS` versions:
 - \>= `v12.x`
+
+---
+
+## Upgrading to v7
+
+Version `7.0.0` includes breaking changes. See the [CHANGELOG](./CHANGELOG.md#700-2026-07-12) for the full list, in short:
+
+- `package.json` now declares an `exports` map. Only `require('node-mailjet')` / `import ... from 'node-mailjet'`
+  are supported entry points — deep imports such as `require('node-mailjet/dist/mailjet.node.js')` will no
+  longer resolve.
+- `.id()` now throws if called after `.action()` instead of silently building an incorrect URL. Call `.id()`
+  before `.action()`.
+- `PUT` requests to the `contactdata` resource now throw synchronously if `Data` is missing, not an array, or
+  contains entries without `Name`/`Value` keys, instead of only failing with a server-side `400`.
+- Requests now time out after `30s` by default instead of hanging indefinitely. Pass `options.timeout` to
+  configure a different value (see [Request timeout](#request-timeout)).
 
 ---
 
