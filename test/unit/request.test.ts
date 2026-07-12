@@ -1148,7 +1148,7 @@ describe('Unit Request', () => {
       it('should be skip request', async () => {
         const apiVersion = Client.config.version;
 
-        const resource = 'contactdata';
+        const resource = 'contact';
         const contactId = 2345234;
         const data = {
           Data: [
@@ -1209,7 +1209,7 @@ describe('Unit Request', () => {
       it('should be request by PUT/POST/DELETE methods', async () => {
         const apiVersion = Client.config.version;
 
-        const resource = 'contactdata';
+        const resource = 'contact';
         const contactId = 2345234;
         const data = {
           Data: [

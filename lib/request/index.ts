@@ -4,7 +4,7 @@ import JSONBigInt from 'json-bigint';
 import axios, { AxiosError } from 'axios';
 /*utils*/
 import {
-  isNonEmptyObject, isNull, isValidJson, setValueIfNotNil,
+  isNonEmptyObject, isNull, isPureObject, isValidJson, setValueIfNotNil,
 } from '../utils/index';
 /*types*/
 import { TObject } from '../types';
@@ -269,6 +269,8 @@ class Request {
 
     if (this.actionPath) {
       this.validateActionData(this.actionPath, data);
+    } else if (this.resource === 'contactdata' && this.method === HttpMethods.Put) {
+      this.validateContactData(data);
     }
 
     if (!performAPICall) {
@@ -424,6 +426,38 @@ class Request {
 
     if (actionPath in validators) {
       validators[actionPath as keyof typeof validators](data);
+    }
+  }
+
+  private validateContactData(data: RequestData | Body) {
+    if (typeof data !== 'object' || isNull(data)) { // only if body is not JSON.stringified by user
+      return;
+    }
+
+    if (!isNonEmptyObject(data as UnknownRec)) {
+      throw new Error('"contactdata" PUT request expects request body to be not empty object');
+    }
+
+    if (!('Data' in data)) {
+      throw new Error('"contactdata" PUT request expects request body to contain a "Data" property');
+    }
+
+    const { Data } = data as UnknownRec;
+
+    if (!Array.isArray(Data)) {
+      throw new Error('"contactdata" PUT request expects "Data" property to be an array');
+    }
+
+    const isContactProperty = (property: unknown) => isPureObject(property)
+      && 'Name' in (property as UnknownRec)
+      && 'Value' in (property as UnknownRec);
+
+    if (!Data.every(isContactProperty)) {
+      throw new Error(
+        '"contactdata" PUT request expects "Data" to be an array of objects with "Name" and "Value" keys, '
+        + 'e.g. { Data: [{ Name: "first_name", Value: "John" }] }. '
+        + 'See https://dev.mailjet.com/email/reference/contacts/contact-properties/',
+      );
     }
   }
 }
