@@ -839,6 +839,11 @@ request
         })
 ```
 
+> **Note:** \
+> For the `contact` and `contactdata` resources, `.id()` also accepts a contact's **email address**
+> instead of its numeric ID (e.g. `.id('user@example.com')`). Pass it as-is — the SDK does not
+> URL-encode it, matching what the Mailjet REST API expects.
+
 #### `PUT` Request
 
 Use the `put` method of the Mailjet client:

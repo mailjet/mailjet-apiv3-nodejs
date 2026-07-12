@@ -446,6 +446,27 @@ describe('Unit Request', () => {
 
         expect(url).to.equal(`${Request.protocol}${Client.config.host}/v3/REST/template/123/detailcontent`);
       });
+
+      it('should not URL-encode email addresses passed to id() for contact/contactdata', () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const email = 'user+test@example.com';
+
+        ([
+          ['get', 'contact'],
+          ['get', 'contactdata'],
+          ['put', 'contactdata'],
+        ] as const).forEach(([method, resource]) => {
+          const request = new Client(params)[method](resource).id(email);
+          const url = request['buildFullUrl']();
+
+          expect(url).to.equal(`${Request.protocol}${Client.config.host}/v3/REST/${resource}/${email}`);
+          expect(url).to.not.include('%40');
+        });
+      });
     });
 
     describe('Request.buildSubPath()', () => {
@@ -1277,6 +1298,47 @@ describe('Unit Request', () => {
 
               expect(requestData.headers).to.haveOwnProperty('accept').that.includes('application/json');
             }),
+        );
+      });
+
+      it('should send email addresses passed to id() unencoded on the wire for contact/contactdata', async () => {
+        const apiVersion = Client.config.version;
+        const email = 'user@example.com';
+
+        const params: Required<Pick<ClientParams, 'apiKey' | 'apiSecret'>> = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const client = new Client(params);
+
+        await Promise.all(
+          ([
+            [HttpMethods.Get, 'contact'],
+            [HttpMethods.Get, 'contactdata'],
+            [HttpMethods.Put, 'contactdata'],
+          ] as const).map(async ([method, resource]) => {
+            const path = `/${apiVersion}/REST/${resource}/${email}`;
+
+            let seenPath: string | undefined;
+            nock(API_MAILJET_URL)
+              .defaultReplyHeaders({
+                'Content-Type': 'application/json',
+              })[method](path)
+              .reply(200, function () {
+                seenPath = this.req.path;
+                return JSON.stringify({});
+              });
+
+            const data = method === HttpMethods.Put
+              ? { Data: [{ Name: 'first_name', Value: 'John' }] }
+              : undefined;
+
+            await client[method](resource).id(email).request(data);
+
+            expect(seenPath).to.equal(path);
+            expect(seenPath).to.not.include('%40');
+          }),
         );
       });
 
