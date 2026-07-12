@@ -116,6 +116,12 @@ Next, require the module and initialize your [Mailjet][mailjet] client:
 const Mailjet = require('node-mailjet');
 ```
 
+The package also works with native ESM, including named imports:
+
+```javascript
+import Mailjet, { Client } from 'node-mailjet';
+```
+
 For `EMAIL API` and `SEND API`:
 ```js
 const mailjet = new Mailjet({
