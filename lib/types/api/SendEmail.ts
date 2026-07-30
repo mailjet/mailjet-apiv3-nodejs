@@ -119,11 +119,19 @@ export namespace SendEmailV3_1 {
     Variables?: Variables;
   }
 
+  // A batch request can contain a mix of successful and failed messages -
+  // the presence of `Error` results here does not mean the whole request
+  // failed, and `Success` does not mean every message in the batch was sent.
+  // Inspect `ResponseMessage.Status` for each entry in `Response.Messages`.
   export enum ResponseStatus {
     Success = 'success',
     Error = 'error',
   }
 
+  // Only present on messages whose `Status` is `Error`. `StatusCode` mirrors
+  // an HTTP status (e.g. >=500 generally indicates a transient/server-side
+  // failure that may be safe to retry, while 4xx generally indicates the
+  // message itself is invalid and retrying it unmodified will fail again).
   export interface ResponseError {
     ErrorIdentifier: string;
     ErrorCode: string;
@@ -160,6 +168,11 @@ export namespace SendEmailV3_1 {
   }
 
   // RESPONSE PART
+  // One entry per message submitted in `Body.Messages`, in the same order.
+  // Batch sending is NOT atomic: each message is validated and processed
+  // independently, so one message can fail (`Status: 'error'`) while the
+  // others in the same request succeed. Always check `Status`/`Errors` per
+  // message rather than relying on the request's HTTP status alone.
   export interface ResponseMessage {
     Status: ResponseStatus;
     Errors: ResponseError[];
@@ -169,6 +182,9 @@ export namespace SendEmailV3_1 {
     Bcc: ResponseEmailAddressTo[];
   }
 
+  // `Messages` can contain a mix of `'success'` and `'error'` entries - a
+  // 200 response does not guarantee every message was sent, and a batch
+  // containing failures does not mean the whole request was rejected.
   export type Response = {
     Messages: ResponseMessage[];
   }
