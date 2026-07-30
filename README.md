@@ -48,6 +48,7 @@ Check out all the resources and JS code examples in the official [Mailjet Docume
     - [Disable API call](#disable-api-call)
   - [TypeScript](#typescript)
     - [Send Email example](#send-email-example)
+    - [Batch sending & partial failures](#batch-sending--partial-failures)
     - [Send Message example](#send-message-example)
     - [Get Contact example](#get-contact-example)
     - [Our external Typings](#our-external-typings)
@@ -557,6 +558,73 @@ And `response` will have this shape:
     }
 }
 ```
+
+### Batch sending & partial failures
+
+The `Send API v3.1` lets you submit multiple emails in a single request via the `Messages` array _(this is often called "batch sending")_. \
+**Batch sending is not an atomic operation.** Each entry in `Messages` is validated and processed **independently**, so a single request can return a mix of successful and failed messages. A `2xx` HTTP response only means Mailjet accepted the request for processing — it does **not** mean every message in the batch was sent, and a message failure elsewhere in the batch does **not** stop the rest of the messages from being processed.
+
+Because of this, you should never assume the batch either "all succeeded" or "all failed". Instead, inspect the `Status` of **each** entry in `result.body.Messages`:
+- `Status: 'success'` — the message was accepted and is being delivered.
+- `Status: 'error'` — the message failed; details are available in that entry's `Errors` array _(`ErrorCode`, `ErrorMessage`, `ErrorIdentifier`)_.
+
+Set `AdvanceErrorHandling: true` on the request body to get one `Errors` entry per validation problem with machine-readable `ErrorCode`/`ErrorIdentifier` fields, which makes it easier to decide programmatically what happened and what, if anything, is safe to retry.
+
+```typescript
+import { Client, SendEmailV3_1, LibraryResponse } from 'node-mailjet';
+
+const mailjet = new Client({
+  apiKey: process.env.MJ_APIKEY_PUBLIC,
+  apiSecret: process.env.MJ_APIKEY_PRIVATE
+});
+
+(async () => {
+  const data: SendEmailV3_1.Body = {
+    Messages: [
+      {
+        From: { Email: 'pilot@test.com' },
+        To: [{ Email: 'passenger1@test.com' }],
+        Subject: 'Your flight plan (1)',
+        TextPart: 'This message is expected to succeed.',
+        CustomID: 'order-1001', // used below to correlate request <-> response
+      },
+      {
+        From: { Email: 'pilot@test.com' },
+        To: [{ Email: 'not-a-valid-address' }],
+        Subject: 'Your flight plan (2)',
+        TextPart: 'This message is expected to fail.',
+        CustomID: 'order-1002',
+      },
+    ],
+    AdvanceErrorHandling: true,
+  };
+
+  const result: LibraryResponse<SendEmailV3_1.Response> = await mailjet
+    .post('send', { version: 'v3.1' })
+    .request(data);
+
+  const succeeded = result.body.Messages.filter((message) => message.Status === 'success');
+  const failed = result.body.Messages.filter((message) => message.Status !== 'success');
+
+  // `failed` here does NOT mean the axios `.catch()`/promise rejection fired -
+  // the request itself succeeded, but some individual messages did not.
+})();
+```
+
+#### Retry guidance _(avoiding duplicate sends)_
+
+Because a batch can partially succeed, blindly retrying the whole request (or the whole `Messages` array) on any failure can **resend messages that already succeeded**, causing duplicate emails. To retry safely:
+
+1. Give every message a unique `CustomID` when you first send it, and keep a record of it (e.g. tied to your order/notification ID) before the request is made.
+2. On response, only collect the messages whose `Status` is `'error'` — never re-include messages whose `Status` was `'success'`.
+3. Use the failed message's `Errors[].StatusCode`/`ErrorCode` to decide if it's worth retrying:
+   - Validation-type errors (invalid recipient, malformed address, blocked domain, etc.) will fail again unless the message content itself is fixed — retrying unmodified is not useful.
+   - Transient/server-side errors _(`StatusCode >= 500`)_ may succeed on retry.
+4. When you do retry, resubmit only the failed messages, reusing the same `CustomID`, so you (and Mailjet's logs) can correlate the retry with the original attempt.
+5. Treat a request-level rejection (a thrown/rejected promise from `.request()`, e.g. network failure, auth failure, malformed payload) differently from a per-message `Status: 'error'` — the former means Mailjet never processed the batch at all, so the entire `Messages` array is safe to retry as-is.
+
+> See [`examples/node/src/batchSend.js`](https://github.com/mailjet/mailjet-apiv3-nodejs/tree/master/examples/node/src/batchSend.js) for a runnable example that sends a batch with one message designed to fail, and shows how to separate successes from failures and decide what to retry.
+
 ### Send Message Example
 ```typescript
 import * as Mailjet from 'node-mailjet'; // another possible importing option
