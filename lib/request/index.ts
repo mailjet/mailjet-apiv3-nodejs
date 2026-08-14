@@ -113,8 +113,10 @@ class Request {
     }
     const isSendResource = this.resource === 'send';
     const resourceContainSMS = this.resource.indexOf('sms') > -1;
+    // https://dev.mailjet.com/email/reference/contacts/contact/#v4_delete_contact_contact_ID
+    const isContactDeletion = this.resource === 'contacts' && this.method === HttpMethods.Delete;
 
-    return (!isSendResource && !resourceContainSMS) ? 'REST' : '';
+    return (!isSendResource && !resourceContainSMS && !isContactDeletion) ? 'REST' : '';
   }
 
   private makeRequest(url: string, data: RequestData, params: RequestParams) {
