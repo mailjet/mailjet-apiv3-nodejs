@@ -718,6 +718,30 @@ And `response` will have this shape:
 }
 ```
 
+### Delete Contact Example
+
+Contact deletion (GDPR-compliant) uses a dedicated `v4` endpoint, so the resource name must be the plural `contacts` and the version must be set to `v4`:
+
+```typescript
+import { Client } from 'node-mailjet'
+
+const mailjet = new Client({
+    apiKey: process.env.MJ_APIKEY_PUBLIC,
+    apiSecret: process.env.MJ_APIKEY_PRIVATE
+});
+
+(async () => {
+  const ContactID = 3860384733;
+
+  await mailjet
+    .delete('contacts', { version: 'v4' })
+    .id(ContactID)
+    .request();
+})();
+```
+
+See the [Delete a Contact](https://dev.mailjet.com/email/reference/contacts/contact/#v4_delete_contact_contact_ID) API reference for more details.
+
 ### Our external Typings
 
 For earlier versions _(`3.*.*` and low)_ of library you can use `@types/node-mailjet` dependency.

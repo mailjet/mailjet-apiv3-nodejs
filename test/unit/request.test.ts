@@ -447,6 +447,20 @@ describe('Unit Request', () => {
         expect(url).to.equal(`${Request.protocol}${Client.config.host}/v3/REST/template/123/detailcontent`);
       });
 
+      it('should build correct URL for DELETE /v4/contacts/{id} (GDPR contact deletion)', () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const contactId = 3860384733;
+
+        const request = new Client(params).delete('contacts', { version: 'v4' }).id(contactId);
+        const url = request['buildFullUrl']();
+
+        expect(url).to.equal(`${Request.protocol}${Client.config.host}/v4/contacts/${contactId}`);
+      });
+
       it('should not URL-encode email addresses passed to id() for contact/contactdata', () => {
         const params: ClientParams = {
           apiKey: 'key',
@@ -517,6 +531,36 @@ describe('Unit Request', () => {
 
         expect(subPath).to.be.a('string');
         expect(subPath).to.equal('');
+      });
+
+      it('should be build sub path for resource /contacts DELETE (v4 contact deletion)', () => {
+        const resource = 'contacts';
+
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const request = new Client(params).delete(resource);
+        const subPath = request['buildSubPath']();
+
+        expect(subPath).to.be.a('string');
+        expect(subPath).to.equal('');
+      });
+
+      it('should not affect GET /contacts sub path', () => {
+        const resource = 'contacts';
+
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const request = new Client(params).get(resource);
+        const subPath = request['buildSubPath']();
+
+        expect(subPath).to.be.a('string');
+        expect(subPath).to.equal('REST');
       });
 
       it('should be build sub path for resource /contactslist with action csvdata', () => {
