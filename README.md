@@ -1016,6 +1016,41 @@ request
         })
 ```
 
+Update a **template**'s editable content (the HTML/text/MJML shown in the Passport editor and the Mailjet App):
+
+> **Note:** \
+> `PUT`/`POST` on the `template` resource itself only updates metadata (`Name`, `Categories`, `Purposes`, ...). \
+> It does **not** touch the template's body, so changes made that way will show up in a `GET template`
+> response but never in the Mailjet App editor. To update the actual content, target the
+> [`template/$ID/detailcontent`](https://github.com/mailjet/api-documentation/blob/master/guides/_template.md)
+> sub-resource via `.id($templateID).action('detailcontent')` — and note that `.id()` must be called
+> **before** `.action()`; calling it after throws (see [Upgrading to v7](#upgrading-to-v7)).
+
+```javascript
+const Mailjet = require('node-mailjet')
+const mailjet = new Mailjet({
+  apiKey: process.env.MJ_APIKEY_PUBLIC,
+  apiSecret: process.env.MJ_APIKEY_PRIVATE
+});
+
+const request = mailjet
+        .put('template')
+        .id($templateID)
+        .action('detailcontent')
+        .request({
+          'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
+          'Text-part': 'Hello {{var:name}}'
+        })
+
+request
+        .then((result) => {
+          console.log(result.body)
+        })
+        .catch((err) => {
+          console.log(err.statusCode)
+        })
+```
+
 #### `DELETE` Request
 
 Use the `delete` method of the Mailjet client:
