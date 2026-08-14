@@ -1090,6 +1090,12 @@ request
         })
 ```
 
+> **Note:** \
+> A `204` here (and a subsequent `404` on `GET template/$templateID`) confirm the template was removed
+> API-side. If the template still appears in the Mailjet App afterwards, that's a discrepancy between
+> the API and the App UI, not something the request/response here can detect or control - see
+> [issue #278](https://github.com/mailjet/mailjet-apiv3-nodejs/issues/278).
+
 ### SMS API
 
 #### Token authentication

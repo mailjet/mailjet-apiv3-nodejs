@@ -461,6 +461,20 @@ describe('Unit Request', () => {
         expect(url).to.equal(`${Request.protocol}${Client.config.host}/v4/contacts/${contactId}`);
       });
 
+      it('should build correct URL for DELETE /v3/REST/template/{id}', () => {
+        const params: ClientParams = {
+          apiKey: 'key',
+          apiSecret: 'secret',
+        };
+
+        const templateId = 123456;
+
+        const request = new Client(params).delete('template').id(templateId);
+        const url = request['buildFullUrl']();
+
+        expect(url).to.equal(`${Request.protocol}${Client.config.host}/v3/REST/template/${templateId}`);
+      });
+
       it('should not URL-encode email addresses passed to id() for contact/contactdata', () => {
         const params: ClientParams = {
           apiKey: 'key',
