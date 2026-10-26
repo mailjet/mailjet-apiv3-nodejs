@@ -153,6 +153,80 @@ describe('Unit Request', () => {
       });
     });
 
+    describe('Request.normalizeHost()', () => {
+      it('should return a bare host name unchanged', () => {
+        expect(Request.normalizeHost('api.mailjet.com')).to.be.equal('api.mailjet.com');
+        expect(Request.normalizeHost('api.us.mailjet.com')).to.be.equal('api.us.mailjet.com');
+      });
+
+      it('should strip an explicit https:// prefix', () => {
+        expect(Request.normalizeHost('https://api.mailjet.com')).to.be.equal('api.mailjet.com');
+        expect(Request.normalizeHost('HTTPS://api.mailjet.com')).to.be.equal('api.mailjet.com');
+      });
+
+      it('should reject http:// and other non-https schemes', () => {
+        expect(() => Request.normalizeHost('http://api.mailjet.com'))
+          .to.throw(Error, 'Mailjet API is only available over HTTPS');
+        expect(() => Request.normalizeHost('ftp://api.mailjet.com'))
+          .to.throw(Error, 'Mailjet API is only available over HTTPS');
+      });
+
+      it('should build an https URL when host is passed with https://', () => {
+        const client = new Client({ apiKey: 'key', apiSecret: 'secret', config: { host: 'https://api.mailjet.com' } });
+        const request = client.get('contact');
+
+        expect(request['buildFullUrl']()).to.be.equal('https://api.mailjet.com/v3/REST/contact');
+      });
+
+      it('should throw when host is passed with http://', () => {
+        const client = new Client({ apiKey: 'key', apiSecret: 'secret', config: { host: 'http://api.mailjet.com' } });
+        const request = client.get('contact');
+
+        expect(() => request['buildFullUrl']())
+          .to.throw(Error, 'Mailjet API is only available over HTTPS');
+      });
+    });
+
+    describe('Request.ensureSecureRedirect()', () => {
+      it('should allow redirects to https URLs', () => {
+        expect(() => Request.ensureSecureRedirect({ href: 'https://api.mailjet.com/v3/REST/contact', protocol: 'https:' }))
+          .to.not.throw();
+      });
+
+      it('should reject redirects to http URLs', () => {
+        expect(() => Request.ensureSecureRedirect({ href: 'http://api.mailjet.com/v3/REST/contact', protocol: 'http:' }))
+          .to.throw(Error, 'Refusing to follow redirect to non-HTTPS URL');
+      });
+
+      it('should use the redirect target from href even when a proxy rewrote protocol', () => {
+        expect(() => Request.ensureSecureRedirect({ href: 'https://api.mailjet.com/v3/REST/contact', protocol: 'http:' }))
+          .to.not.throw();
+      });
+
+      it('should not follow an https -> http redirect returned by the API', async () => {
+        nock('https://api.mailjet.com')
+          .get('/v3/REST/contact')
+          .reply(301, '', { Location: 'http://api.mailjet.com/v3/REST/contact' });
+        const insecure = nock('http://api.mailjet.com')
+          .get('/v3/REST/contact')
+          .reply(200, '{}');
+
+        const client = new Client({ apiKey: 'key', apiSecret: 'secret' });
+
+        let error: Error | undefined;
+        try {
+          await client.get('contact').request();
+        } catch (err) {
+          error = err as Error;
+        }
+
+        expect(error).to.be.instanceOf(Error);
+        expect(error?.message).to.contain('non-HTTPS');
+        expect(insecure.isDone()).to.be.equal(false);
+        nock.cleanAll();
+      });
+    });
+
     describe('Request.parseToJSONb()', () => {
       it('should be have own method #parseToJSONb()', () => {
         expect(Request).itself.to.respondsTo('parseToJSONb');

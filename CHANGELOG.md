@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.1](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v7.1.0...v7.1.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* Enforce HTTPS-only requests ahead of the Mailjet API HTTP deprecation (DE-11222): a custom `host` with a non-https scheme (e.g. `http://...`) is rejected, an explicit `https://` prefix is stripped, and redirects to non-HTTPS URLs are never followed
+
 ## [7.0.0](https://github.com/mailjet/mailjet-apiv3-nodejs/compare/v6.0.11...v7.0.0) (2026-07-12)
 
 

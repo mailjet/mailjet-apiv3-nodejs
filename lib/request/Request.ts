@@ -43,4 +43,4 @@ export type RequestAxiosConfig = Required<Pick<
     | 'responseType'
     | 'transformResponse'
   >
-> & Pick<AxiosRequestConfig, 'auth' | 'timeout' | 'proxy' | 'maxBodyLength' | 'maxContentLength'>
+> & Pick<AxiosRequestConfig, 'auth' | 'timeout' | 'proxy' | 'maxBodyLength' | 'maxContentLength' | 'beforeRedirect'>
