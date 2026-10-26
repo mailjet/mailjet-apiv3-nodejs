@@ -98,7 +98,7 @@ class Request {
   private buildFullUrl() {
     const clientConfig = this.client.getConfig();
 
-    const host = this.config.host ?? clientConfig.host;
+    const host = Request.normalizeHost(this.config.host ?? clientConfig.host);
     const version = this.config.version ?? clientConfig.version;
 
     return urlJoin(Request.protocol, host, version, this.subPath, this.url);
@@ -169,12 +169,15 @@ class Request {
       ? clientOptions.timeout
       : Request.DEFAULT_TIMEOUT;
 
-    // 2. Proxy
+    // 2. Never follow a redirect that downgrades the connection to plain HTTP (Node only)
+    requestConfig.beforeRedirect = Request.ensureSecureRedirect;
+
+    // 3. Proxy
     if (clientOptions.proxy) {
       requestConfig.proxy = clientOptions.proxy;
     }
 
-    // 3. Headers
+    // 4. Headers
     if (clientOptions.headers && Object.keys(clientOptions.headers).length > 0) {
       requestConfig.headers = {
         ...requestConfig.headers,
@@ -182,20 +185,20 @@ class Request {
       };
     }
 
-    // 4. Output
+    // 5. Output
     const output = this.config.output ?? clientConfig.output;
     if (output) {
       requestConfig.responseType = output;
     }
 
     // NODE SIDE
-    // 5. Max request content size
+    // 6. Max request content size
     if (clientOptions.maxBodyLength) {
       requestConfig.maxBodyLength = clientOptions.maxBodyLength;
     }
 
     // NODE SIDE
-    // 6. Max response content size
+    // 7. Max response content size
     if (clientOptions.maxContentLength) {
       requestConfig.maxContentLength = clientOptions.maxContentLength;
     }
@@ -373,6 +376,48 @@ class Request {
   }
 
   public static protocol = 'https://' as const;
+
+  /**
+   * The Mailjet API is served over HTTPS only. `host` must be a bare host name
+   * (e.g. `api.mailjet.com`); an explicit `https://` prefix is tolerated and
+   * stripped, any other scheme (notably `http://`) is rejected.
+   */
+  public static normalizeHost(host: string): string {
+    const value = String(host).trim();
+    const schemeMatch = value.match(/^([a-z][a-z0-9+.-]*):\/\//i);
+
+    if (!schemeMatch) {
+      return value;
+    }
+
+    if (schemeMatch[1].toLowerCase() !== 'https') {
+      throw new Error(
+        `Mailjet API is only available over HTTPS. Pass "host" as a host name (e.g. "api.mailjet.com"), got "${value}"`,
+      );
+    }
+
+    return value.slice(schemeMatch[0].length);
+  }
+
+  /**
+   * `beforeRedirect` hook for axios (follow-redirects, Node only):
+   * aborts the request if a redirect would switch it to a non-HTTPS URL.
+   */
+  public static ensureSecureRedirect(options: { href?: string; protocol?: string }): void {
+    let protocol: string | undefined;
+
+    try {
+      protocol = options.href ? new URL(options.href).protocol : options.protocol;
+    } catch {
+      protocol = options.protocol;
+    }
+
+    if (protocol !== 'https:') {
+      throw new Error(
+        `Refusing to follow redirect to non-HTTPS URL "${options.href ?? ''}": Mailjet API requests must use HTTPS`,
+      );
+    }
+  }
 
   private static readonly DEFAULT_TIMEOUT = 30_000;
 

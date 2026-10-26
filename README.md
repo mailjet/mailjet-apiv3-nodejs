@@ -1,5 +1,5 @@
-[mailjet]: http://www.mailjet.com
-[doc]: http://dev.mailjet.com/guides/?javascript#
+[mailjet]: https://www.mailjet.com
+[doc]: https://dev.mailjet.com/email/guides/?javascript#
 [eventemitter]: https://nodejs.org/api/events.html
 [api_token]: https://app.mailjet.com/sms
 [api_credential]: https://app.mailjet.com/account/api_keys
@@ -448,6 +448,10 @@ You can modify this **host URL** by setting a value for `host` in your call:
 const request = mailjet
     .post('send', { version: 'v3.1', host: 'api.us.mailjet.com' })
 ```
+
+> **NOTE:** \
+> All requests are sent over **HTTPS** only. `host` must be a host name without a scheme;
+> a value starting with `http://` throws an error, and redirects to non-HTTPS URLs are not followed.
 
 > If your account has been moved to Mailjet's `US` architecture, the `host` value you need to set is `api.us.mailjet.com`.
 
